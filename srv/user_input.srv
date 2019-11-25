@@ -1,3 +1,4 @@
-geometry_msgs/Pose pose
+geometry_msgs/Pose boxPose
+geometry_msgs/Pose goalPose
 ---
 bool output
