@@ -41,24 +41,24 @@ TEST(PIDControllerTest, EuclideanDistanceTypePass) {
   desiredPosition.z = 14;
   double expectPass = 5;
   double dist = pidController.euclideanDist(currentPosition, desiredPosition);
-  EXPECT_EQ(typeid(dist), typeid(double));;// Should Pass
+  EXPECT_EQ(typeid(dist), typeid(double));// Should Pass
 }
+
 
 /**
  * @brief Test case that checks if the calculated steering angle is correct
  */
-// TEST CASE COMMENTED OUT SINCE I CAN'T MAKE OUT WHAT THE OUTPUT VALUE SHOULD BE!
-/*TEST(PIDControllerTest, SteeringAnglePass) {
+TEST(PIDControllerTest, SteeringAnglePass) {
   PidController pidController;
   tf::Point trajPosition;
   double angVel = 30.0;
   trajPosition.x = 10;
   trajPosition.y = 10;
   trajPosition.z = 10;
-  double expectPass = 0;
-  double steeringAng = pidController.setSteeringAng(trajPosition, angVel);
+  double expectPass = 30;
+  double steeringAng = pidController.calcSteeringAng(trajPosition, angVel);
   EXPECT_NEAR(expectPass,steeringAng,0.01);// Should Pass
-}*/
+}
 
 /**
  * @brief Test case that checks if the calculated Euclidean Distance is of type double
@@ -72,7 +72,7 @@ TEST(PIDControllerTest, SteeringAngleTypePass) {
   trajPosition.z = 10;
   double expectPass = 0;
   double steeringAng = pidController.setSteeringAng(trajPosition, angVel);
-  EXPECT_EQ(typeid(steeringAng), typeid(double));;// Should Pass
+  EXPECT_EQ(typeid(steeringAng), typeid(double));// Should Pass
 }
 
 /**
@@ -92,18 +92,27 @@ TEST(PIDControllerTest, PidTypePass) {
   kP = pidController.getKP();
   kD = pidController.getKD();
   kI = pidController.getKI();
-  EXPECT_EQ(typeid(kP), typeid(double));;// Should Pass
-  EXPECT_EQ(typeid(kD), typeid(double));;// Should Pass
-  EXPECT_EQ(typeid(kI), typeid(double));;// Should Pass
+  EXPECT_EQ(typeid(kP), typeid(double));// Should Pass
+  EXPECT_EQ(typeid(kD), typeid(double));// Should Pass
+  EXPECT_EQ(typeid(kI), typeid(double));// Should Pass
 }
 
 /**
- * @brief Test case that checks if the calculated Euclidean Distance is correct
+ * @brief Test case that checks if the collision is detected
  */
-TEST(PIDControllerTest, EuclideanDistancePass) {
+TEST(TurtlebotPerceptionTest, DetecCollisionPass) {
   TurtlebotPerception turtlebotPerception;
   bool coll;
   coll = turtlebotPerception.detectCollision();
-  EXPECT_EQ(typeid(coll), typeid(bool));;// Should Pass
+  EXPECT_TRUE(coll);// Should Pass
 }
 
+/**
+ * @brief Test case that checks if the return value is boolean
+ */
+TEST(TurtlebotPerceptionTest, DetecCollisionTypePass) {
+  TurtlebotPerception turtlebotPerception;
+  bool coll;
+  coll = turtlebotPerception.detectCollision();
+  EXPECT_EQ(typeid(coll), typeid(bool));// Should Pass
+}
