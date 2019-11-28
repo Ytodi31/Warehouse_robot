@@ -169,7 +169,7 @@ class PidController {
    * @param Trajectory position and the angular velocity
    * @return calculated steering angle
    */
-  double setSteeringAng(tf::Point trajPosition, double angularVel);
+  double calSteeringAng(tf::Point trajPosition, double angularVel);
 
 };
 
