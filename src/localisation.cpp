@@ -58,7 +58,7 @@ void Localisation::PublishMapPose() {
 void Localisation::PublishRawPose() {
 }
 
-void Localisation::ExecuteLocalisation() {
+void Localisation::ExecuteLocalisation(ros::NodeHandle nh) {
 }
 
 
