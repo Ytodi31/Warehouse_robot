@@ -41,8 +41,8 @@
 #include <std_msgs/Float64.h>
 #include <tf/transform_listener.h>
 
-#ifndef INCLUDE_LOCALISATION_HPP_
-#define INCLUDE_LOCALISATION_HPP_
+#ifndef INCLUDE_WAREHOUSE_ROBOT_LOCALISATION_HPP_
+#define INCLUDE_WAREHOUSE_ROBOT_LOCALISATION_HPP_
 
 /**
  * @class Localisation
@@ -104,9 +104,9 @@ class Localisation {
      * @param none
      * @return none
      */
-    void ExecuteLocalisation();
+    void ExecuteLocalisation(ros::NodeHandle nh);
 };
 
-#endif  // INCLUDE_LOCALISATION_HPP_
+#endif  // INCLUDE_WAREHOUSE_ROBOT_LOCALISATION_HPP_
 
 
