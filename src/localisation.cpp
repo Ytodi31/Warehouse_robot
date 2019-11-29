@@ -42,5 +42,25 @@
 #include "localisation.hpp"
 
 
+void Localisation::EntropyCallback(const std_msgs::Float64::ConstPtr msg) {
+}
+
+bool Localisation::SetEntropyThreshold(double thresholdValue) {
+return true;
+}
+
+void Localisation::GetRobotCoordinate(tf::StampedTransform mapToRobot) {
+}
+
+void Localisation::PublishMapPose() {
+}
+
+void Localisation::PublishRawPose() {
+}
+
+void Localisation::ExecuteLocalisation() {
+}
+
+
 
 

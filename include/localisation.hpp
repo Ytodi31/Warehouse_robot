@@ -55,7 +55,7 @@ class Localisation {
     ros::NodeHandle localizationNode;
     geometry_msgs::Pose localisationPose;
     double entropy;
-    double entropyThreshold;
+    double entropyThreshold = 0;
     ros::Publisher mapPosePublisher;
     ros::Publisher rawPosePublisher;
     ros::Subscriber entropySubscriber;
