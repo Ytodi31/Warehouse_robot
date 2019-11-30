@@ -206,3 +206,32 @@ include_directories(
 
 ## Add folders to be run by python nosetests
 # catkin_add_nosetests(test)
+
+add_executable(pidController src/pidController.cpp src/main.cpp)
+target_link_libraries(pidController ${catkin_LIBRARIES})
+
+add_executable(turtlebotPerception src/turtlebotPerception.cpp src/main.cpp)
+target_link_libraries(turtlebotPerception ${catkin_LIBRARIES})
+
+if(CATKIN_ENABLE_TESTING)
+	find_package(rostest REQUIRED)
+	add_rostest_gtest(
+		GTest
+		test/Gtest.test
+		test/Gtest.cpp 
+		test/main.cpp
+		include/warehouse_robot/pidController.hpp
+	    src/pidController.cpp
+    include/warehouse_robot/turtlebotPerception.hpp
+	    src/turtlebotPerception.cpp
+	)
+	target_link_libraries(
+		GTest
+		${catkin_LIBRARIES}
+	)
+	add_dependencies(
+	GTest
+	pidController
+  turtlebotPerception
+	)
+endif()
