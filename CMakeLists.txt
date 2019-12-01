@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 2.8.3)
 project(warehouse_robot)
 
 ## Compile as C++11, supported in ROS Kinetic and newer
- add_compile_options(-std=c++11)
+# add_compile_options(-std=c++11)
 
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
@@ -11,7 +11,6 @@ find_package(catkin REQUIRED COMPONENTS
   roscpp
   rospy
   std_msgs
-  tf
   message_generation
 )
 
@@ -118,7 +117,7 @@ catkin_package(
 ## Specify additional locations of header files
 ## Your package locations should be listed before other locations
 include_directories(
- include/warehouse_robot
+# include
   ${catkin_INCLUDE_DIRS}
 )
 
@@ -206,29 +205,3 @@ include_directories(
 
 ## Add folders to be run by python nosetests
 # catkin_add_nosetests(test)
-
-add_executable(localisation src/localisation.cpp src/main.cpp)
-target_link_libraries(localisation ${catkin_LIBRARIES})
-#add_dependencies(localisation beginner_tutorials_generate_messages_cpp)
-
-if(CATKIN_ENABLE_TESTING)
-	find_package(rostest REQUIRED)
-	add_rostest_gtest(
-		localisationTest
-		test/localisationTest.test
-		test/localisationTest.cpp 
-		test/localisationTestClass.cpp
-		test/localisationTestClass.hpp
-		test/main.cpp
-		include/warehouse_robot/localisation.hpp
-	    src/localisation.cpp
-	)
-	target_link_libraries(
-		localisationTest
-		${catkin_LIBRARIES}
-	)
-	add_dependencies(
-	localisationTest
-	localisation
-	)
-endif()
