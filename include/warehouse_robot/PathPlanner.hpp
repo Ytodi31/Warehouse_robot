@@ -28,7 +28,7 @@
 */
 
 /**
- * @file PathPlanner.h
+ * @file PathPlanner.hpp
  * @brief This file contains the class declaration of PathPlanner, which will be
  * using A-star algorithm to compute its path
  *
@@ -46,8 +46,8 @@
  *
  * @date 11-24-2019
  */
-#ifndef WAREHOUSE_ROBOT_INCLUDE_WAREHOUSE_ROBOT_PATHPLANNER_H_
-#define WAREHOUSE_ROBOT_INCLUDE_WAREHOUSE_ROBOT_PATHPLANNER_H_
+#ifndef WAREHOUSE_ROBOT_INCLUDE_WAREHOUSE_ROBOT_PATHPLANNER_HPP_
+#define WAREHOUSE_ROBOT_INCLUDE_WAREHOUSE_ROBOT_PATHPLANNER_HPP_
 
 #include <vector>
 #include <utility>
@@ -253,4 +253,4 @@
     */
     bool pathFound;
   };
-  #endif  // WAREHOUSE_ROBOT_INCLUDE_WAREHOUSE_ROBOT_PATHPLANNER_H_
+  #endif  // WAREHOUSE_ROBOT_INCLUDE_WAREHOUSE_ROBOT_PATHPLANNER_HPP_

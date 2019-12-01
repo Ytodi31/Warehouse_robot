@@ -28,7 +28,7 @@
 */
 
 /**
- * @file PickPlace.h
+ * @file PickPlace.hpp
  * @brief This file contains the class declaration of PickPlace, which will be
  * using OpenManipulator to pick and place the object
  *
@@ -46,8 +46,8 @@
  *
  * @date 11-28-2019
  */
- #ifndef WAREHOUSE_ROBOT_INCLUDE_WAREHOUSE_ROBOT_PICKPLACE_H_
- #define WAREHOUSE_ROBOT_INCLUDE_WAREHOUSE_ROBOT_PICKPLACE_H_
+ #ifndef WAREHOUSE_ROBOT_INCLUDE_WAREHOUSE_ROBOT_PICKPLACE_HPP_
+ #define WAREHOUSE_ROBOT_INCLUDE_WAREHOUSE_ROBOT_PICKPLACE_HPP_
 
  #include <vector>
  #include <utility>
@@ -131,4 +131,4 @@
         */
       bool robotState;
     };
-    #endif  // WAREHOUSE_ROBOT_INCLUDE_WAREHOUSE_ROBOT_PICKPLACE_H_
+    #endif  // WAREHOUSE_ROBOT_INCLUDE_WAREHOUSE_ROBOT_PICKPLACE_HPP_

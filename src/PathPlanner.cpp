@@ -45,7 +45,7 @@
  *
  * @date 11-27-2019
  */
-#include <../include/warehouse_robot/PathPlanner.h>
+#include "PathPlanner.hpp"
 #include <iostream>
 
  void PathPlanner::setGoal(std::pair<double , double>) {
