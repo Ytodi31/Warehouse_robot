@@ -48,7 +48,7 @@
  #include "ros/ros.h"
  #include "gtest/gtest.h"
 
- #include <../include/warehouse_robot/PickPlace.h>
+ #include "PickPlace.hpp"
 
  /**
   * @brief Test to check the member function checkGripperState of class

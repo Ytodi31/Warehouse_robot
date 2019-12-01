@@ -1,3 +1,4 @@
+/**
 *BSD 3-Clause License
 *
 *Copyright (c) 2019, Yashaarth Todi
@@ -44,7 +45,7 @@
  *
  * @date 11-27-2019
  */
- 
+
 #include "ros/ros.h"
 #include "gtest/gtest.h"
 
@@ -55,7 +56,7 @@
  * @return boolean value
  */
 int main(int argc, char** argv) {
-  ros::init(argc, argv,  "testPathPlanner");
+  ros::init(argc, argv,  "allTestWarehouseRobot");
   testing::InitGoogleTest(&argc, argv);
   return RUN_ALL_TESTS();
 }

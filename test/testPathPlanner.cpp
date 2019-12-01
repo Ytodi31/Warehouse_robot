@@ -49,7 +49,7 @@
 #include "gtest/gtest.h"
 #include <utility>
 #include <vector>
-#include <../include/warehouse_robot/PathPlanner.h>
+#include "PathPlanner.hpp"
 
 /**
  * @brief Test to checl the setter and getter of private member goal of class

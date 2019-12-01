@@ -1,4 +1,0 @@
-<launch>
-	<test test-name = "GTest" pkg="warehouse_robot"
-	type = "GTest"/>
-</launch>
