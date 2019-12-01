@@ -2,8 +2,6 @@ cmake_minimum_required(VERSION 2.8.3)
 project(warehouse_robot)
 
 ## Compile as C++11, supported in ROS Kinetic and newer
-
-
  add_compile_options(-std=c++11)
 
 
@@ -153,15 +151,18 @@ include_directories(
 ## Add cmake target dependencies of the executable
 ## same as for the library above
 # add_dependencies(${PROJECT_NAME}_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
-add_executable(mainnode src/main.cpp src/PathPlanner.cpp src/PickPlace.cpp)
+
+add_executable(pathPlanner src/main.cpp src/PathPlanner.cpp src/PickPlace.cpp)
+add_executable(pickPlace src/main.cpp  src/PickPlace.cpp)
+add_executable(localisation src/localisation.cpp src/main.cpp)
+add_executable(pidController src/pidController.cpp src/main.cpp)
+add_executable(turtlebotPerception src/turtlebotPerception.cpp src/main.cpp)
 
 ## Specify libraries to link a library or executable target against
-target_link_libraries(mainnode ${catkin_LIBRARIES})
-
-add_executable(pidController src/pidController.cpp src/main.cpp)
+target_link_libraries(pathPlanner ${catkin_LIBRARIES})
+target_link_libraries(pickPlace ${catkin_LIBRARIES})
+target_link_libraries(localisation ${catkin_LIBRARIES})
 target_link_libraries(pidController ${catkin_LIBRARIES})
-
-add_executable(turtlebotPerception src/turtlebotPerception.cpp src/main.cpp)
 target_link_libraries(turtlebotPerception ${catkin_LIBRARIES})
 
 #############
@@ -209,50 +210,36 @@ target_link_libraries(turtlebotPerception ${catkin_LIBRARIES})
 #############
 ## Testing ##
 #############
-
-
-## Add gtest based cpp test target and link libraries
-catkin_add_gtest(GTest test/Gtest.cpp test/main.cpp
-include/warehouse_robot/pidController.hpp src/pidController.cpp
-include/warehouse_robot/turtlebotPerception.hpp src/turtlebotPerception.cpp)
-if(TARGET GTest)
- target_link_libraries(GTest ${catkin_LIBRARIES})
-endif()
-
 ## Add folders to be run by python nosetests
 # catkin_add_nosetests(test)
 
 
-add_executable(localisation src/localisation.cpp src/main.cpp)
-target_link_libraries(localisation ${catkin_LIBRARIES})
-#add_dependencies(localisation beginner_tutorials_generate_messages_cpp)
-
 if(CATKIN_ENABLE_TESTING)
 	find_package(rostest REQUIRED)
 	add_rostest_gtest(
-		localisationTest
-		test/localisationTest.test
-		test/localisationTest.cpp 
+	  allTestWarehouseRobot
+	#	test/localisationTest.cpp
 		test/localisationTestClass.cpp
 		test/localisationTestClass.hpp
+    test/testPathPlanner.cpp
+    test/testPickPlace.cpp
+    test/testControlNPerception.cpp
 		test/main.cpp
 		include/warehouse_robot/localisation.hpp
+    include/warehouse_robot/PathPlanner.hpp
+    include/warehouse_robot/PickPlace.hpp
+    include/warehouse_robot/pidController.hpp
+    include/warehouse_robot/turtlebotPerception.hpp
 	    src/localisation.cpp
+      src/PathPlanner.cpp
+      src/PickPlace.cpp
+      src/pidController.cpp
+      src/turtlebotPerception.cpp
 	)
 	target_link_libraries(
-		localisationTest
+		allTestWarehouseRobot
 		${catkin_LIBRARIES}
 	)
-	add_dependencies(
-	localisationTest
-	localisation
-	)
 
-if(CATKIN_ENABLE_TESTING)
-  find_package(rostest REQUIRED)
-  add_rostest_gtest(testPathPlanner test/testPathPlanner.test test/main.cpp
-  test/testPathPlanner.cpp src/PathPlanner.cpp test/testPickPlace.cpp src/PickPlace.cpp)
-  target_link_libraries(testPathPlanner ${catkin_LIBRARIES})
 
 endif()
-
