@@ -5,14 +5,14 @@
  *      Author: gautam
  */
 
-#include <turtlebotPerception.h>
+#include "turtlebotPerception.hpp"
 
 /**
  * @brief Mock of the function to detect collision
  * @param none
  * @return true if obstacle detected
  */
-bool turtlebotPerception::detectCollision(){
+bool TurtlebotPerception::detectCollision(){
   return true; // MOCK VALUE FOR TESTING!
 }
 
