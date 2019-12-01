@@ -6,16 +6,17 @@
 This project is developed for Warehouse Management wherein a Turtlebot3
 is employed to transport packages from one location to another. The pick-up and drop
 locations are specified by the user.Turtlebot3 uses OpenManipulator for its
-pick and place operation.
+pick and place operation, and would be using A-star algorithm to plan its path.
 
 ## Development Team
 - Yashaarth Todi is Robotics Graduate student at University of Maryland, College Park.
-- Suyash Yeotikar
-- Gautam Balachandran
+- Suyash Yeotikar is Robotics Graduate student at University of Maryland, College Park.
+- Gautam Balachandran is Robotics Graduate student at University of Maryland, College Park.
 
 ## AIP
 The development team has followed AIP process. The link to AIP sheet can be found
 [here](https://docs.google.com/spreadsheets/d/1KsJT0aIaXuEaXX1XelDLg1EV10q6P--KvlY-5qnYGCg/edit#gid=0).
+The AIP planning and review sheet used by the team can be be found [here](https://docs.google.com/document/d/1O4B-fgY8ZTwz_BBVik3APsgOGGVCKxhNlC9fsOs6aUY/edit).
 
 
 ## License Overview

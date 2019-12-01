@@ -2,7 +2,11 @@ cmake_minimum_required(VERSION 2.8.3)
 project(warehouse_robot)
 
 ## Compile as C++11, supported in ROS Kinetic and newer
-add_compile_options(-std=c++11)
+
+
+ add_compile_options(-std=c++11)
+
+
 
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
@@ -13,6 +17,7 @@ find_package(catkin REQUIRED COMPONENTS
   std_msgs
   sensor_msgs
   tf
+  message_generation
 )
 
 ## System dependencies are found with CMake's conventions
@@ -56,11 +61,11 @@ find_package(catkin REQUIRED COMPONENTS
 # )
 
 ## Generate services in the 'srv' folder
-# add_service_files(
-#   FILES
-#   Service1.srv
+ add_service_files(
+   FILES
+   user_input.srv
 #   Service2.srv
-# )
+ )
 
 ## Generate actions in the 'action' folder
 # add_action_files(
@@ -117,10 +122,12 @@ catkin_package(
 
 ## Specify additional locations of header files
 ## Your package locations should be listed before other locations
+
 include_directories(
  include/warehouse_robot
   ${catkin_INCLUDE_DIRS}
 )
+
 
 ## Declare a C++ library
 # add_library(${PROJECT_NAME}
@@ -146,11 +153,10 @@ include_directories(
 ## Add cmake target dependencies of the executable
 ## same as for the library above
 # add_dependencies(${PROJECT_NAME}_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+add_executable(mainnode src/main.cpp src/PathPlanner.cpp src/PickPlace.cpp)
 
 ## Specify libraries to link a library or executable target against
-# target_link_libraries(${PROJECT_NAME}_node
-#   ${catkin_LIBRARIES}
-# )
+target_link_libraries(mainnode ${catkin_LIBRARIES})
 
 add_executable(pidController src/pidController.cpp src/main.cpp)
 target_link_libraries(pidController ${catkin_LIBRARIES})
@@ -204,6 +210,7 @@ target_link_libraries(turtlebotPerception ${catkin_LIBRARIES})
 ## Testing ##
 #############
 
+
 ## Add gtest based cpp test target and link libraries
 catkin_add_gtest(GTest test/Gtest.cpp test/main.cpp
 include/warehouse_robot/pidController.hpp src/pidController.cpp
@@ -214,4 +221,38 @@ endif()
 
 ## Add folders to be run by python nosetests
 # catkin_add_nosetests(test)
+
+
+add_executable(localisation src/localisation.cpp src/main.cpp)
+target_link_libraries(localisation ${catkin_LIBRARIES})
+#add_dependencies(localisation beginner_tutorials_generate_messages_cpp)
+
+if(CATKIN_ENABLE_TESTING)
+	find_package(rostest REQUIRED)
+	add_rostest_gtest(
+		localisationTest
+		test/localisationTest.test
+		test/localisationTest.cpp 
+		test/localisationTestClass.cpp
+		test/localisationTestClass.hpp
+		test/main.cpp
+		include/warehouse_robot/localisation.hpp
+	    src/localisation.cpp
+	)
+	target_link_libraries(
+		localisationTest
+		${catkin_LIBRARIES}
+	)
+	add_dependencies(
+	localisationTest
+	localisation
+	)
+
+if(CATKIN_ENABLE_TESTING)
+  find_package(rostest REQUIRED)
+  add_rostest_gtest(testPathPlanner test/testPathPlanner.test test/main.cpp
+  test/testPathPlanner.cpp src/PathPlanner.cpp test/testPickPlace.cpp src/PickPlace.cpp)
+  target_link_libraries(testPathPlanner ${catkin_LIBRARIES})
+
+endif()
 
