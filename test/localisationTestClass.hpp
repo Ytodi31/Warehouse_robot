@@ -1,5 +1,4 @@
-
-=======
+/**
 *BSD 3-Clause License
 *
 *Copyright (c) 2019, Yashaarth Todi
@@ -29,8 +28,8 @@
 */
 
 /**
- * @file main.cpp
- * @brief This file is the main file of the testing suite using GTest framework
+ * @file localisationTestClass.hpp
+ * @brief This file is the main file of project AuWaMaR
  *
  * This project contains the execution to navigate Turtlebot3 in a warehouse
  * environment using A star path planning, picks up a package and drops it in
@@ -44,21 +43,24 @@
  * @author Gautam Balachandran
  * @author Yashaarth Todi
  *
- * @date 11-27-2019
+ * @date 11-20-2019
  */
- 
-#include "ros/ros.h"
-#include "gtest/gtest.h"
 
-/**
- * @brief Main function for all test functions
- * @param Parameter 1, Number of inputs
- * @param Parameter 2, Input
- * @return boolean value
- */
-int main(int argc, char** argv) {
-  ros::init(argc, argv,  "testPathPlanner");
-  testing::InitGoogleTest(&argc, argv);
-  return RUN_ALL_TESTS();
-}
+#ifndef TEST_LOCALISATIONTESTCLASS_HPP_
+#define TEST_LOCALISATIONTESTCLASS_HPP_
 
+#include <ros/ros.h>
+#include <geometry_msgs/Pose.h>
+
+
+class LocalisationTest {
+ public:
+    bool receivedPose = false;
+    geometry_msgs::Pose robotPose;
+    ros::Subscriber poseSubscriber;
+ public:
+    void InitPose();
+    void PoseCallback(const geometry_msgs::Pose::ConstPtr msg);
+};
+
+#endif  // TEST_LOCALISATIONTESTCLASS_HPP_

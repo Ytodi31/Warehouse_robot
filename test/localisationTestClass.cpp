@@ -1,5 +1,4 @@
-
-=======
+/**
 *BSD 3-Clause License
 *
 *Copyright (c) 2019, Yashaarth Todi
@@ -29,8 +28,8 @@
 */
 
 /**
- * @file main.cpp
- * @brief This file is the main file of the testing suite using GTest framework
+ * @file localisationTestClass.cpp
+ * @brief This file is the main file of project AuWaMaR
  *
  * This project contains the execution to navigate Turtlebot3 in a warehouse
  * environment using A star path planning, picks up a package and drops it in
@@ -44,21 +43,29 @@
  * @author Gautam Balachandran
  * @author Yashaarth Todi
  *
- * @date 11-27-2019
+ * @date 11-20-2019
  */
- 
-#include "ros/ros.h"
-#include "gtest/gtest.h"
 
-/**
- * @brief Main function for all test functions
- * @param Parameter 1, Number of inputs
- * @param Parameter 2, Input
- * @return boolean value
- */
-int main(int argc, char** argv) {
-  ros::init(argc, argv,  "testPathPlanner");
-  testing::InitGoogleTest(&argc, argv);
-  return RUN_ALL_TESTS();
+#include "localisationTestClass.hpp"
+
+void LocalisationTest::PoseCallback(geometry_msgs::Pose::ConstPtr msg) {
+    receivedPose = true;
+    robotPose.position.x = msg->position.x;
+    robotPose.position.y = msg->position.y;
+    robotPose.position.z = msg->position.z;
+    robotPose.orientation.x = msg->orientation.x;
+    robotPose.orientation.y = msg->orientation.y;
+    robotPose.orientation.z = msg->orientation.z;
+    robotPose.orientation.w = msg->orientation.w;
+}
+
+void LocalisationTest::InitPose() {
+    robotPose.position.x = 0;
+    robotPose.position.y = 0;
+    robotPose.position.z = 0;
+    robotPose.orientation.x = 0;
+    robotPose.orientation.y = 0;
+    robotPose.orientation.z = 0;
+    robotPose.orientation.w = 0;
 }
 
