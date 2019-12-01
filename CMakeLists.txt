@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 2.8.3)
 project(warehouse_robot)
 
 ## Compile as C++11, supported in ROS Kinetic and newer
-# add_compile_options(-std=c++11)
+add_compile_options(-std=c++11)
 
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
@@ -118,7 +118,7 @@ catkin_package(
 ## Specify additional locations of header files
 ## Your package locations should be listed before other locations
 include_directories(
-# include
+ include/warehouse_robot
   ${catkin_INCLUDE_DIRS}
 )
 
@@ -151,6 +151,12 @@ include_directories(
 # target_link_libraries(${PROJECT_NAME}_node
 #   ${catkin_LIBRARIES}
 # )
+
+add_executable(pidController src/pidController.cpp src/main.cpp)
+target_link_libraries(pidController ${catkin_LIBRARIES})
+
+add_executable(turtlebotPerception src/turtlebotPerception.cpp src/main.cpp)
+target_link_libraries(turtlebotPerception ${catkin_LIBRARIES})
 
 #############
 ## Install ##
@@ -199,39 +205,13 @@ include_directories(
 #############
 
 ## Add gtest based cpp test target and link libraries
-# catkin_add_gtest(${PROJECT_NAME}-test test/test_warehouse_robot.cpp)
-# if(TARGET ${PROJECT_NAME}-test)
-#   target_link_libraries(${PROJECT_NAME}-test ${PROJECT_NAME})
-# endif()
+catkin_add_gtest(GTest test/Gtest.cpp test/main.cpp
+include/warehouse_robot/pidController.hpp src/pidController.cpp
+include/warehouse_robot/turtlebotPerception.hpp src/turtlebotPerception.cpp)
+if(TARGET GTest)
+ target_link_libraries(GTest ${catkin_LIBRARIES})
+endif()
 
 ## Add folders to be run by python nosetests
 # catkin_add_nosetests(test)
 
-add_executable(pidController src/pidController.cpp src/main.cpp)
-target_link_libraries(pidController ${catkin_LIBRARIES})
-
-add_executable(turtlebotPerception src/turtlebotPerception.cpp src/main.cpp)
-target_link_libraries(turtlebotPerception ${catkin_LIBRARIES})
-
-if(CATKIN_ENABLE_TESTING)
-	find_package(rostest REQUIRED)
-	add_rostest_gtest(
-		GTest
-		test/Gtest.test
-		test/Gtest.cpp 
-		test/main.cpp
-		include/warehouse_robot/pidController.hpp
-	    src/pidController.cpp
-    include/warehouse_robot/turtlebotPerception.hpp
-	    src/turtlebotPerception.cpp
-	)
-	target_link_libraries(
-		GTest
-		${catkin_LIBRARIES}
-	)
-	add_dependencies(
-	GTest
-	pidController
-  turtlebotPerception
-	)
-endif()
