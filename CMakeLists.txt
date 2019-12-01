@@ -3,6 +3,7 @@ project(warehouse_robot)
 
 ## Compile as C++11, supported in ROS Kinetic and newer
 
+
  add_compile_options(-std=c++11)
 
 
@@ -14,6 +15,7 @@ find_package(catkin REQUIRED COMPONENTS
   roscpp
   rospy
   std_msgs
+  sensor_msgs
   tf
   message_generation
 )
@@ -156,6 +158,12 @@ add_executable(mainnode src/main.cpp src/PathPlanner.cpp src/PickPlace.cpp)
 ## Specify libraries to link a library or executable target against
 target_link_libraries(mainnode ${catkin_LIBRARIES})
 
+add_executable(pidController src/pidController.cpp src/main.cpp)
+target_link_libraries(pidController ${catkin_LIBRARIES})
+
+add_executable(turtlebotPerception src/turtlebotPerception.cpp src/main.cpp)
+target_link_libraries(turtlebotPerception ${catkin_LIBRARIES})
+
 #############
 ## Install ##
 #############
@@ -204,13 +212,16 @@ target_link_libraries(mainnode ${catkin_LIBRARIES})
 
 
 ## Add gtest based cpp test target and link libraries
-# catkin_add_gtest(${PROJECT_NAME}-test test/test_warehouse_robot.cpp)
-# if(TARGET ${PROJECT_NAME}-test)
-#   target_link_libraries(${PROJECT_NAME}-test ${PROJECT_NAME})
-# endif()
+catkin_add_gtest(GTest test/Gtest.cpp test/main.cpp
+include/warehouse_robot/pidController.hpp src/pidController.cpp
+include/warehouse_robot/turtlebotPerception.hpp src/turtlebotPerception.cpp)
+if(TARGET GTest)
+ target_link_libraries(GTest ${catkin_LIBRARIES})
+endif()
 
 ## Add folders to be run by python nosetests
 # catkin_add_nosetests(test)
+
 
 add_executable(localisation src/localisation.cpp src/main.cpp)
 target_link_libraries(localisation ${catkin_LIBRARIES})
@@ -244,3 +255,4 @@ if(CATKIN_ENABLE_TESTING)
   target_link_libraries(testPathPlanner ${catkin_LIBRARIES})
 
 endif()
+

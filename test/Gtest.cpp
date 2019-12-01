@@ -1,0 +1,116 @@
+/**
+ * @Author Gautam Balachandran
+ * @file Gtest.cpp
+ * @brief PID controller and Perception class testing
+ *
+ */
+
+#include <gtest/gtest.h>
+#include <tf/transform_broadcaster.h>
+#include "../include/warehouse_robot/pidController.hpp"
+#include "../include/warehouse_robot/turtlebotPerception.hpp"
+
+/**
+ * @brief Test case that checks if the calculated Euclidean Distance is correct
+ */
+TEST(PIDControllerTest, EuclideanDistancePass) {
+  PidController pidController;
+  tf::Point currentPosition, desiredPosition;
+  currentPosition.setX(10);
+  currentPosition.setY(10);
+  currentPosition.setZ(10);
+  desiredPosition.setX(10);
+  desiredPosition.setY(13);
+  desiredPosition.setZ(14);
+  double expectPass = 5;
+  double dist = pidController.euclideanDist(currentPosition, desiredPosition);
+  EXPECT_NEAR(expectPass,dist,0.01);// Should Pass
+}
+
+/**
+ * @brief Test case that checks if the calculated Euclidean Distance is of type double
+ */
+TEST(PIDControllerTest, EuclideanDistanceTypePass) {
+  PidController pidController;
+  tf::Point currentPosition, desiredPosition;
+  currentPosition.setX(10);
+  currentPosition.setY(10);
+  currentPosition.setZ(10);
+  desiredPosition.setX(10);
+  desiredPosition.setY(13);
+  desiredPosition.setZ(14);
+  double dist = pidController.euclideanDist(currentPosition, desiredPosition);
+  EXPECT_EQ(typeid(dist), typeid(double));// Should Pass
+}
+
+
+/**
+ * @brief Test case that checks if the calculated steering angle is correct
+ */
+TEST(PIDControllerTest, SteeringAnglePass) {
+  PidController pidController;
+  tf::Point trajPosition;
+  double angVel = 30.0;
+  trajPosition.setX(10);
+  trajPosition.setY(10);
+  trajPosition.setZ(10);
+  double expectPass = 30;
+  double steeringAng = pidController.calcSteeringAng(trajPosition, angVel);
+  EXPECT_NEAR(expectPass,steeringAng,0.01);// Should Pass
+}
+
+/**
+ * @brief Test case that checks if the calculated Euclidean Distance is of type double
+ */
+TEST(PIDControllerTest, SteeringAngleTypePass) {
+  PidController pidController;
+  tf::Point trajPosition;
+  double angVel = 30.0;
+  trajPosition.setX(10);
+  trajPosition.setY(10);
+  trajPosition.setZ(10);
+  double steeringAng = pidController.calcSteeringAng(trajPosition, angVel);
+  EXPECT_EQ(typeid(steeringAng), typeid(double));// Should Pass
+}
+
+/**
+ * @brief Test case that checks if the type of PID Control parameters are correct
+ */
+TEST(PIDControllerTest, PidTypePass) {
+  PidController pidController;
+  tf::Point trajPosition, desiredPosition;
+  double kP, kI, kD;
+  trajPosition.setX(10);
+  trajPosition.setY(10);
+  trajPosition.setZ(10);
+  desiredPosition.setX(10);
+  desiredPosition.setY(10);
+  desiredPosition.setZ(10);
+  pidController.calcPID(trajPosition, desiredPosition);
+  kP = pidController.getKP();
+  kD = pidController.getKD();
+  kI = pidController.getKI();
+  EXPECT_EQ(typeid(kP), typeid(double));// Should Pass
+  EXPECT_EQ(typeid(kD), typeid(double));// Should Pass
+  EXPECT_EQ(typeid(kI), typeid(double));// Should Pass
+}
+
+/**
+ * @brief Test case that checks if the collision is detected
+ */
+TEST(TurtlebotPerceptionTest, DetecCollisionPass) {
+  TurtlebotPerception turtlebotPerception;
+  bool coll;
+  coll = turtlebotPerception.detectCollision();
+  EXPECT_TRUE(coll);// Should Pass
+}
+
+/**
+ * @brief Test case that checks if the return value is boolean
+ */
+TEST(TurtlebotPerceptionTest, DetecCollisionTypePass) {
+  TurtlebotPerception turtlebotPerception;
+  bool coll;
+  coll = turtlebotPerception.detectCollision();
+  EXPECT_EQ(typeid(coll), typeid(bool));// Should Pass
+}
