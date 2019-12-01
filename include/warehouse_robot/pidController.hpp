@@ -22,11 +22,11 @@
 class PidController {
  private:
   // ROS Node handle object for controller
-  ros::NodeHandle controllerNode;
+  // ros::NodeHandle controllerNode;
   // ROS publisher object for velocity publishing
-  ros::Publisher velocityPub;
+  // ros::Publisher velocityPub;
   // ROS subscriber object for getting position
-  ros::Subscriber positionSub;
+  // ros::Subscriber positionSub;
   // Transform Object for position
   tf::Point position;
   double orientation, linearVel, angularVel, kD, kI, kP;
@@ -37,37 +37,37 @@ class PidController {
    * @param none
    * @return The current node handle for the controller
    */
-  ros::NodeHandle getControllerNode();
+  // ros::NodeHandle getControllerNode();
   /**
    * @brief Setter method for the Ros Node
    * @param New Node to be set
    * @return none
    */
-  void setControllerNode(ros::NodeHandle n);
+  // void setControllerNode(ros::NodeHandle n);
   /**
    * @brief Getter method for the velocity publisher
    * @param none
    * @return The current velocity publisher
    */
-  ros::Publisher getVelocityPub();
+  // ros::Publisher getVelocityPub();
   /**
    * @brief Setter method for the velocity publisher
    * @param New velocity publisher to be set
    * @return none
    */
-  void setVelocityPub(ros::Publisher pub);
+  // void setVelocityPub(ros::Publisher pub);
   /**
    * @brief Getter method for the position subscriber
    * @param none
    * @return The current position subscriber
    */
-  ros::Subscriber getPositionSub();
+  // ros::Subscriber getPositionSub();
   /**
    * @brief Setter method for the position subscriber
    * @param New position subscriber to be set
    * @return none
    */
-  void setPositionSub(ros::Subscriber sub);
+  // void setPositionSub(ros::Subscriber sub);
   /**
    * @brief Getter method for the position
    * @param none
@@ -169,7 +169,7 @@ class PidController {
    * @param Trajectory position and the angular velocity
    * @return calculated steering angle
    */
-  double calSteeringAng(tf::Point trajPosition, double angularVel);
+  double calcSteeringAng(tf::Point trajPosition, double angularVel);
 
 };
 

@@ -15,11 +15,11 @@
 class TurtlebotPerception {
  private:
   // ROS Node handle object for perception
-  ros::NodeHandle perceptionNode;
+  // ros::NodeHandle perceptionNode;
   // ROS publisher object for perception
-  ros::Publisher distPub;
+  // ros::Publisher distPub;
   // ROS subscriber object for perception
-  ros::Subscriber distSub;
+  // ros::Subscriber distSub;
   // Boolean object to detect collision
   bool collide;
 
@@ -29,37 +29,37 @@ class TurtlebotPerception {
    * @param  none
    * @return The current node handle for the perception
    */
-  ros::NodeHandle getPerceptionNode();
+  // ros::NodeHandle getPerceptionNode();
   /**
    * @brief Setter method for the Ros Node
    * @param  New Node to be set
    * @return none
    */
-  void setPerceptionNode(ros::NodeHandle n);
+  // void setPerceptionNode(ros::NodeHandle n);
   /**
    * @brief Getter method for the distance publisher
    * @param  none
    * @return The current distance publisher
    */
-  ros::Publisher getDistPub();
+  // ros::Publisher getDistPub();
   /**
    * @brief Setter method for the distance publisher
    * @param  New distance publisher to be set
    * @return none
    */
-  void setDistPub(ros::Publisher pub);
+  // void setDistPub(ros::Publisher pub);
   /**
    * @brief Getter method for the distance subscriber
    * @param  none
    * @return The current distance subscriber
    */
-  ros::Subscriber getDistSub();
+  // ros::Subscriber getDistSub();
   /**
    * @brief Setter method for the distance subscriber
    * @param  New distance subscriber to be set
    * @return none
    */
-  void setDistSub(ros::Subscriber sub);
+  // void setDistSub(ros::Subscriber sub);
   /**
    * @brief Getter method for the collision parameter
    * @param  none
