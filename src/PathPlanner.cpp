@@ -1,5 +1,4 @@
-
-=======
+/**
 *BSD 3-Clause License
 *
 *Copyright (c) 2019, Yashaarth Todi
@@ -29,8 +28,8 @@
 */
 
 /**
- * @file main.cpp
- * @brief This file is the main file of the testing suite using GTest framework
+ * @file PathPlanner.cpp
+ * @brief This file contains the function definitions of class PathPlanner
  *
  * This project contains the execution to navigate Turtlebot3 in a warehouse
  * environment using A star path planning, picks up a package and drops it in
@@ -46,19 +45,82 @@
  *
  * @date 11-27-2019
  */
- 
-#include "ros/ros.h"
-#include "gtest/gtest.h"
+#include <../include/warehouse_robot/PathPlanner.h>
+#include <iostream>
 
-/**
- * @brief Main function for all test functions
- * @param Parameter 1, Number of inputs
- * @param Parameter 2, Input
- * @return boolean value
- */
-int main(int argc, char** argv) {
-  ros::init(argc, argv,  "testPathPlanner");
-  testing::InitGoogleTest(&argc, argv);
-  return RUN_ALL_TESTS();
+ void PathPlanner::setGoal(std::pair<double , double>) {
+  goal.first = 100;
+  goal.second = 100;
+ }
+
+
+ std::pair<double , double> PathPlanner::getGoal() {
+  std::pair<double , double> stub;
+  stub.first = 1;
+  stub.second = 1;
+  return stub;
+ }
+
+ void PathPlanner::setStart(std::pair<double , double>) {
+  start.first = 100;
+  start.second = 100;
+ }
+
+ std::pair<double , double> PathPlanner::getStart() {
+  std::pair<double , double> stub;
+  stub.first = 1;
+  stub.second = 1;
+  return stub;
+ }
+
+ void PathPlanner::setPathFound(bool) {
+  pathFound = false;
+ }
+
+ bool PathPlanner::getPathFound() {
+  return false;
+ }
+
+ std::size_t PathPlanner::hashIndex(std::pair<double , double>) {
+  return 0;
+ }
+
+std::pair<double , double> PathPlanner::hashCoordinates(std::size_t) {
+
+  return std::make_pair(0,0);
+ }
+
+ bool PathPlanner::boundaryCheck(std::size_t) {
+   return false;
+ }
+
+std::vector<std::pair<double , double>> PathPlanner::
+                                                    shortestPath(std::size_t) {
+std::vector<std::pair<double , double>> shortPath;
+std::pair<double , double> p = std::make_pair(0,0);
+shortPath.push_back(p);
+PathPlanner::totalCost.push_back(0);
+PathPlanner::totalCost.push_back(-1);
+return shortPath;
 }
 
+bool PathPlanner::updateCost(std::size_t, std::size_t, double) {
+  return true;
+}
+
+std::pair<double, double> PathPlanner::differential(double, double, double, double,
+   double, double, size_t, double) {
+return std::make_pair(0,0);
+}
+
+void PathPlanner::allActions(std::size_t) {
+
+}
+
+std::vector<std::vector<std::size_t>> PathPlanner::showMap() {
+  std::vector<std::vector<std::size_t>> stubVector;
+  std::vector<std::size_t> intermediateVector;
+  intermediateVector.push_back(0);
+  stubVector.push_back(intermediateVector);
+  return stubVector;
+}

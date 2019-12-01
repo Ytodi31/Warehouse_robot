@@ -1,0 +1,7 @@
+<launch>
+  <node pkg = "warehouse_robot" type = "main" name="main" />
+  <test test-name = "testPathPlanner" pkg = "warehouse_robot"
+     type = "testPathPlanner"/>
+     <test test-name = "testPickPlace" pkg = "warehouse_robot"
+        type = "testPickPlace"/>
+</launch>

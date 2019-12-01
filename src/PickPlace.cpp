@@ -1,5 +1,4 @@
-
-=======
+/**
 *BSD 3-Clause License
 *
 *Copyright (c) 2019, Yashaarth Todi
@@ -29,8 +28,8 @@
 */
 
 /**
- * @file main.cpp
- * @brief This file is the main file of the testing suite using GTest framework
+ * @file PickPlace.cpp
+ * @brief This file contains the function defintions of class PickPlace
  *
  * This project contains the execution to navigate Turtlebot3 in a warehouse
  * environment using A star path planning, picks up a package and drops it in
@@ -44,21 +43,30 @@
  * @author Gautam Balachandran
  * @author Yashaarth Todi
  *
- * @date 11-27-2019
+ * @date 11-28-2019
  */
- 
-#include "ros/ros.h"
-#include "gtest/gtest.h"
+ #include <../include/warehouse_robot/PickPlace.h>
 
-/**
- * @brief Main function for all test functions
- * @param Parameter 1, Number of inputs
- * @param Parameter 2, Input
- * @return boolean value
- */
-int main(int argc, char** argv) {
-  ros::init(argc, argv,  "testPathPlanner");
-  testing::InitGoogleTest(&argc, argv);
-  return RUN_ALL_TESTS();
-}
+ bool PickPlace::checkGripperState() {
+   return false;
+ }
 
+ void PickPlace::setPick() {
+   pickPose.position.x = 0;
+   pickPose.position.y = 0;
+   pickPose.position.z = 0;
+   pickPose.orientation.x = 0;
+   pickPose.orientation.y = 0;
+   pickPose.orientation.z = 0;
+   pickPose.orientation.w = 0;
+ }
+
+   void PickPlace::setPlace() {
+     placePose.position.x = 0;
+     placePose.position.y = 0;
+     placePose.position.z = 0;
+     placePose.orientation.x = 0;
+     placePose.orientation.y = 0;
+     placePose.orientation.z = 0;
+     placePose.orientation.w = 0;
+   }
