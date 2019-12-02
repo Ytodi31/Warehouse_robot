@@ -2,7 +2,9 @@ cmake_minimum_required(VERSION 2.8.3)
 project(warehouse_robot)
 
 ## Compile as C++11, supported in ROS Kinetic and newer
-# add_compile_options(-std=c++11)
+ add_compile_options(-std=c++11)
+
+
 
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
@@ -11,6 +13,8 @@ find_package(catkin REQUIRED COMPONENTS
   roscpp
   rospy
   std_msgs
+  sensor_msgs
+  tf
   message_generation
 )
 
@@ -116,10 +120,12 @@ catkin_package(
 
 ## Specify additional locations of header files
 ## Your package locations should be listed before other locations
+
 include_directories(
-# include
+ include/warehouse_robot
   ${catkin_INCLUDE_DIRS}
 )
+
 
 ## Declare a C++ library
 # add_library(${PROJECT_NAME}
@@ -146,10 +152,18 @@ include_directories(
 ## same as for the library above
 # add_dependencies(${PROJECT_NAME}_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
+add_executable(pathPlanner src/main.cpp src/PathPlanner.cpp src/PickPlace.cpp)
+add_executable(pickPlace src/main.cpp  src/PickPlace.cpp)
+add_executable(localisation src/localisation.cpp src/main.cpp)
+add_executable(pidController src/pidController.cpp src/main.cpp)
+add_executable(turtlebotPerception src/turtlebotPerception.cpp src/main.cpp)
+
 ## Specify libraries to link a library or executable target against
-# target_link_libraries(${PROJECT_NAME}_node
-#   ${catkin_LIBRARIES}
-# )
+target_link_libraries(pathPlanner ${catkin_LIBRARIES})
+target_link_libraries(pickPlace ${catkin_LIBRARIES})
+target_link_libraries(localisation ${catkin_LIBRARIES})
+target_link_libraries(pidController ${catkin_LIBRARIES})
+target_link_libraries(turtlebotPerception ${catkin_LIBRARIES} ${OpenCV_LIBS})
 
 #############
 ## Install ##
@@ -196,12 +210,33 @@ include_directories(
 #############
 ## Testing ##
 #############
-
-## Add gtest based cpp test target and link libraries
-# catkin_add_gtest(${PROJECT_NAME}-test test/test_warehouse_robot.cpp)
-# if(TARGET ${PROJECT_NAME}-test)
-#   target_link_libraries(${PROJECT_NAME}-test ${PROJECT_NAME})
-# endif()
-
 ## Add folders to be run by python nosetests
 # catkin_add_nosetests(test)
+
+
+if(CATKIN_ENABLE_TESTING)
+	find_package(rostest REQUIRED)
+	add_rostest_gtest(allTestWarehouseRobot
+    test/allTestWarehouseRobot.test
+    test/localisationTest.cpp
+		test/localisationTestClass.cpp
+		test/localisationTestClass.hpp
+    include/warehouse_robot/localisation.hpp
+     src/localisation.cpp
+     test/testPathPlanner.cpp
+     include/warehouse_robot/PathPlanner.hpp
+    src/PathPlanner.cpp
+    test/testPickPlace.cpp
+    include/warehouse_robot/PickPlace.hpp
+    src/PickPlace.cpp
+     test/testControlNPerception.cpp
+     include/warehouse_robot/pidController.hpp
+     include/warehouse_robot/turtlebotPerception.hpp
+     src/pidController.cpp
+     src/turtlebotPerception.cpp
+     test/main.cpp)
+
+	target_link_libraries(allTestWarehouseRobot ${catkin_LIBRARIES} ${OpenCV_LIBS})
+
+
+endif()

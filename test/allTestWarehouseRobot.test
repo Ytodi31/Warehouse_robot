@@ -1,0 +1,6 @@
+<launch>
+	<test test-name = "allTestWarehouseRobot"
+	           pkg="warehouse_robot"
+	           type = "allTestWarehouseRobot"/>
+
+</launch>
