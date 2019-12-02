@@ -163,7 +163,7 @@ target_link_libraries(pathPlanner ${catkin_LIBRARIES})
 target_link_libraries(pickPlace ${catkin_LIBRARIES})
 target_link_libraries(localisation ${catkin_LIBRARIES})
 target_link_libraries(pidController ${catkin_LIBRARIES})
-target_link_libraries(turtlebotPerception ${catkin_LIBRARIES})
+target_link_libraries(turtlebotPerception ${catkin_LIBRARIES} ${OpenCV_LIBS})
 
 #############
 ## Install ##
@@ -236,7 +236,7 @@ if(CATKIN_ENABLE_TESTING)
      src/turtlebotPerception.cpp
      test/main.cpp)
 
-	target_link_libraries(allTestWarehouseRobot ${catkin_LIBRARIES})
+	target_link_libraries(allTestWarehouseRobot ${catkin_LIBRARIES} ${OpenCV_LIBS})
 
 
 endif()
