@@ -216,30 +216,27 @@ target_link_libraries(turtlebotPerception ${catkin_LIBRARIES})
 
 if(CATKIN_ENABLE_TESTING)
 	find_package(rostest REQUIRED)
-	add_rostest_gtest(
-	  allTestWarehouseRobot
-	#	test/localisationTest.cpp
+	add_rostest_gtest(allTestWarehouseRobot
+    test/allTestWarehouseRobot.test
+    test/localisationTest.cpp
 		test/localisationTestClass.cpp
 		test/localisationTestClass.hpp
-    test/testPathPlanner.cpp
+    include/warehouse_robot/localisation.hpp
+     src/localisation.cpp
+     test/testPathPlanner.cpp
+     include/warehouse_robot/PathPlanner.hpp
+    src/PathPlanner.cpp
     test/testPickPlace.cpp
-    test/testControlNPerception.cpp
-		test/main.cpp
-		include/warehouse_robot/localisation.hpp
-    include/warehouse_robot/PathPlanner.hpp
     include/warehouse_robot/PickPlace.hpp
-    include/warehouse_robot/pidController.hpp
-    include/warehouse_robot/turtlebotPerception.hpp
-	    src/localisation.cpp
-      src/PathPlanner.cpp
-      src/PickPlace.cpp
-      src/pidController.cpp
-      src/turtlebotPerception.cpp
-	)
-	target_link_libraries(
-		allTestWarehouseRobot
-		${catkin_LIBRARIES}
-	)
+    src/PickPlace.cpp
+     test/testControlNPerception.cpp
+     include/warehouse_robot/pidController.hpp
+     include/warehouse_robot/turtlebotPerception.hpp
+     src/pidController.cpp
+     src/turtlebotPerception.cpp
+     test/main.cpp)
+
+	target_link_libraries(allTestWarehouseRobot ${catkin_LIBRARIES})
 
 
 endif()

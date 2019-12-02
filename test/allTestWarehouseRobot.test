@@ -1,17 +1,6 @@
 <launch>
-	<test test-name = "localisationTest"
+	<test test-name = "allTestWarehouseRobot"
 	           pkg="warehouse_robot"
-	           type = "localisationTest"/>
+	           type = "allTestWarehouseRobot"/>
 
-  <test test-name = "testPathPlanner"
-	           pkg = "warehouse_robot"
-	           type = "testPathPlanner"/>
-
-	 <test test-name = "testPickPlace"
-	           pkg = "warehouse_robot"
-			       type = "testPickPlace"/>
-
-		<test test-name = "testControlNPerception"
-							pkg = "warehouse_robot"
-							type = "testControlNPerception"/>
 </launch>
