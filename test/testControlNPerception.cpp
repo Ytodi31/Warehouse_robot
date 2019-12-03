@@ -49,100 +49,143 @@
 
 #include <gtest/gtest.h>
 #include <tf/transform_broadcaster.h>
+#include <opencv2/aruco.hpp>
 #include "../include/warehouse_robot/pidController.hpp"
 #include "../include/warehouse_robot/turtlebotPerception.hpp"
 
+/**
+ * @brief Test case that checks the pose getter method
+ */
+TEST(PIDControllerTest, PoseTypeTest) {
+  PidController pidController;
+  tf::Pose pose;
+  pose = pidController.getPose();
+  EXPECT_EQ(typeid(pose), typeid(tf::Pose));  // Should Pass
+}
+/**
+ * @brief Test case that checks the linear velocity getter method
+ */
+TEST(PIDControllerTest, LinearVelTypeTest) {
+  PidController pidController;
+  double vel;
+  vel = pidController.getLinearVel();
+  EXPECT_EQ(typeid(vel), typeid(double));  // Should Pass
+}
+/**
+ * @brief Test case that checks the angular velocity getter method
+ */
+TEST(PIDControllerTest, AngularVelTypeTest) {
+  PidController pidController;
+  double vel;
+  vel = pidController.getAngularVel();
+  EXPECT_EQ(typeid(vel), typeid(double));  // Should Pass
+}
+/**
+ * @brief Test case that checks the control parameters getter methods
+ */
+TEST(PIDControllerTest, ControlParametersTypeTest) {
+  PidController pidController;
+  double kP,kD,kI;
+  kP = pidController.getKP();
+  kD = pidController.getKD();
+  kI = pidController.getKI();
+  EXPECT_EQ(typeid(kP), typeid(double));  // Should Pass
+  EXPECT_EQ(typeid(kD), typeid(double));// Should Pass
+  EXPECT_EQ(typeid(kI), typeid(double));// Should Pass
+}
 /**
  * @brief Test case that checks if the calculated Euclidean Distance is correct
  */
 TEST(PIDControllerTest, EuclideanDistancePass) {
   PidController pidController;
-  tf::Point currentPosition, desiredPosition;
-  currentPosition.setX(10);
-  currentPosition.setY(10);
-  currentPosition.setZ(10);
-  desiredPosition.setX(10);
-  desiredPosition.setY(13);
-  desiredPosition.setZ(14);
+  tf::Pose currentPose, desiredPose;
+  currentPose.getOrigin().setX(10);
+  currentPose.getOrigin().setY(10);
+  currentPose.getOrigin().setZ(0);
+  currentPose.getRotation().setEulerZYX(0,0,0);
+  desiredPose.getOrigin().setX(14);
+  desiredPose.getOrigin().setY(13);
+  desiredPose.getOrigin().setZ(0);
+  desiredPose.getRotation().setEulerZYX(0,0,0);
   double expectPass = 5;
-  double dist = pidController.euclideanDist(currentPosition, desiredPosition);
+  double dist = pidController.euclideanDist(currentPose, desiredPose);
   EXPECT_NEAR(expectPass,dist,0.01);  // Should Pass
 }
-
 /**
- * @brief Test case that checks if the calculated Euclidean Distance is of type
- * double
+ * @brief Test case that checks if the calculated Euclidean Distance is of 
+ * type double
  */
 TEST(PIDControllerTest, EuclideanDistanceTypePass) {
   PidController pidController;
-  tf::Point currentPosition, desiredPosition;
-  currentPosition.setX(10);
-  currentPosition.setY(10);
-  currentPosition.setZ(10);
-  desiredPosition.setX(10);
-  desiredPosition.setY(13);
-  desiredPosition.setZ(14);
-  double dist = pidController.euclideanDist(currentPosition, desiredPosition);
+  tf::Pose currentPose, desiredPose;
+  currentPose.getOrigin().setX(10);
+  currentPose.getOrigin().setY(10);
+  currentPose.getOrigin().setZ(0);
+  currentPose.getRotation().setEulerZYX(0,0,0);
+  desiredPose.getOrigin().setX(14);
+  desiredPose.getOrigin().setY(13);
+  desiredPose.getOrigin().setZ(0);
+  desiredPose.getRotation().setEulerZYX(0,0,0);
+  double dist = pidController.euclideanDist(currentPose, desiredPose);
   EXPECT_EQ(typeid(dist), typeid(double));  // Should Pass
 }
-
 /**
  * @brief Test case that checks if the calculated velocities is correct
  */
 TEST(PIDControllerTest, VelocityPass) {
   PidController pidController;
-  tf::Point currentPosition, desiredPosition;
-  double linearVel, angVel, expectPassLin = 10, expectPassAng = 10;
-  currentPosition.setX(10);
-  currentPosition.setY(10);
-  currentPosition.setZ(10);
-  desiredPosition.setX(10);
-  desiredPosition.setY(13);
-  desiredPosition.setZ(14);
-  pidController.calcVel(currentPosition, desiredPosition);
+  tf::Pose currentPose, desiredPose;
+  double linearVel, angVel, expectPassLin = 0.3, expectPassAng = 5;
+  currentPose.getOrigin().setX(10);
+  currentPose.getOrigin().setY(10);
+  currentPose.getRotation().setEulerZYX(0,0,0);
+  desiredPose.getOrigin().setX(14);
+  desiredPose.getOrigin().setY(13);
+  desiredPose.getOrigin().setZ(0);
+  desiredPose.getRotation().setEulerZYX(30,0,0);
+  pidController.setKP(80);
+  pidController.setKD(3);
+  pidController.setKI(4);
+  pidController.calcVel(currentPose, desiredPose);
   linearVel = pidController.getLinearVel();
   angVel = pidController.getAngularVel();
-  EXPECT_NEAR(expectPassLin,linearVel,0.01);  // Should Pass
-  EXPECT_NEAR(expectPassAng,angVel,0.01);// Should Pass
+  EXPECT_NEAR(expectPassLin,linearVel,0.1);  // Should Pass
+  EXPECT_NEAR(expectPassAng,angVel,0.1);// Should Pass
 }
-
 /**
  * @brief Test case that checks if the calculated velocities are of type
  * double
  */
 TEST(PIDControllerTest, VelocityTypePass) {
   PidController pidController;
-  tf::Point currentPosition, desiredPosition;
-  double linearVel, angVel, expectPassLin = 10, expectPassAng = 10;
-  currentPosition.setX(10);
-  currentPosition.setY(10);
-  currentPosition.setZ(10);
-  desiredPosition.setX(10);
-  desiredPosition.setY(13);
-  desiredPosition.setZ(14);
-  pidController.calcVel(currentPosition, desiredPosition);
+  tf::Pose currentPose, desiredPose;
+  double linearVel, angVel;
+  currentPose.getOrigin().setX(10);
+  currentPose.getOrigin().setY(10);
+  currentPose.getOrigin().setZ(0);
+  currentPose.getRotation().setEulerZYX(0,0,0);
+  desiredPose.getOrigin().setX(14);
+  desiredPose.getOrigin().setY(13);
+  desiredPose.getOrigin().setZ(0);
+  desiredPose.getRotation().setEulerZYX(30,0,0);
+  pidController.setKP(80);
+  pidController.setKD(3);
+  pidController.setKI(4);
+  pidController.calcVel(currentPose, desiredPose);
   linearVel = pidController.getLinearVel();
   angVel = pidController.getAngularVel();
-  EXPECT_EQ(typeid(linearVel), typeid(double));// Should Pass
+  EXPECT_EQ(typeid(linearVel), typeid(double));  // Should Pass
   EXPECT_EQ(typeid(angVel), typeid(double));// Should Pass
 }
-
 /**
- * @brief Test case that checks if the type of PID Control parameters are
- * correct
+ * @brief Test case that checks if the getter method of the collision variable
  */
-TEST(PIDControllerTest, PidTypePass) {
-  PidController pidController;
-  tf::Point trajPosition, desiredPosition;
-  double kP, kI, kD;
-  kP = pidController.getKP();
-  kD = pidController.getKD();
-  kI = pidController.getKI();
-  EXPECT_EQ(typeid(kP), typeid(double));// Should Pass
-  EXPECT_EQ(typeid(kD), typeid(double));// Should Pass
-  EXPECT_EQ(typeid(kI), typeid(double));// Should Pass
+TEST(TurtlebotPerceptionTest, CollisionTypePass) {
+  TurtlebotPerception turtlebotPerception;
+  bool coll;
+  coll = turtlebotPerception.getCollide();
+  EXPECT_EQ(typeid(coll), typeid(bool));  // Should Pass
 }
-
 /**
  * @brief Test case that checks if the collision is detected
  */
@@ -152,9 +195,9 @@ TEST(TurtlebotPerceptionTest, DetectCollisionPass) {
   coll = turtlebotPerception.detectCollision();
   EXPECT_TRUE(coll);  // Should Pass
 }
-
 /**
- * @brief Test case that checks if the return value is boolean
+ * @brief Test case that checks if the collision detector return value is 
+ * boolean
  */
 TEST(TurtlebotPerceptionTest, DetectCollisionTypePass) {
   TurtlebotPerception turtlebotPerception;
@@ -162,3 +205,28 @@ TEST(TurtlebotPerceptionTest, DetectCollisionTypePass) {
   coll = turtlebotPerception.detectCollision();
   EXPECT_EQ(typeid(coll), typeid(bool));  // Should Pass
 }
+/**
+ * @brief Test case that checks if the marker is detected properly
+ */
+TEST(TurtlebotPerceptionTest, MarkerDetectionPass) {
+  TurtlebotPerception turtlebotPerception;
+  bool detectMarker;
+  cv::Mat markerImage;
+  cv::Ptr<cv::aruco::Dictionary> dictionary = cv::aruco::getPredefinedDictionary(cv::aruco::DICT_6X6_250);
+  cv::aruco::drawMarker(dictionary, 23, 170, markerImage, 1);
+  detectMarker = turtlebotPerception.detectArucoMarker(markerImage, 23);
+  EXPECT_TRUE(detectMarker);  // Should Pass
+}
+/**
+ * @brief Test case that checks if the marker detector function returns boolean value
+ */
+TEST(TurtlebotPerceptionTest, MarkerDetectionTypePass) {
+  TurtlebotPerception turtlebotPerception;
+  bool detectMarker;
+  cv::Mat markerImage;
+  cv::Ptr<cv:aruco::Dictionary> dictionary = cv::aruco::getPredefinedDictionary(cv::aruco::DICT_6X6_250);
+  cv::aruco::drawMarker(dictionary, 23, 170, markerImage, 1);
+  detectMarker = turtlebotPerception.detectArucoMarker(markerImage, 23);
+  EXPECT_EQ(typeid(detectMarker), typeid(bool));  // Should Pass
+}
+
