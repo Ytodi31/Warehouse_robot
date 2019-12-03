@@ -16,6 +16,7 @@ find_package(catkin REQUIRED COMPONENTS
   sensor_msgs
   tf
   message_generation
+  cv_bridge
 )
 
 ## System dependencies are found with CMake's conventions
@@ -163,7 +164,7 @@ target_link_libraries(pathPlanner ${catkin_LIBRARIES})
 target_link_libraries(pickPlace ${catkin_LIBRARIES})
 target_link_libraries(localisation ${catkin_LIBRARIES})
 target_link_libraries(pidController ${catkin_LIBRARIES})
-target_link_libraries(turtlebotPerception ${catkin_LIBRARIES} ${OpenCV_LIBS})
+target_link_libraries(turtlebotPerception ${catkin_LIBRARIES})
 
 #############
 ## Install ##
@@ -235,8 +236,7 @@ if(CATKIN_ENABLE_TESTING)
      src/pidController.cpp
      src/turtlebotPerception.cpp
      test/main.cpp)
-
-	target_link_libraries(allTestWarehouseRobot ${catkin_LIBRARIES} ${OpenCV_LIBS})
+    target_link_libraries(allTestWarehouseRobot ${catkin_LIBRARIES})
 
 
 endif()
