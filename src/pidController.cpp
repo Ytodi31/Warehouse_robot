@@ -1,8 +1,49 @@
-/*
- * pidController.cpp
+/**
+ *BSD 3-Clause License
  *
- *  Created on: Nov 28, 2019
- *      Author: gautam
+ *Copyright (c) 2019, Yashaarth Todi
+ *All rights reserved.
+ *
+ *Redistribution and use in source and binary forms, with or without
+ *modification, are permitted provided that the following conditions are met:
+ *1. Redistributions of source code must retain the above copyright notice, this
+ *   list of conditions and the following disclaimer.
+ *2. Redistributions in binary form must reproduce the above copyright notice,
+ *   this list of conditions and the following disclaimer in the documentation
+ *   and/or other materials provided with the distribution.
+ *3. Neither the name of the copyright holder nor the names of its
+ *   contributors may be used to endorse or promote products derived from
+ *   this software without specific prior written permission.
+ *
+ *THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ *AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ *IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ *DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+ *FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ *DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ *SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ *CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+ *OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ *OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+
+/**
+ * @file pidController.cpp
+ * @brief This file provides the implementation of the Controller module
+ *
+ * This project contains the execution to navigate Turtlebot3 in a warehouse
+ * environment using A star path planning, picks up a package and drops it in
+ * user defined postitions. Turtebot3 uses OpenManipulator to perform thus
+ * pick-place task.
+ *
+ * @copyright Copyright (c) Fall 2019 ENPM808X
+ *            This project is released under the BSD 3-Clause License.
+ *
+ * @author Suyash Yeotikar
+ * @author Gautam Balachandran
+ * @author Yashaarth Todi
+ *
+ * @date 11-28-2019
  */
 
 #include "pidController.hpp"
@@ -40,52 +81,36 @@ void PidController::setVelocityPub(ros::Publisher pub) {
   PidController::velocityPub = pub;
 }
 /**
- * @brief Getter method for the position subscriber
+ * @brief Getter method for the pose subscriber
  * @param none
- * @return The current position subscriber
+ * @return The current pose subscriber
  */
-ros::Subscriber PidController::getPositionSub() {
-  return PidController::positionSub;
+ros::Subscriber PidController::getPoseSub() {
+  return PidController::poseSub;
 }
 /**
- * @brief Setter method for the position subscriber
- * @param New position subscriber to be set
+ * @brief Setter method for the pose subscriber
+ * @param New pose subscriber to be set
  * @return none
  */
-void PidController::setPositionSub(ros::Subscriber sub) {
-  PidController::positionSub = sub;
+void PidController::setPoseSub(ros::Subscriber sub) {
+  PidController::poseSub = sub;
 }
 /**
- * @brief Getter method for the position
+ * @brief Getter method for the pose
  * @param none
- * @return The current position of the turtlebot
+ * @return The current pose of the turtlebot
  */
-tf::Point PidController::getPosition() {
-  return PidController::position;
+tf::Pose PidController::getPose() {
+  return PidController::pose;
 }
 /**
- * @brief Setter method for the position
- * @param New position to be set
+ * @brief Setter method for the pose
+ * @param New pose to be set
  * @return none
  */
-void PidController::setPosition(tf::Point pos) {
-  PidController::position = pos;
-}
-/**
- * @brief Getter method for the orientation
- * @param none
- * @return The current orientation of the turtlebot
- */
-double PidController::getOrientation() {
-  return PidController::orientation;
-}
-/**
- * @brief Setter method for the orientation
- * @param New orientation to be set
- * @return none
- */
-void PidController::setOrientation(double orient) {
-  PidController::orientation = orient;
+void PidController::setPose(tf::Pose pos) {
+  PidController::pose = pos;
 }
 /**
  * @brief Getter method for the linear velocity
@@ -168,28 +193,31 @@ void PidController::setKI(double kI) {
   PidController::kI = kI;
 }
 /**
- * @brief Euclidean distance calculator
- * @param Current position and desired position
- * @return Calculated distance
+ * @brief Callback function to get the pose data from the Turtlebot
+ * @param Turtlebot Pose
+ * @return none
  */
+void PidController::distCallBack(
+    const geometry_msgs::PoseStamped::ConstPtr &msg) {
+  ROS_INFO("Calling Distance Call Back Pose: [%s]", msg->pose);
+}
 /**
  * @brief Mock of the euclidean distance calculator
- * @param Current position and desired position
+ * @param Current pose and desired pose
  * @return Calculated distance
  */
-double PidController::euclideanDist(tf::Point currentPosition,
-                                    tf::Point desiredPosition) {
+double PidController::euclideanDist(tf::Pose currentPose,
+                                    tf::Pose desiredPose) {
   double dist = 5;  // MOCK VALUE FOR TESTING!
   return dist;
 }
 
 /**
  * @brief Mock method to calculate the linear and angular velocity for the robot
- * @param Current position and desired position
+ * @param Current pose and desired pose
  * @return Calculated linear and angular velocity
  */
-void PidController::calcVel(tf::Point currentPosition,
-                            tf::Point desiredPosition) {
+void PidController::calcVel(tf::Pose currentPose, tf::Pose desiredPose) {
   PidController::linearVel = 10.0;  // Mock values for testing
   PidController::angularVel = 10.0;  // Mock values for testing
 
