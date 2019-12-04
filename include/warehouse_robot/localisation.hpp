@@ -67,7 +67,7 @@ class Localisation {
      * @param msg entropy message holding the entropy value
      * @return none
      */
-    void EntropyCallback(const std_msgs::Float64::ConstPtr msg);
+    void EntropyCallback(const std_msgs::Float64::ConstPtr& msg);
     /*
      * @brief function to publish the pose that was obtained in
      * map coordinates (class variable)(extracted from tf listener)
@@ -108,5 +108,3 @@ class Localisation {
 };
 
 #endif  // INCLUDE_WAREHOUSE_ROBOT_LOCALISATION_HPP_
-
-
