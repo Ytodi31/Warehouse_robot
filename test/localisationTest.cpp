@@ -78,32 +78,41 @@ TEST(LocalisationTest, ExecuteLocalisationPositive) {
     q.setRPY(-0.003, 0.135, 0.295);
     transform.setRotation(q);
     locObj.SetEntropyThreshold(100);
-    br.sendTransform(tf::StampedTransform(transform,
-    ros::Time::now(), "map", "om_with_tb3/base_footprint"));
-    locObj.ExecuteLocalisation(nh);
     testObj1.InitPose();
     testObj2.InitPose();
     testObj1.poseSubscriber = nh.subscribe("/rawPose",
             100, &LocalisationTest::PoseCallback, &testObj1);
     testObj2.poseSubscriber = nh.subscribe("/mapPose",
                 100, &LocalisationTest::PoseCallback, &testObj2);
-    ros::spinOnce();
+    ros::Rate loop_rate(10);
+    ros::Time begin = ros::Time::now();
+    while (1) {
+        br.sendTransform(tf::StampedTransform(transform,
+        ros::Time::now(), "/map", "/om_with_tb3/base_footprint"));
+        locObj.ExecuteLocalisation(nh);
+         ros::spinOnce();
+        loop_rate.sleep();
+        double diff = (ros::Time::now() - begin).toSec();
+        if ((testObj2.receivedPose && testObj1.receivedPose) || diff > 5) {
+            break;
+        }
+    }
     EXPECT_TRUE(testObj1.receivedPose);
-    EXPECT_EQ(testObj1.robotPose.position.x, 2.5);
-    EXPECT_EQ(testObj1.robotPose.position.y, 9.7);
-    EXPECT_EQ(testObj1.robotPose.position.z, 0);
-    EXPECT_EQ(testObj1.robotPose.orientation.x, -0.011);
-    EXPECT_EQ(testObj1.robotPose.orientation.y, 0.066);
-    EXPECT_EQ(testObj1.robotPose.orientation.z, 0.144);
-    EXPECT_EQ(testObj1.robotPose.orientation.w, 0.987);
+    EXPECT_NEAR(testObj1.robotPose.position.x, 2.5, 0.1);
+    EXPECT_NEAR(testObj1.robotPose.position.y, 9.7, 0.1);
+    EXPECT_NEAR(testObj1.robotPose.position.z, 0, 0.1);
+    EXPECT_NEAR(testObj1.robotPose.orientation.x, -0.011, 0.1);
+    EXPECT_NEAR(testObj1.robotPose.orientation.y, 0.066, 0.1);
+    EXPECT_NEAR(testObj1.robotPose.orientation.z, 0.144, 0.1);
+    EXPECT_NEAR(testObj1.robotPose.orientation.w, 0.987, 0.1);
     EXPECT_TRUE(testObj2.receivedPose);
-    EXPECT_EQ(testObj2.robotPose.position.x, 50);
-    EXPECT_EQ(testObj2.robotPose.position.y, 194);
-    EXPECT_EQ(testObj2.robotPose.position.z, 0);
-    EXPECT_EQ(testObj2.robotPose.orientation.x, -0.011);
-    EXPECT_EQ(testObj2.robotPose.orientation.y, 0.066);
-    EXPECT_EQ(testObj2.robotPose.orientation.z, 0.144);
-    EXPECT_EQ(testObj2.robotPose.orientation.w, 0.987);
+    EXPECT_NEAR(testObj2.robotPose.position.x, 50, 0.1);
+    EXPECT_NEAR(testObj2.robotPose.position.y, 194, 0.1);
+    EXPECT_NEAR(testObj2.robotPose.position.z, 0, 0.1);
+    EXPECT_NEAR(testObj2.robotPose.orientation.x, -0.011, 0.1);
+    EXPECT_NEAR(testObj2.robotPose.orientation.y, 0.066, 0.1);
+    EXPECT_NEAR(testObj2.robotPose.orientation.z, 0.144, 0.1);
+    EXPECT_NEAR(testObj2.robotPose.orientation.w, 0.987, 0.1);
 }
 
 /**
@@ -122,18 +131,41 @@ TEST(LocalisationTest, ExecuteLocalisationFallenRobotYaxis) {
     q.setRPY(-0.003, 1.57, 0.295);
     transform.setRotation(q);
     locObj.SetEntropyThreshold(100);
-    br.sendTransform(tf::StampedTransform(transform,
-    ros::Time::now(), "map", "om_with_tb3/base_footprint"));
-    locObj.ExecuteLocalisation(nh);
     testObj1.InitPose();
     testObj2.InitPose();
     testObj1.poseSubscriber = nh.subscribe("/rawPose",
                 100, &LocalisationTest::PoseCallback, &testObj1);
     testObj2.poseSubscriber = nh.subscribe("/mapPose",
                 100, &LocalisationTest::PoseCallback, &testObj2);
-    ros::spinOnce();
-    EXPECT_FALSE(testObj1.receivedPose);
-    EXPECT_FALSE(testObj2.receivedPose);
+    ros::Rate loop_rate(10);
+    ros::Time begin = ros::Time::now();
+    while (1) {
+        br.sendTransform(tf::StampedTransform(transform,
+        ros::Time::now(), "/map", "/om_with_tb3/base_footprint"));
+        locObj.ExecuteLocalisation(nh);
+         ros::spinOnce();
+        loop_rate.sleep();
+        double diff = (ros::Time::now() - begin).toSec();
+        if ((testObj2.receivedPose && testObj1.receivedPose) || diff > 5) {
+            break;
+        }
+    }
+    EXPECT_TRUE(testObj1.receivedPose);
+    EXPECT_NEAR(testObj1.robotPose.position.x, 0, 0.1);
+    EXPECT_NEAR(testObj1.robotPose.position.y, 0, 0.1);
+    EXPECT_NEAR(testObj1.robotPose.position.z, 0, 0.1);
+    EXPECT_NEAR(testObj1.robotPose.orientation.x, 0, 0.1);
+    EXPECT_NEAR(testObj1.robotPose.orientation.y, 0, 0.1);
+    EXPECT_NEAR(testObj1.robotPose.orientation.z, 0, 0.1);
+    EXPECT_NEAR(testObj1.robotPose.orientation.w, 0, 0.1);
+    EXPECT_TRUE(testObj2.receivedPose);
+    EXPECT_NEAR(testObj2.robotPose.position.x, 0, 0.1);
+    EXPECT_NEAR(testObj2.robotPose.position.y, 0, 0.1);
+    EXPECT_NEAR(testObj2.robotPose.position.z, 0, 0.1);
+    EXPECT_NEAR(testObj2.robotPose.orientation.x, 0, 0.1);
+    EXPECT_NEAR(testObj2.robotPose.orientation.y, 0, 0.1);
+    EXPECT_NEAR(testObj2.robotPose.orientation.z, 0, 0.1);
+    EXPECT_NEAR(testObj2.robotPose.orientation.w, 0, 0.1);
 }
 
 /**
@@ -152,18 +184,41 @@ TEST(LocalisationTest, ExecuteLocalisationFallenRobotYaxisNeg) {
     q.setRPY(-0.003, -1.57, 0.295);
     transform.setRotation(q);
     locObj.SetEntropyThreshold(100);
-    br.sendTransform(tf::StampedTransform(transform,
-    ros::Time::now(), "map", "om_with_tb3/base_footprint"));
-    locObj.ExecuteLocalisation(nh);
     testObj2.InitPose();
     testObj1.InitPose();
     testObj1.poseSubscriber = nh.subscribe("/rawPose",
                 100, &LocalisationTest::PoseCallback, &testObj1);
     testObj2.poseSubscriber = nh.subscribe("/mapPose",
                 100, &LocalisationTest::PoseCallback, &testObj2);
-    ros::spinOnce();
-    EXPECT_FALSE(testObj1.receivedPose);
-    EXPECT_FALSE(testObj2.receivedPose);
+    ros::Rate loop_rate(10);
+    ros::Time begin = ros::Time::now();
+    while (1) {
+        br.sendTransform(tf::StampedTransform(transform,
+        ros::Time::now(), "/map", "/om_with_tb3/base_footprint"));
+        locObj.ExecuteLocalisation(nh);
+         ros::spinOnce();
+        loop_rate.sleep();
+        double diff = (ros::Time::now() - begin).toSec();
+        if ((testObj2.receivedPose && testObj1.receivedPose) || diff > 5) {
+            break;
+        }
+    }
+    EXPECT_TRUE(testObj1.receivedPose);
+    EXPECT_NEAR(testObj1.robotPose.position.x, 0, 0.1);
+    EXPECT_NEAR(testObj1.robotPose.position.y, 0, 0.1);
+    EXPECT_NEAR(testObj1.robotPose.position.z, 0, 0.1);
+    EXPECT_NEAR(testObj1.robotPose.orientation.x, 0, 0.1);
+    EXPECT_NEAR(testObj1.robotPose.orientation.y, 0, 0.1);
+    EXPECT_NEAR(testObj1.robotPose.orientation.z, 0, 0.1);
+    EXPECT_NEAR(testObj1.robotPose.orientation.w, 0, 0.1);
+    EXPECT_TRUE(testObj2.receivedPose);
+    EXPECT_NEAR(testObj2.robotPose.position.x, 0, 0.1);
+    EXPECT_NEAR(testObj2.robotPose.position.y, 0, 0.1);
+    EXPECT_NEAR(testObj2.robotPose.position.z, 0, 0.1);
+    EXPECT_NEAR(testObj2.robotPose.orientation.x, 0, 0.1);
+    EXPECT_NEAR(testObj2.robotPose.orientation.y, 0, 0.1);
+    EXPECT_NEAR(testObj2.robotPose.orientation.z, 0, 0.1);
+    EXPECT_NEAR(testObj2.robotPose.orientation.w, 0, 0.1);
 }
 
 /**
@@ -181,18 +236,41 @@ TEST(LocalisationTest, ExecuteLocalisationFallenRobotXaxis) {
     q.setRPY(1.57, 0.135, 0.295);
     transform.setRotation(q);
     locObj.SetEntropyThreshold(100);
-    br.sendTransform(tf::StampedTransform(transform,
-    ros::Time::now(), "map", "om_with_tb3/base_footprint"));
-    locObj.ExecuteLocalisation(nh);
     testObj1.InitPose();
     testObj2.InitPose();
     testObj1.poseSubscriber = nh.subscribe("/rawPose",
                 100, &LocalisationTest::PoseCallback, &testObj1);
     testObj2.poseSubscriber = nh.subscribe("/mapPose",
                 100, &LocalisationTest::PoseCallback, &testObj2);
-    ros::spinOnce();
-    EXPECT_FALSE(testObj1.receivedPose);
-    EXPECT_FALSE(testObj2.receivedPose);
+    ros::Rate loop_rate(10);
+    ros::Time begin = ros::Time::now();
+    while (1) {
+        br.sendTransform(tf::StampedTransform(transform,
+        ros::Time::now(), "/map", "/om_with_tb3/base_footprint"));
+        locObj.ExecuteLocalisation(nh);
+         ros::spinOnce();
+        loop_rate.sleep();
+        double diff = (ros::Time::now() - begin).toSec();
+        if ((testObj2.receivedPose && testObj1.receivedPose) || diff > 5) {
+            break;
+        }
+    }
+    EXPECT_TRUE(testObj1.receivedPose);
+    EXPECT_NEAR(testObj1.robotPose.position.x, 0, 0.1);
+    EXPECT_NEAR(testObj1.robotPose.position.y, 0, 0.1);
+    EXPECT_NEAR(testObj1.robotPose.position.z, 0, 0.1);
+    EXPECT_NEAR(testObj1.robotPose.orientation.x, 0, 0.1);
+    EXPECT_NEAR(testObj1.robotPose.orientation.y, 0, 0.1);
+    EXPECT_NEAR(testObj1.robotPose.orientation.z, 0, 0.1);
+    EXPECT_NEAR(testObj1.robotPose.orientation.w, 0, 0.1);
+    EXPECT_TRUE(testObj2.receivedPose);
+    EXPECT_NEAR(testObj2.robotPose.position.x, 0, 0.1);
+    EXPECT_NEAR(testObj2.robotPose.position.y, 0, 0.1);
+    EXPECT_NEAR(testObj2.robotPose.position.z, 0, 0.1);
+    EXPECT_NEAR(testObj2.robotPose.orientation.x, 0, 0.1);
+    EXPECT_NEAR(testObj2.robotPose.orientation.y, 0, 0.1);
+    EXPECT_NEAR(testObj2.robotPose.orientation.z, 0, 0.1);
+    EXPECT_NEAR(testObj2.robotPose.orientation.w, 0, 0.1);
 }
 
 /**
@@ -210,18 +288,41 @@ TEST(LocalisationTest, ExecuteLocalisationFallenRobotXaxisNeg) {
     q.setRPY(-1.57, 0.135, 0.295);
     transform.setRotation(q);
     locObj.SetEntropyThreshold(100);
-    br.sendTransform(tf::StampedTransform(transform,
-    ros::Time::now(), "map", "om_with_tb3/base_footprint"));
-    locObj.ExecuteLocalisation(nh);
     testObj1.InitPose();
     testObj2.InitPose();
     testObj1.poseSubscriber = nh.subscribe("/rawPose",
                 100, &LocalisationTest::PoseCallback, &testObj1);
     testObj2.poseSubscriber = nh.subscribe("/mapPose",
                 100, &LocalisationTest::PoseCallback, &testObj2);
-    ros::spinOnce();
-    EXPECT_FALSE(testObj1.receivedPose);
-    EXPECT_FALSE(testObj2.receivedPose);
+    ros::Rate loop_rate(10);
+    ros::Time begin = ros::Time::now();
+    while (1) {
+        br.sendTransform(tf::StampedTransform(transform,
+        ros::Time::now(), "/map", "/om_with_tb3/base_footprint"));
+        locObj.ExecuteLocalisation(nh);
+         ros::spinOnce();
+        loop_rate.sleep();
+        double diff = (ros::Time::now() - begin).toSec();
+        if ((testObj2.receivedPose && testObj1.receivedPose) || diff > 5) {
+            break;
+        }
+    }
+    EXPECT_TRUE(testObj1.receivedPose);
+    EXPECT_NEAR(testObj1.robotPose.position.x, 0, 0.1);
+    EXPECT_NEAR(testObj1.robotPose.position.y, 0, 0.1);
+    EXPECT_NEAR(testObj1.robotPose.position.z, 0, 0.1);
+    EXPECT_NEAR(testObj1.robotPose.orientation.x, 0, 0.1);
+    EXPECT_NEAR(testObj1.robotPose.orientation.y, 0, 0.1);
+    EXPECT_NEAR(testObj1.robotPose.orientation.z, 0, 0.1);
+    EXPECT_NEAR(testObj1.robotPose.orientation.w, 0, 0.1);
+    EXPECT_TRUE(testObj2.receivedPose);
+    EXPECT_NEAR(testObj2.robotPose.position.x, 0, 0.1);
+    EXPECT_NEAR(testObj2.robotPose.position.y, 0, 0.1);
+    EXPECT_NEAR(testObj2.robotPose.position.z, 0, 0.1);
+    EXPECT_NEAR(testObj2.robotPose.orientation.x, 0, 0.1);
+    EXPECT_NEAR(testObj2.robotPose.orientation.y, 0, 0.1);
+    EXPECT_NEAR(testObj2.robotPose.orientation.z, 0, 0.1);
+    EXPECT_NEAR(testObj2.robotPose.orientation.w, 0, 0.1);
 }
 
 
@@ -240,8 +341,6 @@ TEST(LocalisationTest, ExecuteLocalisationRobotOutOfMapCorner1) {
     q.setRPY(0.003, 0.135, 0.295);
     transform.setRotation(q);
     locObj.SetEntropyThreshold(100);
-    br.sendTransform(tf::StampedTransform(transform,
-    ros::Time::now(), "map", "om_with_tb3/base_footprint"));
     locObj.ExecuteLocalisation(nh);
     testObj1.InitPose();
     testObj2.InitPose();
@@ -249,9 +348,35 @@ TEST(LocalisationTest, ExecuteLocalisationRobotOutOfMapCorner1) {
                 100, &LocalisationTest::PoseCallback, &testObj1);
     testObj2.poseSubscriber = nh.subscribe("/mapPose",
                 100, &LocalisationTest::PoseCallback, &testObj2);
-    ros::spinOnce();
-    EXPECT_FALSE(testObj1.receivedPose);
-    EXPECT_FALSE(testObj2.receivedPose);
+    ros::Rate loop_rate(10);
+    ros::Time begin = ros::Time::now();
+    while (1) {
+        br.sendTransform(tf::StampedTransform(transform,
+        ros::Time::now(), "/map", "/om_with_tb3/base_footprint"));
+        locObj.ExecuteLocalisation(nh);
+         ros::spinOnce();
+        loop_rate.sleep();
+        double diff = (ros::Time::now() - begin).toSec();
+        if ((testObj2.receivedPose && testObj1.receivedPose) || diff > 5) {
+            break;
+        }
+    }
+    EXPECT_TRUE(testObj1.receivedPose);
+    EXPECT_NEAR(testObj1.robotPose.position.x, 0, 0.1);
+    EXPECT_NEAR(testObj1.robotPose.position.y, 0, 0.1);
+    EXPECT_NEAR(testObj1.robotPose.position.z, 0, 0.1);
+    EXPECT_NEAR(testObj1.robotPose.orientation.x, 0, 0.1);
+    EXPECT_NEAR(testObj1.robotPose.orientation.y, 0, 0.1);
+    EXPECT_NEAR(testObj1.robotPose.orientation.z, 0, 0.1);
+    EXPECT_NEAR(testObj1.robotPose.orientation.w, 0, 0.1);
+    EXPECT_TRUE(testObj2.receivedPose);
+    EXPECT_NEAR(testObj2.robotPose.position.x, 0, 0.1);
+    EXPECT_NEAR(testObj2.robotPose.position.y, 0, 0.1);
+    EXPECT_NEAR(testObj2.robotPose.position.z, 0, 0.1);
+    EXPECT_NEAR(testObj2.robotPose.orientation.x, 0, 0.1);
+    EXPECT_NEAR(testObj2.robotPose.orientation.y, 0, 0.1);
+    EXPECT_NEAR(testObj2.robotPose.orientation.z, 0, 0.1);
+    EXPECT_NEAR(testObj2.robotPose.orientation.w, 0, 0.1);
 }
 
 
@@ -270,8 +395,6 @@ TEST(LocalisationTest, ExecuteLocalisationRobotOutOfMapCorner2) {
     q.setRPY(0.003, 0.135, 0.295);
     transform.setRotation(q);
     locObj.SetEntropyThreshold(100);
-    br.sendTransform(tf::StampedTransform(transform,
-    ros::Time::now(), "map", "om_with_tb3/base_footprint"));
     locObj.ExecuteLocalisation(nh);
     testObj1.InitPose();
     testObj2.InitPose();
@@ -279,9 +402,35 @@ TEST(LocalisationTest, ExecuteLocalisationRobotOutOfMapCorner2) {
                 100, &LocalisationTest::PoseCallback, &testObj1);
     testObj2.poseSubscriber = nh.subscribe("/mapPose",
                 100, &LocalisationTest::PoseCallback, &testObj2);
-    ros::spinOnce();
-    EXPECT_FALSE(testObj1.receivedPose);
-    EXPECT_FALSE(testObj2.receivedPose);
+    ros::Rate loop_rate(10);
+    ros::Time begin = ros::Time::now();
+    while (1) {
+        br.sendTransform(tf::StampedTransform(transform,
+        ros::Time::now(), "/map", "/om_with_tb3/base_footprint"));
+        locObj.ExecuteLocalisation(nh);
+         ros::spinOnce();
+        loop_rate.sleep();
+        double diff = (ros::Time::now() - begin).toSec();
+        if ((testObj2.receivedPose && testObj1.receivedPose) || diff > 5) {
+            break;
+        }
+    }
+    EXPECT_TRUE(testObj1.receivedPose);
+    EXPECT_NEAR(testObj1.robotPose.position.x, 0, 0.1);
+    EXPECT_NEAR(testObj1.robotPose.position.y, 0, 0.1);
+    EXPECT_NEAR(testObj1.robotPose.position.z, 0, 0.1);
+    EXPECT_NEAR(testObj1.robotPose.orientation.x, 0, 0.1);
+    EXPECT_NEAR(testObj1.robotPose.orientation.y, 0, 0.1);
+    EXPECT_NEAR(testObj1.robotPose.orientation.z, 0, 0.1);
+    EXPECT_NEAR(testObj1.robotPose.orientation.w, 0, 0.1);
+    EXPECT_TRUE(testObj2.receivedPose);
+    EXPECT_NEAR(testObj2.robotPose.position.x, 0, 0.1);
+    EXPECT_NEAR(testObj2.robotPose.position.y, 0, 0.1);
+    EXPECT_NEAR(testObj2.robotPose.position.z, 0, 0.1);
+    EXPECT_NEAR(testObj2.robotPose.orientation.x, 0, 0.1);
+    EXPECT_NEAR(testObj2.robotPose.orientation.y, 0, 0.1);
+    EXPECT_NEAR(testObj2.robotPose.orientation.z, 0, 0.1);
+    EXPECT_NEAR(testObj2.robotPose.orientation.w, 0, 0.1);
 }
 
 /**
@@ -299,8 +448,6 @@ TEST(LocalisationTest, ExecuteLocalisationRobotZPos) {
     q.setRPY(0.003, 0.135, 0.295);
     transform.setRotation(q);
     locObj.SetEntropyThreshold(100);
-    br.sendTransform(tf::StampedTransform(transform,
-    ros::Time::now(), "map", "om_with_tb3/base_footprint"));
     locObj.ExecuteLocalisation(nh);
     testObj1.InitPose();
     testObj2.InitPose();
@@ -308,9 +455,35 @@ TEST(LocalisationTest, ExecuteLocalisationRobotZPos) {
                 100, &LocalisationTest::PoseCallback, &testObj1);
     testObj2.poseSubscriber = nh.subscribe("/mapPose",
                 100, &LocalisationTest::PoseCallback, &testObj2);
-    ros::spinOnce();
-    EXPECT_FALSE(testObj1.receivedPose);
-    EXPECT_FALSE(testObj2.receivedPose);
+    ros::Rate loop_rate(10);
+    ros::Time begin = ros::Time::now();
+    while (1) {
+        br.sendTransform(tf::StampedTransform(transform,
+        ros::Time::now(), "/map", "/om_with_tb3/base_footprint"));
+        locObj.ExecuteLocalisation(nh);
+         ros::spinOnce();
+        loop_rate.sleep();
+        double diff = (ros::Time::now() - begin).toSec();
+        if ((testObj2.receivedPose && testObj1.receivedPose) || diff > 5) {
+            break;
+        }
+    }
+    EXPECT_TRUE(testObj1.receivedPose);
+    EXPECT_NEAR(testObj1.robotPose.position.x, 0, 0.1);
+    EXPECT_NEAR(testObj1.robotPose.position.y, 0, 0.1);
+    EXPECT_NEAR(testObj1.robotPose.position.z, 0, 0.1);
+    EXPECT_NEAR(testObj1.robotPose.orientation.x, 0, 0.1);
+    EXPECT_NEAR(testObj1.robotPose.orientation.y, 0, 0.1);
+    EXPECT_NEAR(testObj1.robotPose.orientation.z, 0, 0.1);
+    EXPECT_NEAR(testObj1.robotPose.orientation.w, 0, 0.1);
+    EXPECT_TRUE(testObj2.receivedPose);
+    EXPECT_NEAR(testObj2.robotPose.position.x, 0, 0.1);
+    EXPECT_NEAR(testObj2.robotPose.position.y, 0, 0.1);
+    EXPECT_NEAR(testObj2.robotPose.position.z, 0, 0.1);
+    EXPECT_NEAR(testObj2.robotPose.orientation.x, 0, 0.1);
+    EXPECT_NEAR(testObj2.robotPose.orientation.y, 0, 0.1);
+    EXPECT_NEAR(testObj2.robotPose.orientation.z, 0, 0.1);
+    EXPECT_NEAR(testObj2.robotPose.orientation.w, 0, 0.1);
 }
 
 
@@ -330,7 +503,7 @@ TEST(LocalisationTest, ExecuteLocalisationRobotZPosNeg) {
     transform.setRotation(q);
     locObj.SetEntropyThreshold(100);
     br.sendTransform(tf::StampedTransform(transform,
-    ros::Time::now(), "map", "om_with_tb3/base_footprint"));
+    ros::Time::now(), "map", "/om_with_tb3/base_footprint"));
     locObj.ExecuteLocalisation(nh);
     testObj1.InitPose();
     testObj2.InitPose();
@@ -338,9 +511,35 @@ TEST(LocalisationTest, ExecuteLocalisationRobotZPosNeg) {
                 100, &LocalisationTest::PoseCallback, &testObj1);
     testObj2.poseSubscriber = nh.subscribe("/mapPose",
                 100, &LocalisationTest::PoseCallback, &testObj2);
-    ros::spinOnce();
-    EXPECT_FALSE(testObj1.receivedPose);
-    EXPECT_FALSE(testObj2.receivedPose);
+    ros::Rate loop_rate(10);
+    ros::Time begin = ros::Time::now();
+    while (1) {
+        br.sendTransform(tf::StampedTransform(transform,
+        ros::Time::now(), "/map", "/om_with_tb3/base_footprint"));
+        locObj.ExecuteLocalisation(nh);
+         ros::spinOnce();
+        loop_rate.sleep();
+        double diff = (ros::Time::now() - begin).toSec();
+        if ((testObj2.receivedPose && testObj1.receivedPose) || diff > 5) {
+            break;
+        }
+    }
+    EXPECT_TRUE(testObj1.receivedPose);
+    EXPECT_NEAR(testObj1.robotPose.position.x, 0, 0.1);
+    EXPECT_NEAR(testObj1.robotPose.position.y, 0, 0.1);
+    EXPECT_NEAR(testObj1.robotPose.position.z, 0, 0.1);
+    EXPECT_NEAR(testObj1.robotPose.orientation.x, 0, 0.1);
+    EXPECT_NEAR(testObj1.robotPose.orientation.y, 0, 0.1);
+    EXPECT_NEAR(testObj1.robotPose.orientation.z, 0, 0.1);
+    EXPECT_NEAR(testObj1.robotPose.orientation.w, 0, 0.1);
+    EXPECT_TRUE(testObj2.receivedPose);
+    EXPECT_NEAR(testObj2.robotPose.position.x, 0, 0.1);
+    EXPECT_NEAR(testObj2.robotPose.position.y, 0, 0.1);
+    EXPECT_NEAR(testObj2.robotPose.position.z, 0, 0.1);
+    EXPECT_NEAR(testObj2.robotPose.orientation.x, 0, 0.1);
+    EXPECT_NEAR(testObj2.robotPose.orientation.y, 0, 0.1);
+    EXPECT_NEAR(testObj2.robotPose.orientation.z, 0, 0.1);
+    EXPECT_NEAR(testObj2.robotPose.orientation.w, 0, 0.1);
 }
 
 
