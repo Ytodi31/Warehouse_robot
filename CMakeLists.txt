@@ -17,7 +17,15 @@ find_package(catkin REQUIRED COMPONENTS
   tf
   message_generation
   cv_bridge
+  aruco
+  roslib
 )
+
+find_package(OpenCV REQUIRED
+)
+
+include_directories(${OpenCV_INCLUDE_DIRS})
+
 
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
@@ -220,23 +228,23 @@ if(CATKIN_ENABLE_TESTING)
 	add_rostest_gtest(allTestWarehouseRobot
     test/allTestWarehouseRobot.test
     test/localisationTest.cpp
-		test/localisationTestClass.cpp
-		test/localisationTestClass.hpp
+	test/localisationTestClass.cpp
+	test/localisationTestClass.hpp
     include/warehouse_robot/localisation.hpp
-     src/localisation.cpp
-     test/testPathPlanner.cpp
-     include/warehouse_robot/PathPlanner.hpp
+    src/localisation.cpp
+    test/testPathPlanner.cpp
+    include/warehouse_robot/PathPlanner.hpp
     src/PathPlanner.cpp
     test/testPickPlace.cpp
     include/warehouse_robot/PickPlace.hpp
     src/PickPlace.cpp
-     test/testControlNPerception.cpp
-     include/warehouse_robot/pidController.hpp
-     include/warehouse_robot/turtlebotPerception.hpp
-     src/pidController.cpp
-     src/turtlebotPerception.cpp
-     test/main.cpp)
-    target_link_libraries(allTestWarehouseRobot ${catkin_LIBRARIES})
+    test/testControlNPerception.cpp
+    include/warehouse_robot/pidController.hpp
+    include/warehouse_robot/turtlebotPerception.hpp
+    src/pidController.cpp
+    src/turtlebotPerception.cpp
+    test/main.cpp)
+    target_link_libraries(allTestWarehouseRobot ${catkin_LIBRARIES} ${OpenCV_LIBRARIES})
 
 
 endif()
