@@ -163,9 +163,12 @@ std::pair<double, double> PathPlanner::hashCoordinates(std::size_t hashIndex) {
 }
 
 bool PathPlanner::boundaryCheck(std::pair<double, double> node) {
+  // Checking if the node is within the map
   if ((node.first <= mapSize.second and node.first >= 0)
       and (node.second <= mapSize.first and node.second >= 0)) {
-    return 1;
+    if(map[node.second][node.first] == 0){ // Checking if the new node is not in an obstacle
+      return 1;
+    }
   }
   return 0;
 }
