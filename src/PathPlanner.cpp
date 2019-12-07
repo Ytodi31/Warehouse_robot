@@ -46,15 +46,18 @@
  * @date 11-27-20 19
  */
 #include "../include/warehouse_robot/PathPlanner.hpp"
+#include <opencv2/opencv.hpp>
+#include <opencv2/highgui/highgui.hpp>
+#include <opencv2/core/core.hpp>
 #include <iostream>
 
 PathPlanner::PathPlanner() {
   setPathFound(false);
   goalThreshold = 5;  // Euclidean distance threshold to the goal
   mapSize = std::make_pair(402, 780);
-  std::vector<std::vector<std::size_t> > vec(780,
-                                             std::vector<std::size_t>(402, 0));
-  map = vec;
+//  std::vector<std::vector<std::size_t> > vec(780,
+//                                             std::vector<std::size_t>(402, 0));
+//  map = vec;
   int vectorSize = (mapSize.first * mapSize.second) / 0.05;
   costGo.assign(vectorSize, INFINITY);
   costCome.assign(vectorSize, 0.0);  // Euclidean distance
@@ -68,6 +71,41 @@ PathPlanner::PathPlanner() {
   goalIndex = hashIndex(getGoal());
   currentIndex = 0;
   localGoal = std::make_pair(0, 0);
+
+  // Reading Image file to populate the map
+  cv::String path = "../data/maps/ariac_load.pgm";
+  cv::Mat mapImage = cv::imread(path, CV_LOAD_IMAGE_GRAYSCALE);
+
+  int erosion_type = 0, erosion_size = 0;
+  erosion_type = cv::MORPH_RECT;
+  cv::Mat erodedImage;
+  cv::Mat element = cv::getStructuringElement(
+      erosion_type, cv::Size(2 * erosion_size + 1, 2 * erosion_size + 1),
+      cv::Point(erosion_size, erosion_size));
+  int rows = mapImage.rows;
+  int cols = mapImage.cols;
+
+  std::vector<std::vector<std::size_t>> map;
+  for (auto i = 0; i <= rows; i++) {
+    for (auto j = 0; j <= cols; j++) {
+      if (mapImage.at<int>(i, j) != 255) {
+        mapImage.at<int>(i, j) = 0;
+      }
+    }
+  }
+  // Eroding original image as a substitute for Minkowski Sum
+  cv::erode(mapImage, erodedImage, element);
+  erodedImage = erodedImage / 255;
+
+  // Populating Map from Image
+  for (auto i = 0; i <= rows; i++) {
+    std::vector<std::size_t> tempCol;
+    for (auto j = 0; j <= cols; j++) {
+      tempCol.push_back(erodedImage.at<int>(i, j));
+    }
+    map.push_back(tempCol);
+  }
+
 }
 
 void PathPlanner::plannerMain() {
@@ -166,7 +204,7 @@ bool PathPlanner::boundaryCheck(std::pair<double, double> node) {
   // Checking if the node is within the map
   if ((node.first <= mapSize.second and node.first >= 0)
       and (node.second <= mapSize.first and node.second >= 0)) {
-    if(map[node.second][node.first] == 0){ // Checking if the new node is not in an obstacle
+    if (map[node.second][node.first] == 0) {  // Checking if the new node is not in an obstacle
       return 1;
     }
   }
