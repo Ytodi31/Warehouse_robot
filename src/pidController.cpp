@@ -46,16 +46,10 @@
  * @date 11-28-2019
  */
 
+#include <math.h>
+#include <geometry_msgs/Twist.h>
 #include "pidController.hpp"
 
-/**
- * @brief Getter method for the Ros Node
- * @param none
- * @return The current node handle for the controller
- */
-ros::NodeHandle PidController::getControllerNode() {
-  return PidController::controllerNode;
-}
 /**
  * @brief Setter method for the Ros Node
  * @param New Node to be set
@@ -64,37 +58,25 @@ ros::NodeHandle PidController::getControllerNode() {
 void PidController::setControllerNode(ros::NodeHandle n) {
   PidController::controllerNode = n;
 }
-/**
- * @brief Getter method for the velocity publisher
- * @param none
- * @return The current velocity publisher
- */
-ros::Publisher PidController::getVelocityPub() {
-  return PidController::velocityPub;
-}
+
 /**
  * @brief Setter method for the velocity publisher
  * @param New velocity publisher to be set
  * @return none
  */
-void PidController::setVelocityPub(ros::Publisher pub) {
-  PidController::velocityPub = pub;
+void PidController::setVelocityPub() {
+  velocityPub = controllerNode.advertise<geometry_msgs
+          ::Twist>("/om_with_tb3/cmd_vel", 100);
 }
-/**
- * @brief Getter method for the pose subscriber
- * @param none
- * @return The current pose subscriber
- */
-ros::Subscriber PidController::getPoseSub() {
-  return PidController::poseSub;
-}
+
 /**
  * @brief Setter method for the pose subscriber
  * @param New pose subscriber to be set
  * @return none
  */
-void PidController::setPoseSub(ros::Subscriber sub) {
-  PidController::poseSub = sub;
+void PidController::setPoseSub() {
+  poseSub = controllerNode.subscribe("/rawPose", 100,
+          &PidController::distCallBack, this);
 }
 /**
  * @brief Getter method for the pose
@@ -104,14 +86,7 @@ void PidController::setPoseSub(ros::Subscriber sub) {
 tf::Pose PidController::getPose() {
   return PidController::pose;
 }
-/**
- * @brief Setter method for the pose
- * @param New pose to be set
- * @return none
- */
-void PidController::setPose(tf::Pose pos) {
-  PidController::pose = pos;
-}
+
 /**
  * @brief Getter method for the linear velocity
  * @param none
@@ -120,14 +95,7 @@ void PidController::setPose(tf::Pose pos) {
 double PidController::getLinearVel() {
   return PidController::linearVel;
 }
-/**
- * @brief Setter method for the linear velocity
- * @param New linear velocity to be set
- * @return none
- */
-void PidController::setLinearVel(double vel) {
-  PidController::linearVel = vel;
-}
+
 /**
  * @brief Getter method for the angular velocity
  * @param none
@@ -136,20 +104,13 @@ void PidController::setLinearVel(double vel) {
 double PidController::getAngularVel() {
   return PidController::angularVel;
 }
-/**
- * @brief Setter method for the angular velocity
- * @param New angular velocity to be set
- * @return none
- */
-void PidController::setAngularVel(double angVel) {
-  PidController::angularVel = angVel;
-}
+
 /**
  * @brief Getter method for the Propotional gain
  * @param none
  * @return The current propotional gain of the controller
  */
-double PidController::getKP() {
+std::vector<double> PidController::getKP() {
   return PidController::kP;
 }
 /**
@@ -157,31 +118,33 @@ double PidController::getKP() {
  * @param New propotional gain to be set
  * @return none
  */
-void PidController::setKP(double kP) {
-  PidController::kP = kP;
+void PidController::setKP(double kP_linear, double kP_angular) {
+  kP.push_back(kP_linear);
+  kP.push_back(kP_angular);
 }
 /**
  * @brief Getter method for the derivative gain
  * @param none
  * @return The current derivative gain of the controller
  */
-double PidController::getKD() {
-  return PidController::kD;
+std::vector<double> PidController::getKD() {
+    return kD;
 }
 /**
  * @brief Setter method for the derivative gain
  * @param New derivative gain to be set
  * @return none
  */
-void PidController::setKD(double kD) {
-  PidController::kD = kD;
+void PidController::setKD(double kD_linear, double kD_angular) {
+  kD.push_back(kD_linear);
+  kD.push_back(kD_angular);
 }
 /**
  * @brief Getter method for the integral gain
  * @param none
  * @return The current integral gain of the controller
  */
-double PidController::getKI() {
+std::vector<double> PidController::getKI() {
   return PidController::kI;
 }
 /**
@@ -189,8 +152,9 @@ double PidController::getKI() {
  * @param New integral gain to be set
  * @return none
  */
-void PidController::setKI(double kI) {
-  PidController::kI = kI;
+void PidController::setKI(double kI_linear, double kI_angular) {
+  kI.push_back(kI_linear);
+  kI.push_back(kI_angular);
 }
 /**
  * @brief Callback function to get the pose data from the Turtlebot
@@ -199,7 +163,12 @@ void PidController::setKI(double kI) {
  */
 void PidController::distCallBack(
     const geometry_msgs::PoseStamped::ConstPtr &msg) {
-  ROS_INFO("Calling Distance Call Back Pose: [%s]", msg->pose);
+    pose.setOrigin(tf::Vector3(msg->pose.position.x, msg->pose.position.y,
+            msg->pose.position.z));
+    pose.setRotation(tf::Quaternion(msg->pose.orientation.x,
+            msg->pose.orientation.y,
+            msg->pose.orientation.z, msg->pose.orientation.w));
+    return;
 }
 /**
  * @brief Mock of the euclidean distance calculator
@@ -208,8 +177,9 @@ void PidController::distCallBack(
  */
 double PidController::euclideanDist(tf::Pose currentPose,
                                     tf::Pose desiredPose) {
-  double dist = 5;  // MOCK VALUE FOR TESTING!
-  return dist;
+    double dist = 0;
+    dist = currentPose.getOrigin().distance(desiredPose.getOrigin());
+    return dist;
 }
 
 /**
@@ -218,7 +188,48 @@ double PidController::euclideanDist(tf::Pose currentPose,
  * @return Calculated linear and angular velocity
  */
 void PidController::calcVel(tf::Pose currentPose, tf::Pose desiredPose) {
-  PidController::linearVel = 10.0;  // Mock values for testing
-  PidController::angularVel = 10.0;  // Mock values for testing
-
+    double dist = euclideanDist(currentPose, desiredPose);
+    double linearError = dist;
+    double angularDesired = atan2(desiredPose.getOrigin().y() -
+                                currentPose.getOrigin().y(),
+                                 desiredPose.getOrigin().x() -
+                                 currentPose.getOrigin().x()) + M_PI;
+    ros::start();
+    tf::Matrix3x3 rotMat(currentPose.getRotation());
+    double roll, pitch, yaw;
+    rotMat.getRPY(roll, pitch, yaw);
+    double angularError;
+    angularError = yaw - angularDesired;
+    ROS_DEBUG_STREAM("angular Error: " << angularError);
+    double linearErrorDiff;
+    linearErrorDiff = linearError - lastLinearError;
+    double angularErrorDiff;
+    angularErrorDiff = angularError - lastAngularError;
+    linearVel = kP[0] * linearError + kI[0] * sumLinearError +
+                kD[0] * linearErrorDiff;
+    angularVel = kP[1] * angularError + kI[1] * sumAngularError +
+                 kD[1] * angularErrorDiff;
+    geometry_msgs::Twist msg;
+    if ( linearVel > linearVelThreshold ) {
+        linearVel = linearVelThreshold;
+    } else if ( linearVel < -linearVelThreshold ) {
+        linearVel = -linearVelThreshold;
+    }
+    if ( angularVel > angularVelThreshold ) {
+        angularVel = angularVelThreshold;
+    } else if ( angularVel < -angularVelThreshold ) {
+        angularVel = -angularVelThreshold;
+    }
+    std::cout << "Angular vel: " << angularVel;
+    msg.linear.x = linearVel;
+    msg.linear.y = 0;
+    msg.linear.z = 0;
+    msg.angular.x = 0;
+    msg.angular.y = 0;
+    msg.angular.z = angularVel;
+    velocityPub.publish(msg);
+    lastAngularError = angularError;
+    lastLinearError = linearError;
+    sumLinearError = sumLinearError + linearError;
+    sumAngularError = sumAngularError + angularError;
 }
