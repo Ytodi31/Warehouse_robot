@@ -55,6 +55,8 @@
   <build_depend>aruco</build_depend>
   <build_depend>roslib</build_depend>
   <build_depend>open_manipulator_msgs</build_depend>
+  <build_depend>open_manipulator_libs</build_depend>
+  <build_depend>OpenCV</build_depend>
   <!-- <build_depend>geometry_msgs</build_depend> -->
   <build_depend>tf</build_depend>
   <build_depend>roslib</build_depend>
@@ -66,6 +68,8 @@
   <build_export_depend>cv_bridge</build_export_depend>
   <build_export_depend>aruco</build_export_depend>
   <build_export_depend>open_manipulator_msgs</build_export_depend>
+  <build_export_depend>open_manipulator_libs</build_export_depend>
+  <build_export_depend>OpenCV</build_export_depend>
   <!-- <build_export_depend>geometry_msgs</build_export_depend> -->
   <exec_depend>aruco</exec_depend>
   <exec_depend>open_manipulator_msgs</exec_depend>
@@ -75,6 +79,8 @@
   <exec_depend>rospy</exec_depend>
   <exec_depend>std_msgs</exec_depend>
   <exec_depend>tf</exec_depend>
+  <exec_depend>open_manipulator_libs</exec_depend>
+  <exec_depend>OpenCV</exec_depend>
   <!-- <exec_depend>geometry_msgs</exec_depend> -->
   <exec_depend>sensor_msgs</exec_depend>
   <test_depend>rosunit</test_depend>
