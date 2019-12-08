@@ -60,6 +60,10 @@ PickPlace::PickPlace() {
 
 
 bool PickPlace::setPose(geometry_msgs::Pose armPose) {
+  // Creating service client to set manipulator pose to pick object
+  setArmPose = pnpNode.serviceClient
+  <open_manipulator_msgs::SetKinematicsPose>
+  ("/arm/moveit/set_kinematics_pose");
   // Defining reuqest and response for service
   open_manipulator_msgs::SetKinematicsPose::Request initPose;
   open_manipulator_msgs::SetKinematicsPose::Response setPoseResp;
@@ -82,6 +86,9 @@ bool PickPlace::setPose(geometry_msgs::Pose armPose) {
 }
 
   bool PickPlace::setGripper(std::vector<double>state) {
+    // Creating service client to set gripper position
+    setGripperState = pnpNode.serviceClient
+    <open_manipulator_msgs::SetJointPosition>("/om_with_tb3/gripper");
     // Defining request and response for service
     open_manipulator_msgs::SetJointPosition::Request initialState;
     open_manipulator_msgs::SetJointPosition::Response finalState;
@@ -95,20 +102,13 @@ bool PickPlace::setPose(geometry_msgs::Pose armPose) {
     return setGripperState.call(initialState, finalState);
   }
 
-void PickPlace::executePick(ros::NodeHandle m) {
+bool PickPlace::executePick(ros::NodeHandle m) {
   // Setting main node handle to local handle
   pnpNode = m;
-  // Creating service client to set gripper position
-  setGripperState = pnpNode.serviceClient
-  <open_manipulator_msgs::SetJointPosition>("/om_with_tb3/gripper");
   // Sending command to open gripperState
   std::vector<double>open{0.01};
   bool gripperState = setGripper(open);
   ros::Duration(1).sleep();
-  // Creating service client to set manipulator pose to pick object
-  setArmPose = pnpNode.serviceClient
-  <open_manipulator_msgs::SetKinematicsPose>
-  ("/arm/moveit/set_kinematics_pose");
   bool pickSet = setPose(pickPose);
   std::cout << "Pick pose set result: " << pickSet << std::endl;
   ros::Duration(1).sleep();
@@ -120,9 +120,10 @@ void PickPlace::executePick(ros::NodeHandle m) {
   }
   // Setting manipulator to home position
   bool goHome = setPose(homePose);
+  return goHome;
 }
 
-void PickPlace::executePlace(ros::NodeHandle m) {
+bool PickPlace::executePlace(ros::NodeHandle m) {
   // Setting main node handle to local handle
   pnpNode = m;
     // Creating service client to set manipulator pose to place object
@@ -142,6 +143,7 @@ void PickPlace::executePlace(ros::NodeHandle m) {
   }
   // Setting manipulator to home position
   bool goHome = setPose(homePose);
+  return goHome;
 }
 
 PickPlace::~PickPlace() {}
