@@ -232,12 +232,12 @@ if(CATKIN_ENABLE_TESTING)
 	test/localisationTestClass.hpp
     include/warehouse_robot/localisation.hpp
     src/localisation.cpp
-    test/testPathPlanner.cpp
-    include/warehouse_robot/PathPlanner.hpp
-    src/PathPlanner.cpp
-    test/testPickPlace.cpp
-    include/warehouse_robot/PickPlace.hpp
-    src/PickPlace.cpp
+    #test/testPathPlanner.cpp
+    #include/warehouse_robot/PathPlanner.hpp
+    #src/PathPlanner.cpp
+    #test/testPickPlace.cpp
+    #include/warehouse_robot/PickPlace.hpp
+    #src/PickPlace.cpp
     test/testControlNPerception.cpp
     include/warehouse_robot/pidController.hpp
     include/warehouse_robot/turtlebotPerception.hpp
