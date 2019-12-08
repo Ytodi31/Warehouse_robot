@@ -85,7 +85,7 @@ TEST(LocalisationTest, ExecuteLocalisationPositive) {
             100, &LocalisationTest::PoseCallback, &testObj1);
     testObj2.poseSubscriber = nh.subscribe("/mapPose",
                 100, &LocalisationTest::PoseCallback, &testObj2);
-    ros::Rate loop_rate(10);
+    ros::Rate loop_rate(1);
     ros::Time begin = ros::Time::now();
     while (1) {
         br.sendTransform(tf::StampedTransform(transform,
@@ -95,7 +95,7 @@ TEST(LocalisationTest, ExecuteLocalisationPositive) {
 
         loop_rate.sleep();
         double diff = (ros::Time::now() - begin).toSec();
-        if ((testObj2.receivedPose && testObj1.receivedPose) || diff > 7) {
+        if ((testObj2.receivedPose && testObj1.receivedPose) || diff > 10) {
             break;
         }
     }
@@ -140,7 +140,7 @@ TEST(LocalisationTest, ExecuteLocalisationFallenRobotYaxis) {
                 100, &LocalisationTest::PoseCallback, &testObj1);
     testObj2.poseSubscriber = nh.subscribe("/mapPose",
                 100, &LocalisationTest::PoseCallback, &testObj2);
-    ros::Rate loop_rate(10);
+    ros::Rate loop_rate(1);
     ros::Time begin = ros::Time::now();
     while (1) {
         br.sendTransform(tf::StampedTransform(transform,
@@ -149,7 +149,7 @@ TEST(LocalisationTest, ExecuteLocalisationFallenRobotYaxis) {
          locObj.ExecuteLocalisation();
         loop_rate.sleep();
         double diff = (ros::Time::now() - begin).toSec();
-        if ((testObj2.receivedPose && testObj1.receivedPose) || diff > 7) {
+        if ((testObj2.receivedPose && testObj1.receivedPose) || diff > 10) {
             break;
         }
     }
@@ -194,7 +194,7 @@ TEST(LocalisationTest, ExecuteLocalisationFallenRobotYaxisNeg) {
                 100, &LocalisationTest::PoseCallback, &testObj1);
     testObj2.poseSubscriber = nh.subscribe("/mapPose",
                 100, &LocalisationTest::PoseCallback, &testObj2);
-    ros::Rate loop_rate(10);
+    ros::Rate loop_rate(1);
     ros::Time begin = ros::Time::now();
     while (1) {
         br.sendTransform(tf::StampedTransform(transform,
@@ -203,7 +203,7 @@ TEST(LocalisationTest, ExecuteLocalisationFallenRobotYaxisNeg) {
          locObj.ExecuteLocalisation();
         loop_rate.sleep();
         double diff = (ros::Time::now() - begin).toSec();
-        if ((testObj2.receivedPose && testObj1.receivedPose) || diff > 7) {
+        if ((testObj2.receivedPose && testObj1.receivedPose) || diff > 10) {
             break;
         }
     }
@@ -247,7 +247,7 @@ TEST(LocalisationTest, ExecuteLocalisationFallenRobotXaxis) {
                 100, &LocalisationTest::PoseCallback, &testObj1);
     testObj2.poseSubscriber = nh.subscribe("/mapPose",
                 100, &LocalisationTest::PoseCallback, &testObj2);
-    ros::Rate loop_rate(10);
+    ros::Rate loop_rate(1);
     ros::Time begin = ros::Time::now();
     while (1) {
         br.sendTransform(tf::StampedTransform(transform,
@@ -256,7 +256,7 @@ TEST(LocalisationTest, ExecuteLocalisationFallenRobotXaxis) {
          locObj.ExecuteLocalisation();
         loop_rate.sleep();
         double diff = (ros::Time::now() - begin).toSec();
-        if ((testObj2.receivedPose && testObj1.receivedPose) || diff > 7) {
+        if ((testObj2.receivedPose && testObj1.receivedPose) || diff > 10) {
             break;
         }
     }
@@ -300,7 +300,7 @@ TEST(LocalisationTest, ExecuteLocalisationFallenRobotXaxisNeg) {
                 100, &LocalisationTest::PoseCallback, &testObj1);
     testObj2.poseSubscriber = nh.subscribe("/mapPose",
                 100, &LocalisationTest::PoseCallback, &testObj2);
-    ros::Rate loop_rate(10);
+    ros::Rate loop_rate(1);
     ros::Time begin = ros::Time::now();
     while (1) {
         br.sendTransform(tf::StampedTransform(transform,
@@ -309,7 +309,7 @@ TEST(LocalisationTest, ExecuteLocalisationFallenRobotXaxisNeg) {
          locObj.ExecuteLocalisation();
         loop_rate.sleep();
         double diff = (ros::Time::now() - begin).toSec();
-        if ((testObj2.receivedPose && testObj1.receivedPose) || diff > 5) {
+        if ((testObj2.receivedPose && testObj1.receivedPose) || diff > 10) {
             break;
         }
     }
@@ -355,7 +355,7 @@ TEST(LocalisationTest, ExecuteLocalisationRobotOutOfMapCorner1) {
                 100, &LocalisationTest::PoseCallback, &testObj1);
     testObj2.poseSubscriber = nh.subscribe("/mapPose",
                 100, &LocalisationTest::PoseCallback, &testObj2);
-    ros::Rate loop_rate(10);
+    ros::Rate loop_rate(1);
     ros::Time begin = ros::Time::now();
     while (1) {
         br.sendTransform(tf::StampedTransform(transform,
@@ -364,7 +364,7 @@ TEST(LocalisationTest, ExecuteLocalisationRobotOutOfMapCorner1) {
          locObj.ExecuteLocalisation();
         loop_rate.sleep();
         double diff = (ros::Time::now() - begin).toSec();
-        if ((testObj2.receivedPose && testObj1.receivedPose) || diff > 5) {
+        if ((testObj2.receivedPose && testObj1.receivedPose) || diff > 10) {
             break;
         }
     }
@@ -420,7 +420,7 @@ TEST(LocalisationTest, ExecuteLocalisationRobotOutOfMapCorner2) {
 
         loop_rate.sleep();
         double diff = (ros::Time::now() - begin).toSec();
-        if ((testObj2.receivedPose && testObj1.receivedPose) || diff > 5) {
+        if ((testObj2.receivedPose && testObj1.receivedPose) || diff > 10) {
             break;
         }
     }
@@ -473,7 +473,7 @@ TEST(LocalisationTest, ExecuteLocalisationRobotZPos) {
          locObj.ExecuteLocalisation();
         loop_rate.sleep();
         double diff = (ros::Time::now() - begin).toSec();
-        if ((testObj2.receivedPose && testObj1.receivedPose) || diff > 7) {
+        if ((testObj2.receivedPose && testObj1.receivedPose) || diff > 10) {
             break;
         }
     }
@@ -531,7 +531,7 @@ TEST(LocalisationTest, ExecuteLocalisationRobotZPosNeg) {
 
         loop_rate.sleep();
         double diff = (ros::Time::now() - begin).toSec();
-        if ((testObj2.receivedPose && testObj1.receivedPose) || diff > 5) {
+        if ((testObj2.receivedPose && testObj1.receivedPose) || diff > 10) {
             break;
         }
     }
