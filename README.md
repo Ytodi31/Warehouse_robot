@@ -1,12 +1,17 @@
-# AuWaMaR
+# Autonomous Warehouse Management Robot (AuWaMaR)
 [![License](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause)
 [![Build Status](https://travis-ci.org/Ytodi31/warehouse_robot.svg?branch=master)](https://travis-ci.org/Ytodi31/warehouse_robot)
+[![Coverage Status](https://coveralls.io/repos/github/Ytodi31/warehouse_robot/badge.svg?branch=master)](https://coveralls.io/github/Ytodi31/warehouse_robot?branch=master)
 
 ## Overview
-This project is developed for Warehouse Management wherein a Turtlebot3
+This project is developed for Warehouse Management wherein a Turtlebot3 Waffle Pi
 is employed to transport packages from one location to another. The pick-up and drop
 locations are specified by the user.Turtlebot3 uses OpenManipulator for its
 pick and place operation, and would be using A-star algorithm to plan its path.
+
+__Technical Presentation__\
+A brief Technical Presentation of the project can be found
+[here](https://docs.google.com/presentation/d/14QqkwVFgyVMpcSMVNDBS_6l7sLMyVfS4-13v47q9Lyo/edit?usp=sharing)
 
 ## Development Team
 - Yashaarth Todi is Robotics Graduate student at University of Maryland, College Park.
@@ -15,18 +20,51 @@ pick and place operation, and would be using A-star algorithm to plan its path.
 
 ## AIP
 The development team has followed AIP process. The link to AIP sheet can be found
-[here](https://docs.google.com/spreadsheets/d/1KsJT0aIaXuEaXX1XelDLg1EV10q6P--KvlY-5qnYGCg/edit#gid=0).
+[here](https://docs.google.com/spreadsheets/d/1KsJT0aIaXuEaXX1XelDLg1EV10q6P--KvlY-5qnYGCg/edit#gid=0). \
 The AIP planning and review sheet used by the team can be be found [here](https://docs.google.com/document/d/1O4B-fgY8ZTwz_BBVik3APsgOGGVCKxhNlC9fsOs6aUY/edit).
 
-##Running the tests
-To compile the tests please run the following command
-```
-catkin_make test
-```
-To run the tests and view the results of the test
-```
-catkin_make run_tests
-```
+
+---
+## Dependencies
+- The project uses Ubuntu 16.04
+- The project uses Kinetic version of ROS. To install, follow the [link]( http://wiki.ros.org/kinetic/Installation/Ubuntu)
+- The project uses catkin build system, To install, follow the [link](http://wiki.ros.org/catkin)
+- The project uses Google Test framework for Unit Testing.
+
+The following ROS packages are used in the project:
+- Gmapping
+- Turtlebot3 with OpenManipulator
+- CV_Bridge
+
+Ensure the above packages are installed before running the project.
+
+---
+## Unit Testing
+The module makes use of Level 1 Testing - Unit testing with Gtest and Level 2
+Testing - Integration testing with rostest.
+
+### Building the test
+To build the tests, run the following command:\
+`cd ~/catkin_ws/`\
+`source ./devel/setup.bash` \
+`catkin_make test`
+
+### Running the test
+To run the tests and view the results of the test\
+`catkin_make run_tests`
+
+Alternatively,
+- The tests can be runned using a launch file\
+`roslaunch warehouse_robot allTestWarehouseRobot.test `
+
+- The tests can be runned as a node\
+Terminal 1:\
+`roscore`\
+Terminal 2:\
+`rosrun warehouse_robot allTestWarehouseRobot`
+
+---
+
 
 ## License Overview
 BSD 3-Clause License

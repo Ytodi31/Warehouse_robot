@@ -1,31 +1,31 @@
 /**
-*BSD 3-Clause License
-*
-*Copyright (c) 2019, Yashaarth Todi
-*All rights reserved.
-*
-*Redistribution and use in source and binary forms, with or without
-*modification, are permitted provided that the following conditions are met:
-*1. Redistributions of source code must retain the above copyright notice, this
-*   list of conditions and the following disclaimer.
-*2. Redistributions in binary form must reproduce the above copyright notice,
-*   this list of conditions and the following disclaimer in the documentation
-*   and/or other materials provided with the distribution.
-*3. Neither the name of the copyright holder nor the names of its
-*   contributors may be used to endorse or promote products derived from
-*   this software without specific prior written permission.
-*
-*THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-*AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-*IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-*DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
-*FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-*DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
-*SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
-*CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
-*OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-*OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/
+ *BSD 3-Clause License
+ *
+ *Copyright (c) 2019, Yashaarth Todi
+ *All rights reserved.
+ *
+ *Redistribution and use in source and binary forms, with or without
+ *modification, are permitted provided that the following conditions are met:
+ *1. Redistributions of source code must retain the above copyright notice, this
+ *   list of conditions and the following disclaimer.
+ *2. Redistributions in binary form must reproduce the above copyright notice,
+ *   this list of conditions and the following disclaimer in the documentation
+ *   and/or other materials provided with the distribution.
+ *3. Neither the name of the copyright holder nor the names of its
+ *   contributors may be used to endorse or promote products derived from
+ *   this software without specific prior written permission.
+ *
+ *THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ *AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ *IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ *DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+ *FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ *DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ *SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ *CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+ *OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ *OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
 
 /**
  * @file PickPlace.hpp
@@ -46,89 +46,90 @@
  *
  * @date 11-28-2019
  */
- #ifndef WAREHOUSE_ROBOT_INCLUDE_WAREHOUSE_ROBOT_PICKPLACE_HPP_
- #define WAREHOUSE_ROBOT_INCLUDE_WAREHOUSE_ROBOT_PICKPLACE_HPP_
+#ifndef WAREHOUSE_ROBOT_INCLUDE_WAREHOUSE_ROBOT_PICKPLACE_HPP_
+#define WAREHOUSE_ROBOT_INCLUDE_WAREHOUSE_ROBOT_PICKPLACE_HPP_
 
- #include <vector>
- #include <utility>
- #include <ros/ros.h>
- #include <geometry_msgs/Pose.h>
+#include <ros/ros.h>
+#include <std_msgs/Float64MultiArray.h>
+#include <geometry_msgs/Pose.h>
+#include <open_manipulator_msgs/SetKinematicsPose.h>
+#include <open_manipulator_msgs/SetJointPosition.h>
+#include <vector>
+#include <utility>
+#include "open_manipulator_libs/open_manipulator.h"
+/**
+ * @brief PickPlace class controls the manipulator on the Turtlebot,
+ * enabling it to pick and place the object
+ */
+class PickPlace {
+ public:
+  PickPlace();
+  ~PickPlace();
   /**
-   * @brief PickPlace class controls the manipulator on the Turtlebot,
-   * enabling it to pick and place the object
+   * @brief Function that executes the pick up operation of manipulator
+   * @param ros node handle
+   * @return none
    */
-   class PickPlace {
-    public:
-    /**
-      * @brief Checks the state of the gripper, whether it is open or close
-      * @param none
-      * @return boolean value, true if closed, false otherwise
-      */
-      bool checkGripperState();
+  void executePick(ros::NodeHandle);
 
-    /**
-      * @brief Sets the pose of the point from where object is to be picked
-      * @param none
-      * @return void
-      */
-      void setPick();
+  /**
+   * @brief Function that executes the place operation of manipulator
+   * @param ros node handle
+   * @return none
+   */
+  void executePlace(ros::NodeHandle);
 
-    /**
-      * @brief Sets the pose of the point where object is to be placed
-      * @param none
-      * @return void
-      */
-      void setPlace();
+  /**
+   * @brief Function that sets the kinematic pose for pick up and calls service
+   * @param geometry_msg of type pose, holding the kinematic pose of the end
+   * effector
+   * @return true if successful
+   */
+  bool setPose(geometry_msgs::Pose);
 
-    /**
-      * @brief Subscriber to gripper state, topic
-      * open_manipulator_with_tb3/gripper_state
-      */
-      ros::Subscriber gripperState;
+  /**
+   * @brief Function that controls the gripper
+   * @param vector of type double, holding value of joint position of gripper
+   * @return true if successful
+   */
+  bool setGripper(std::vector<double>);
 
-    /**
-      * @brief Service to set the kinematics pose of manipulator to pick object,
-      * service name - open_manipulator_with_tb3/set_kinematics_pose
-      */
-      ros::ServiceServer setPickPose;
+  /**
+   * @brief Service to set the kinematics pose of manipulator,
+   * service name - /arm/moveit/set_kinematics_pose
+   */
+  ros::ServiceClient setArmPose;
 
-    /**
-      * @brief Service to set the kinematics pose of the manipulator to place
-      * object, service name - open_manipulator_with_tb3/set_kinematics_pose
-      */
-      ros::ServiceServer setPlacePose;
+  /**
+   * @brief Service to set the gripper state
+   * service name -/om_with_tb3/gripper
+   */
+  ros::ServiceClient setGripperState;
 
-    /**
-      * @brief Pose variable, holding the kinematic pose to pick object
-      */
-      geometry_msgs::Pose pickPose;
+  /**
+   * @brief Pose variable, holding the kinematic pose to pick object
+   */
+  geometry_msgs::Pose pickPose;
 
-    /**
-      * @brief Pose variable, holding the kinematic pose to place object
-      */
-      geometry_msgs::Pose placePose;
+  /**
+   * @brief Pose variable, holding the kinematic pose to place object
+   */
+  geometry_msgs::Pose placePose;
 
-    /**
-      * @brief Pose variable, holding the kinematic pose of the home location of
-      * the manipulator
-      */
-      geometry_msgs::Pose homePose;
+  /**
+   * @brief Pose variable, holding the kinematic pose of the home location of
+   * the manipulator
+   */
+  geometry_msgs::Pose homePose;
 
-    /**
-      * @brief Client to service, shows the result of pick up, service name -
-      * open_manipulator_with_tb3/result_of_pick_up
-      */
-      ros::ServiceClient pickState;
+  /**
+   * @brief robot state, 0 if robot is stationary, 1 if it is moving
+   */
+  bool robotState;
 
-    /**
-      * @brief Client to service, shows the result of place, service name -
-      * open_manipulator_with_tb3/result_of_place
-      */
-      ros::ServiceClient placeState;
-
-      /**
-        * @brief robot state, 0 if robot is stationary, 1 if it is moving
-        */
-      bool robotState;
-    };
-    #endif  // WAREHOUSE_ROBOT_INCLUDE_WAREHOUSE_ROBOT_PICKPLACE_HPP_
+  /**
+   * @brief Local node handle
+   */
+  ros::NodeHandle pnpNode;
+};
+#endif  // WAREHOUSE_ROBOT_INCLUDE_WAREHOUSE_ROBOT_PICKPLACE_HPP_
