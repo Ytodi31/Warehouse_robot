@@ -132,24 +132,28 @@ void Localisation::PublishRawPose() {
   rawPosePublisher.publish(localisationPose);
 }
 
-void Localisation::ExecuteLocalisation(ros::NodeHandle nh) {
+void Localisation::initSubscribers(ros::NodeHandle n) {
+    localizationNode = n;
+    entropySubscriber = localizationNode.subscribe<std_msgs::Float64>
+      ("/turtlebot3_slam_gmapping/entropy", 1000, &Localisation::EntropyCallback,this);
+
+     // Defining publisher for mapPose topic
+      mapPosePublisher = localizationNode.advertise<geometry_msgs::Pose>
+                         ("/mapPose", 1000);
+
+      // Defining publisher for rawPose topic
+      rawPosePublisher = localizationNode.advertise<geometry_msgs::Pose>
+                         ("/rawPose", 1000);
+}
+
+void Localisation::ExecuteLocalisation() {
   // Setting local node handle to master node handle
-  localizationNode = nh;
 
   // Subscribing to entropy topic
-  entropySubscriber = localizationNode.subscribe<std_msgs::Float64>
-  ("/turtlebot3_slam_gmapping/entropy", 1000, &Localisation::EntropyCallback,this);
 
- // Defining publisher for mapPose topic
-  mapPosePublisher = localizationNode.advertise<geometry_msgs::Pose>
-                     ("/mapPose", 1000);
-
-  // Defining publisher for rawPose topic
-  rawPosePublisher = localizationNode.advertise<geometry_msgs::Pose>
-                     ("/rawPose", 1000);
 
   tf::StampedTransform mapToRobot;
-  ros::Rate rate(10.0);
+  //ros::Rate rate(10.0);
   // while(ros::ok()) {
       GetRobotCoordinate(mapToRobot);
       PublishMapPose();

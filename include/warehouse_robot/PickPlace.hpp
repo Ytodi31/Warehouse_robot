@@ -68,16 +68,16 @@ class PickPlace {
   /**
    * @brief Function that executes the pick up operation of manipulator
    * @param ros node handle
-   * @return none
+   * @return true if succesful
    */
-  void executePick(ros::NodeHandle);
+  bool executePick(ros::NodeHandle);
 
   /**
    * @brief Function that executes the place operation of manipulator
    * @param ros node handle
-   * @return none
+   * @return true if succesful
    */
-  void executePlace(ros::NodeHandle);
+  bool executePlace(ros::NodeHandle);
 
   /**
    * @brief Function that sets the kinematic pose for pick up and calls service

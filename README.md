@@ -1,7 +1,7 @@
 # Autonomous Warehouse Management Robot (AuWaMaR)
 [![License](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause)
-[![Build Status](https://travis-ci.org/Ytodi31/warehouse_robot.svg?branch=master)](https://travis-ci.org/Ytodi31/warehouse_robot)
-[![Coverage Status](https://coveralls.io/repos/github/Ytodi31/warehouse_robot/badge.svg?branch=master)](https://coveralls.io/github/Ytodi31/warehouse_robot?branch=master)
+[![Build Status](https://travis-ci.org/Ytodi31/warehouse_robot.svg?branch=Ydriver)](https://travis-ci.org/Ytodi31/warehouse_robot)
+[![Coverage Status](https://coveralls.io/repos/github/Ytodi31/warehouse_robot/badge.svg?branch=Ydriver)](https://coveralls.io/github/Ytodi31/warehouse_robot?branch=Ydriver)
 
 ## Overview
 This project is developed for Warehouse Management wherein a Turtlebot3 Waffle Pi
@@ -77,5 +77,3 @@ Redistribution and use in source and binary forms, with or without modification,
 3. Neither the name of the copyright holder nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
 
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
-

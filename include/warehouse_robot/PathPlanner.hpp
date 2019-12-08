@@ -46,13 +46,19 @@
  *
  * @date 11-24-2019
  */
-#ifndef WAREHOUSE_ROBOT_INCLUDE_WAREHOUSE_ROBOT_PATHPLANNER_HPP_
-#define WAREHOUSE_ROBOT_INCLUDE_WAREHOUSE_ROBOT_PATHPLANNER_HPP_
+#ifndef INCLUDE_WAREHOUSE_ROBOT_PATHPLANNER_HPP_
+#define INCLUDE_WAREHOUSE_ROBOT_PATHPLANNER_HPP_
 
+#include<math.h>
+#include <ros/package.h>
+#include<iostream>
 #include<vector>
 #include<utility>
-#include<math.h>
 #include<algorithm>
+#include <opencv2/opencv.hpp>
+#include <opencv2/highgui/highgui.hpp>
+#include <opencv2/core/core.hpp>
+#include "ros/ros.h"
 /**
  * @brief PathPlanner class computes the shortest path from start to goal
  */
@@ -73,12 +79,12 @@ class PathPlanner {
    * otherwise
    */
   bool pathFound;
- public:
 
+ public:
   /**
    * @brief 2D Vector, holding the occupancy grid of the environment
    */
-  std::vector<std::vector<std::size_t>> map;
+  std::vector<std::vector<int>> map;
 
   /**
    * @brief pair holding the rows and columns size of the map environment
@@ -187,9 +193,9 @@ class PathPlanner {
   /**
    * @brief Main function that calls all the other functions.
    * @param none
-   * @return none
+   * @return Shortest path from start to goal
    */
-  void plannerMain();
+  std::vector<std::pair<double, double>> plannerMain();
 
   /**
    * @brief Setter for private member, goal
@@ -242,7 +248,7 @@ class PathPlanner {
 
   /**
    * @brief Function to convert hash index to cartesian coordinates
-   * @param hash index
+   * @param hash index to be converted
    * @return pair holding x and y coordinates of node
    */
   std::pair<double, double> hashCoordinates(std::size_t hashInd);
@@ -290,14 +296,7 @@ class PathPlanner {
 
   /**
    * @brief Function to calculate new nodes in all directions from current node
-   * @param1 hash index of the current node
-   * @param2 cost of the current node
-   * @param3 velocity 1 in rpm
-   * @param4 velocity 2 in rpm
-   * @param5 time interval
-   * @param6 Length of wheel base of robot
-   * @param7 wheel radius of robot
-   * @param8 Old heading angle
+   * @param hash index of the current node
    * @return none
    */
   void allActions(std::size_t newIndex);
@@ -314,6 +313,6 @@ class PathPlanner {
    * @param1 none
    * @return 2D vector holding the map as an occupancy grid
    */
-  std::vector<std::vector<std::size_t>> showMap();
+  std::vector<std::vector<int>> showMap();
 };
-#endif  // WAREHOUSE_ROBOT_INCLUDE_WAREHOUSE_ROBOT_PATHPLANNER_HPP_
+#endif  // INCLUDE_WAREHOUSE_ROBOT_PATHPLANNER_HPP_
