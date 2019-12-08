@@ -1,16 +1,58 @@
-/*
- * pidController.hpp
+/**
+ *BSD 3-Clause License
  *
- *  Created on: Nov 27, 2019
- *  Author: Gautam Balachandran
+ *Copyright (c) 2019, Yashaarth Todi
+ *All rights reserved.
+ *
+ *Redistribution and use in source and binary forms, with or without
+ *modification, are permitted provided that the following conditions are met:
+ *1. Redistributions of source code must retain the above copyright notice, this
+ *   list of conditions and the following disclaimer.
+ *2. Redistributions in binary form must reproduce the above copyright notice,
+ *   this list of conditions and the following disclaimer in the documentation
+ *   and/or other materials provided with the distribution.
+ *3. Neither the name of the copyright holder nor the names of its
+ *   contributors may be used to endorse or promote products derived from
+ *   this software without specific prior written permission.
+ *
+ *THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ *AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ *IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ *DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+ *FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ *DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ *SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ *CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+ *OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ *OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef INCLUDE_PIDCONTROLLER_HPP_
-#define INCLUDE_PIDCONTROLLER_HPP_
+/**
+ * @file pidController.hpp
+ * @brief This file provides the header file for the Controller module
+ *
+ * This project contains the execution to navigate Turtlebot3 in a warehouse
+ * environment using A star path planning, picks up a package and drops it in
+ * user defined postitions. Turtebot3 uses OpenManipulator to perform thus
+ * pick-place task.
+ *
+ * @copyright Copyright (c) Fall 2019 ENPM808X
+ *            This project is released under the BSD 3-Clause License.
+ *
+ * @author Suyash Yeotikar
+ * @author Gautam Balachandran
+ * @author Yashaarth Todi
+ *
+ * @date 11-27-2019
+ */
 
-#include <iostream>
+#ifndef INCLUDE_WAREHOUSE_ROBOT_PIDCONTROLLER_HPP_
+#define INCLUDE_WAREHOUSE_ROBOT_PIDCONTROLLER_HPP_
+
 #include <tf/transform_broadcaster.h>
-#include "ros/ros.h"
+#include <ros/ros.h>
+#include <iostream>
+#include <vector>
 
 /*
  * pidController.hpp
@@ -22,88 +64,57 @@
 class PidController {
  private:
   // ROS Node handle object for controller
-  // ros::NodeHandle controllerNode;
+  ros::NodeHandle controllerNode;
   // ROS publisher object for velocity publishing
-  // ros::Publisher velocityPub;
-  // ROS subscriber object for getting position
-  // ros::Subscriber positionSub;
-  // Transform Object for position
-  tf::Point position;
-  double orientation, linearVel, angularVel, kD, kI, kP;
+
+  ros::Subscriber poseSub;
+  tf::Pose pose;
+  double linearVel;
+  std::vector<double> kP;
+  std::vector<double> kI;
+  std::vector<double> kD;
+  double lastLinearError = 0;
+  double sumLinearError = 0;
+  double linearVelThreshold = 0.8;
+  double angularVelThreshold = 0.1;
 
  public:
-  /**
-   * @brief Getter method for the Ros Node
-   * @param none
-   * @return The current node handle for the controller
-   */
-  // ros::NodeHandle getControllerNode();
+  double angularVel;
+  double sumAngularError = 0;
+  double lastAngularError = 0;
+  ros::Publisher velocityPub;
   /**
    * @brief Setter method for the Ros Node
    * @param New Node to be set
    * @return none
    */
-  // void setControllerNode(ros::NodeHandle n);
+  void setControllerNode(ros::NodeHandle n);
   /**
    * @brief Getter method for the velocity publisher
    * @param none
    * @return The current velocity publisher
    */
-  // ros::Publisher getVelocityPub();
+  void setVelocityPub();
+
   /**
-   * @brief Setter method for the velocity publisher
-   * @param New velocity publisher to be set
+   * @brief Setter method for the pose subscriber
+   * @param New pose subscriber to be set
    * @return none
    */
-  // void setVelocityPub(ros::Publisher pub);
+  void setPoseSub();
   /**
-   * @brief Getter method for the position subscriber
+   * @brief Getter method for the pose
    * @param none
-   * @return The current position subscriber
+   * @return The current pose of the turtlebot
    */
-  // ros::Subscriber getPositionSub();
-  /**
-   * @brief Setter method for the position subscriber
-   * @param New position subscriber to be set
-   * @return none
-   */
-  // void setPositionSub(ros::Subscriber sub);
-  /**
-   * @brief Getter method for the position
-   * @param none
-   * @return The current position of the turtlebot
-   */
-  tf::Point getPosition();
-  /**
-   * @brief Setter method for the position
-   * @param New position to be set
-   * @return none
-   */
-  void setPosition(tf::Point pos);
-  /**
-   * @brief Getter method for the orientation
-   * @param none
-   * @return The current orientation of the turtlebot
-   */
-  double getOrientation();
-  /**
-   * @brief Setter method for the orientation
-   * @param New orientation to be set
-   * @return none
-   */
-  void setOrientation(double orient);
+  tf::Pose getPose();
   /**
    * @brief Getter method for the linear velocity
    * @param none
    * @return The current linear velocity of the turtlebot
    */
   double getLinearVel();
-  /**
-   * @brief Setter method for the linear velocity
-   * @param New linear velocity to be set
-   * @return none
-   */
-  void setLinearVel(double vel);
+
   /**
    * @brief Getter method for the angular velocity
    * @param none
@@ -111,66 +122,59 @@ class PidController {
    */
   double getAngularVel();
   /**
-   * @brief Setter method for the angular velocity
-   * @param New angular velocity to be set
-   * @return none
-   */
-  void setAngularVel(double angVel);
-  /**
    * @brief Getter method for the Propotional gain
    * @param none
    * @return The current propotional gain of the controller
    */
-  double getKP();
+  std::vector<double> getKP();
   /**
    * @brief Setter method for the propotional gain
    * @param New propotional gain to be set
    * @return none
    */
-  void setKP(double kP);
+  void setKP(double kP_linear, double kP_angular);
   /**
    * @brief Getter method for the derivative gain
    * @param none
    * @return The current derivative gain of the controller
    */
-  double getKD();
+  std::vector<double> getKD();
   /**
    * @brief Setter method for the derivative gain
    * @param New derivative gain to be set
    * @return none
    */
-  void setKD(double kD);
+  void setKD(double kD_linear, double kD_angular);
   /**
    * @brief Getter method for the integral gain
    * @param none
    * @return The current integral gain of the controller
    */
-  double getKI();
+  std::vector<double> getKI();
   /**
    * @brief Setter method for the integral gain
    * @param New integral gain to be set
    * @return none
    */
-  void setKI(double kI);
+  void setKI(double kI_linear, double kI_angular);
   /**
-   * @brief Method to calculate the controller parameters
-   * @param Trajectory position and current position
+   * @brief Callback function to get the pose data from the Turtlebot
+   * @param Turtlebot Pose
    * @return none
    */
-  void calcPID(tf::Point trajPosition, tf::Point currentPosition);
+  void distCallBack(const geometry_msgs::PoseStamped::ConstPtr &distMsg);
   /**
    * @brief Euclidean distance calculator
-   * @param Current position and desired position
-   * @return calculated distance
+   * @param Current pose and desired pose
+   * @return Calculated distance
    */
-  double euclideanDist(tf::Point currentPos, tf::Point desiredPos);
+  double euclideanDist(tf::Pose currentPos, tf::Pose desiredPos);
   /**
-   * @brief Method to calculate the steering angle for the robot
-   * @param Trajectory position and the angular velocity
-   * @return calculated steering angle
+   * @brief Method to calculate the linear and angular velocity for the robot
+   * @param Current pose and desired pose
+   * @return Calculated linear and angular velocity
    */
-  double calcSteeringAng(tf::Point trajPosition, double angularVel);
-
+  void calcVel(tf::Pose currentPos, tf::Pose desiredPos);
 };
 
-#endif /* INCLUDE_PIDCONTROLLER_HPP_ */
+#endif  // INCLUDE_WAREHOUSE_ROBOT_PIDCONTROLLER_HPP_

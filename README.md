@@ -23,6 +23,7 @@ The development team has followed AIP process. The link to AIP sheet can be foun
 [here](https://docs.google.com/spreadsheets/d/1KsJT0aIaXuEaXX1XelDLg1EV10q6P--KvlY-5qnYGCg/edit#gid=0). \
 The AIP planning and review sheet used by the team can be be found [here](https://docs.google.com/document/d/1O4B-fgY8ZTwz_BBVik3APsgOGGVCKxhNlC9fsOs6aUY/edit).
 
+
 ---
 ## Dependencies
 - The project uses Ubuntu 16.04
@@ -64,6 +65,7 @@ Terminal 2:\
 
 ---
 
+
 ## License Overview
 BSD 3-Clause License
 Copyright (c) 2019, Yashaarth Todi
@@ -75,3 +77,5 @@ Redistribution and use in source and binary forms, with or without modification,
 3. Neither the name of the copyright holder nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
 
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+
