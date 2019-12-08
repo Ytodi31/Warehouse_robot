@@ -90,7 +90,6 @@ TEST(LocalisationTest, ExecuteLocalisationPositive) {
     while (1) {
         br.sendTransform(tf::StampedTransform(transform,
         ros::Time::now(), "/map", "/om_with_tb3/base_footprint"));
-         ros::spinOnce();
          locObj.ExecuteLocalisation();
 
         loop_rate.sleep();
@@ -98,6 +97,7 @@ TEST(LocalisationTest, ExecuteLocalisationPositive) {
         if ((testObj2.receivedPose && testObj1.receivedPose) || diff > 10) {
             break;
         }
+        ros::spinOnce();
     }
     EXPECT_TRUE(testObj1.receivedPose);
     EXPECT_NEAR(testObj1.robotPose.position.x, 2.5, 0.1);
@@ -145,13 +145,13 @@ TEST(LocalisationTest, ExecuteLocalisationFallenRobotYaxis) {
     while (1) {
         br.sendTransform(tf::StampedTransform(transform,
         ros::Time::now(), "/map", "/om_with_tb3/base_footprint"));
-         ros::spinOnce();
          locObj.ExecuteLocalisation();
         loop_rate.sleep();
         double diff = (ros::Time::now() - begin).toSec();
         if ((testObj2.receivedPose && testObj1.receivedPose) || diff > 10) {
             break;
         }
+        ros::spinOnce();
     }
     EXPECT_TRUE(testObj1.receivedPose);
     EXPECT_NEAR(testObj1.robotPose.position.x, 0, 0.1);
@@ -199,13 +199,13 @@ TEST(LocalisationTest, ExecuteLocalisationFallenRobotYaxisNeg) {
     while (1) {
         br.sendTransform(tf::StampedTransform(transform,
         ros::Time::now(), "/map", "/om_with_tb3/base_footprint"));
-         ros::spinOnce();
          locObj.ExecuteLocalisation();
         loop_rate.sleep();
         double diff = (ros::Time::now() - begin).toSec();
         if ((testObj2.receivedPose && testObj1.receivedPose) || diff > 10) {
             break;
         }
+        ros::spinOnce();
     }
     EXPECT_TRUE(testObj1.receivedPose);
     EXPECT_NEAR(testObj1.robotPose.position.x, 0, 0.1);
@@ -252,13 +252,13 @@ TEST(LocalisationTest, ExecuteLocalisationFallenRobotXaxis) {
     while (1) {
         br.sendTransform(tf::StampedTransform(transform,
         ros::Time::now(), "/map", "/om_with_tb3/base_footprint"));
-         ros::spinOnce();
-         locObj.ExecuteLocalisation();
+        locObj.ExecuteLocalisation();
         loop_rate.sleep();
         double diff = (ros::Time::now() - begin).toSec();
         if ((testObj2.receivedPose && testObj1.receivedPose) || diff > 10) {
             break;
         }
+        ros::spinOnce();
     }
     EXPECT_TRUE(testObj1.receivedPose);
     EXPECT_NEAR(testObj1.robotPose.position.x, 0, 0.1);
@@ -305,13 +305,13 @@ TEST(LocalisationTest, ExecuteLocalisationFallenRobotXaxisNeg) {
     while (1) {
         br.sendTransform(tf::StampedTransform(transform,
         ros::Time::now(), "/map", "/om_with_tb3/base_footprint"));
-         ros::spinOnce();
-         locObj.ExecuteLocalisation();
+        locObj.ExecuteLocalisation();
         loop_rate.sleep();
         double diff = (ros::Time::now() - begin).toSec();
         if ((testObj2.receivedPose && testObj1.receivedPose) || diff > 10) {
             break;
         }
+        ros::spinOnce();
     }
     EXPECT_TRUE(testObj1.receivedPose);
     EXPECT_NEAR(testObj1.robotPose.position.x, 0, 0.1);
@@ -360,13 +360,13 @@ TEST(LocalisationTest, ExecuteLocalisationRobotOutOfMapCorner1) {
     while (1) {
         br.sendTransform(tf::StampedTransform(transform,
         ros::Time::now(), "/map", "/om_with_tb3/base_footprint"));
-         ros::spinOnce();
-         locObj.ExecuteLocalisation();
+        locObj.ExecuteLocalisation();
         loop_rate.sleep();
         double diff = (ros::Time::now() - begin).toSec();
         if ((testObj2.receivedPose && testObj1.receivedPose) || diff > 10) {
             break;
         }
+        ros::spinOnce();
     }
     EXPECT_TRUE(testObj1.receivedPose);
     EXPECT_NEAR(testObj1.robotPose.position.x, 0, 0.1);
@@ -415,14 +415,13 @@ TEST(LocalisationTest, ExecuteLocalisationRobotOutOfMapCorner2) {
     while (1) {
         br.sendTransform(tf::StampedTransform(transform,
         ros::Time::now(), "/map", "/om_with_tb3/base_footprint"));
-         ros::spinOnce();
-         locObj.ExecuteLocalisation();
-
+        locObj.ExecuteLocalisation();
         loop_rate.sleep();
         double diff = (ros::Time::now() - begin).toSec();
         if ((testObj2.receivedPose && testObj1.receivedPose) || diff > 10) {
             break;
         }
+        ros::spinOnce();
     }
     EXPECT_TRUE(testObj1.receivedPose);
     EXPECT_NEAR(testObj1.robotPose.position.x, 0, 0.1);
@@ -469,13 +468,13 @@ TEST(LocalisationTest, ExecuteLocalisationRobotZPos) {
     while (1) {
         br.sendTransform(tf::StampedTransform(transform,
         ros::Time::now(), "/map", "/om_with_tb3/base_footprint"));
-         ros::spinOnce();
-         locObj.ExecuteLocalisation();
+        locObj.ExecuteLocalisation();
         loop_rate.sleep();
         double diff = (ros::Time::now() - begin).toSec();
         if ((testObj2.receivedPose && testObj1.receivedPose) || diff > 10) {
             break;
         }
+        ros::spinOnce();
     }
     EXPECT_TRUE(testObj1.receivedPose);
     EXPECT_NEAR(testObj1.robotPose.position.x, 0, 0.1);
@@ -526,14 +525,13 @@ TEST(LocalisationTest, ExecuteLocalisationRobotZPosNeg) {
     while (1) {
         br.sendTransform(tf::StampedTransform(transform,
         ros::Time::now(), "/map", "/om_with_tb3/base_footprint"));
-         ros::spinOnce();
-         locObj.ExecuteLocalisation();
-
+        locObj.ExecuteLocalisation();
         loop_rate.sleep();
         double diff = (ros::Time::now() - begin).toSec();
         if ((testObj2.receivedPose && testObj1.receivedPose) || diff > 10) {
             break;
         }
+        ros::spinOnce();
     }
     EXPECT_TRUE(testObj1.receivedPose);
     EXPECT_NEAR(testObj1.robotPose.position.x, 0, 0.1);
@@ -552,9 +550,3 @@ TEST(LocalisationTest, ExecuteLocalisationRobotZPosNeg) {
     EXPECT_NEAR(testObj2.robotPose.orientation.z, 0, 0.1);
     EXPECT_NEAR(testObj2.robotPose.orientation.w, 0, 0.1);
 }
-
-
-
-
-
-
