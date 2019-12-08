@@ -228,22 +228,22 @@ if(CATKIN_ENABLE_TESTING)
 	find_package(rostest REQUIRED)
 	add_rostest_gtest(allTestWarehouseRobot
     test/allTestWarehouseRobot.test
-    #test/localisationTest.cpp
-	#test/localisationTestClass.cpp
-	#test/localisationTestClass.hpp
-    #include/warehouse_robot/localisation.hpp
-    #src/localisation.cpp
-    #test/testPathPlanner.cpp
-    #include/warehouse_robot/PathPlanner.hpp
-    #src/PathPlanner.cpp
+    test/localisationTest.cpp
+	test/localisationTestClass.cpp
+	test/localisationTestClass.hpp
+    include/warehouse_robot/localisation.hpp
+    src/localisation.cpp
+    test/testPathPlanner.cpp
+    include/warehouse_robot/PathPlanner.hpp
+    src/PathPlanner.cpp
     test/testPickPlace.cpp
     include/warehouse_robot/PickPlace.hpp
     src/PickPlace.cpp
-    #test/testControlNPerception.cpp
-    #include/warehouse_robot/pidController.hpp
-    #include/warehouse_robot/turtlebotPerception.hpp
-    #src/pidController.cpp
-    #src/turtlebotPerception.cpp
+    test/testControlNPerception.cpp
+    include/warehouse_robot/pidController.hpp
+    include/warehouse_robot/turtlebotPerception.hpp
+    src/pidController.cpp
+    src/turtlebotPerception.cpp
     test/main.cpp)
     target_link_libraries(allTestWarehouseRobot ${catkin_LIBRARIES} ${OpenCV_LIBRARIES})
 
