@@ -19,7 +19,6 @@ find_package(catkin REQUIRED COMPONENTS
   message_generation
   cv_bridge
   aruco
-  OpenCV
   open_manipulator_msgs
 )
 
