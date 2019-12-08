@@ -12,13 +12,15 @@ project(warehouse_robot)
 find_package(catkin REQUIRED COMPONENTS
   roscpp
   rospy
+  roslib
   std_msgs
   sensor_msgs
   tf
   message_generation
   cv_bridge
   aruco
-  roslib
+  OpenCV
+  open_manipulator_msgs
 )
 
 find_package(OpenCV REQUIRED
@@ -245,6 +247,5 @@ if(CATKIN_ENABLE_TESTING)
     src/turtlebotPerception.cpp
     test/main.cpp)
     target_link_libraries(allTestWarehouseRobot ${catkin_LIBRARIES} ${OpenCV_LIBRARIES})
-
 
 endif()
