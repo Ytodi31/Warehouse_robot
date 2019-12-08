@@ -80,6 +80,7 @@ TEST(LocalisationTest, ExecuteLocalisationPositive) {
     locObj.SetEntropyThreshold(100);
     testObj1.InitPose();
     testObj2.InitPose();
+    locObj.initSubscribers(nh);
     testObj1.poseSubscriber = nh.subscribe("/rawPose",
             100, &LocalisationTest::PoseCallback, &testObj1);
     testObj2.poseSubscriber = nh.subscribe("/mapPose",
@@ -89,11 +90,12 @@ TEST(LocalisationTest, ExecuteLocalisationPositive) {
     while (1) {
         br.sendTransform(tf::StampedTransform(transform,
         ros::Time::now(), "/map", "/om_with_tb3/base_footprint"));
-        locObj.ExecuteLocalisation(nh);
          ros::spinOnce();
+         locObj.ExecuteLocalisation();
+
         loop_rate.sleep();
         double diff = (ros::Time::now() - begin).toSec();
-        if ((testObj2.receivedPose && testObj1.receivedPose) || diff > 5) {
+        if ((testObj2.receivedPose && testObj1.receivedPose) || diff > 7) {
             break;
         }
     }
@@ -130,6 +132,7 @@ TEST(LocalisationTest, ExecuteLocalisationFallenRobotYaxis) {
     tf::Quaternion q;
     q.setRPY(-0.003, 1.57, 0.295);
     transform.setRotation(q);
+    locObj.initSubscribers(nh);
     locObj.SetEntropyThreshold(100);
     testObj1.InitPose();
     testObj2.InitPose();
@@ -142,11 +145,11 @@ TEST(LocalisationTest, ExecuteLocalisationFallenRobotYaxis) {
     while (1) {
         br.sendTransform(tf::StampedTransform(transform,
         ros::Time::now(), "/map", "/om_with_tb3/base_footprint"));
-        locObj.ExecuteLocalisation(nh);
          ros::spinOnce();
+         locObj.ExecuteLocalisation();
         loop_rate.sleep();
         double diff = (ros::Time::now() - begin).toSec();
-        if ((testObj2.receivedPose && testObj1.receivedPose) || diff > 5) {
+        if ((testObj2.receivedPose && testObj1.receivedPose) || diff > 7) {
             break;
         }
     }
@@ -183,6 +186,7 @@ TEST(LocalisationTest, ExecuteLocalisationFallenRobotYaxisNeg) {
     tf::Quaternion q;
     q.setRPY(-0.003, -1.57, 0.295);
     transform.setRotation(q);
+    locObj.initSubscribers(nh);
     locObj.SetEntropyThreshold(100);
     testObj2.InitPose();
     testObj1.InitPose();
@@ -195,11 +199,11 @@ TEST(LocalisationTest, ExecuteLocalisationFallenRobotYaxisNeg) {
     while (1) {
         br.sendTransform(tf::StampedTransform(transform,
         ros::Time::now(), "/map", "/om_with_tb3/base_footprint"));
-        locObj.ExecuteLocalisation(nh);
          ros::spinOnce();
+         locObj.ExecuteLocalisation();
         loop_rate.sleep();
         double diff = (ros::Time::now() - begin).toSec();
-        if ((testObj2.receivedPose && testObj1.receivedPose) || diff > 5) {
+        if ((testObj2.receivedPose && testObj1.receivedPose) || diff > 7) {
             break;
         }
     }
@@ -238,6 +242,7 @@ TEST(LocalisationTest, ExecuteLocalisationFallenRobotXaxis) {
     locObj.SetEntropyThreshold(100);
     testObj1.InitPose();
     testObj2.InitPose();
+    locObj.initSubscribers(nh);
     testObj1.poseSubscriber = nh.subscribe("/rawPose",
                 100, &LocalisationTest::PoseCallback, &testObj1);
     testObj2.poseSubscriber = nh.subscribe("/mapPose",
@@ -247,11 +252,11 @@ TEST(LocalisationTest, ExecuteLocalisationFallenRobotXaxis) {
     while (1) {
         br.sendTransform(tf::StampedTransform(transform,
         ros::Time::now(), "/map", "/om_with_tb3/base_footprint"));
-        locObj.ExecuteLocalisation(nh);
          ros::spinOnce();
+         locObj.ExecuteLocalisation();
         loop_rate.sleep();
         double diff = (ros::Time::now() - begin).toSec();
-        if ((testObj2.receivedPose && testObj1.receivedPose) || diff > 5) {
+        if ((testObj2.receivedPose && testObj1.receivedPose) || diff > 7) {
             break;
         }
     }
@@ -288,6 +293,7 @@ TEST(LocalisationTest, ExecuteLocalisationFallenRobotXaxisNeg) {
     q.setRPY(-1.57, 0.135, 0.295);
     transform.setRotation(q);
     locObj.SetEntropyThreshold(100);
+    locObj.initSubscribers(nh);
     testObj1.InitPose();
     testObj2.InitPose();
     testObj1.poseSubscriber = nh.subscribe("/rawPose",
@@ -299,8 +305,8 @@ TEST(LocalisationTest, ExecuteLocalisationFallenRobotXaxisNeg) {
     while (1) {
         br.sendTransform(tf::StampedTransform(transform,
         ros::Time::now(), "/map", "/om_with_tb3/base_footprint"));
-        locObj.ExecuteLocalisation(nh);
          ros::spinOnce();
+         locObj.ExecuteLocalisation();
         loop_rate.sleep();
         double diff = (ros::Time::now() - begin).toSec();
         if ((testObj2.receivedPose && testObj1.receivedPose) || diff > 5) {
@@ -341,7 +347,8 @@ TEST(LocalisationTest, ExecuteLocalisationRobotOutOfMapCorner1) {
     q.setRPY(0.003, 0.135, 0.295);
     transform.setRotation(q);
     locObj.SetEntropyThreshold(100);
-    locObj.ExecuteLocalisation(nh);
+    locObj.initSubscribers(nh);
+    locObj.ExecuteLocalisation();
     testObj1.InitPose();
     testObj2.InitPose();
     testObj1.poseSubscriber = nh.subscribe("/rawPose",
@@ -353,8 +360,8 @@ TEST(LocalisationTest, ExecuteLocalisationRobotOutOfMapCorner1) {
     while (1) {
         br.sendTransform(tf::StampedTransform(transform,
         ros::Time::now(), "/map", "/om_with_tb3/base_footprint"));
-        locObj.ExecuteLocalisation(nh);
          ros::spinOnce();
+         locObj.ExecuteLocalisation();
         loop_rate.sleep();
         double diff = (ros::Time::now() - begin).toSec();
         if ((testObj2.receivedPose && testObj1.receivedPose) || diff > 5) {
@@ -395,7 +402,8 @@ TEST(LocalisationTest, ExecuteLocalisationRobotOutOfMapCorner2) {
     q.setRPY(0.003, 0.135, 0.295);
     transform.setRotation(q);
     locObj.SetEntropyThreshold(100);
-    locObj.ExecuteLocalisation(nh);
+    locObj.initSubscribers(nh);
+    locObj.ExecuteLocalisation();
     testObj1.InitPose();
     testObj2.InitPose();
     testObj1.poseSubscriber = nh.subscribe("/rawPose",
@@ -407,8 +415,9 @@ TEST(LocalisationTest, ExecuteLocalisationRobotOutOfMapCorner2) {
     while (1) {
         br.sendTransform(tf::StampedTransform(transform,
         ros::Time::now(), "/map", "/om_with_tb3/base_footprint"));
-        locObj.ExecuteLocalisation(nh);
          ros::spinOnce();
+         locObj.ExecuteLocalisation();
+
         loop_rate.sleep();
         double diff = (ros::Time::now() - begin).toSec();
         if ((testObj2.receivedPose && testObj1.receivedPose) || diff > 5) {
@@ -448,7 +457,7 @@ TEST(LocalisationTest, ExecuteLocalisationRobotZPos) {
     q.setRPY(0.003, 0.135, 0.295);
     transform.setRotation(q);
     locObj.SetEntropyThreshold(100);
-    locObj.ExecuteLocalisation(nh);
+    locObj.initSubscribers(nh);
     testObj1.InitPose();
     testObj2.InitPose();
     testObj1.poseSubscriber = nh.subscribe("/rawPose",
@@ -460,11 +469,11 @@ TEST(LocalisationTest, ExecuteLocalisationRobotZPos) {
     while (1) {
         br.sendTransform(tf::StampedTransform(transform,
         ros::Time::now(), "/map", "/om_with_tb3/base_footprint"));
-        locObj.ExecuteLocalisation(nh);
          ros::spinOnce();
+         locObj.ExecuteLocalisation();
         loop_rate.sleep();
         double diff = (ros::Time::now() - begin).toSec();
-        if ((testObj2.receivedPose && testObj1.receivedPose) || diff > 5) {
+        if ((testObj2.receivedPose && testObj1.receivedPose) || diff > 7) {
             break;
         }
     }
@@ -502,9 +511,10 @@ TEST(LocalisationTest, ExecuteLocalisationRobotZPosNeg) {
     q.setRPY(0.003, 0.135, 0.295);
     transform.setRotation(q);
     locObj.SetEntropyThreshold(100);
+    locObj.initSubscribers(nh);
     br.sendTransform(tf::StampedTransform(transform,
     ros::Time::now(), "map", "/om_with_tb3/base_footprint"));
-    locObj.ExecuteLocalisation(nh);
+    locObj.ExecuteLocalisation();
     testObj1.InitPose();
     testObj2.InitPose();
     testObj1.poseSubscriber = nh.subscribe("/rawPose",
@@ -516,8 +526,9 @@ TEST(LocalisationTest, ExecuteLocalisationRobotZPosNeg) {
     while (1) {
         br.sendTransform(tf::StampedTransform(transform,
         ros::Time::now(), "/map", "/om_with_tb3/base_footprint"));
-        locObj.ExecuteLocalisation(nh);
          ros::spinOnce();
+         locObj.ExecuteLocalisation();
+
         loop_rate.sleep();
         double diff = (ros::Time::now() - begin).toSec();
         if ((testObj2.receivedPose && testObj1.receivedPose) || diff > 5) {

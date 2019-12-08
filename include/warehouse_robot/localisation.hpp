@@ -92,6 +92,7 @@ class Localisation {
     void GetRobotCoordinate(tf::StampedTransform mapToRobot);
 
  public:
+    void initSubscribers(ros::NodeHandle n);
     /*
      * @brief function to set the threshold of entropy
      * @param thresholdValue threshold value to be set
@@ -104,7 +105,7 @@ class Localisation {
      * @param none
      * @return none
      */
-    void ExecuteLocalisation(ros::NodeHandle nh);
+    void ExecuteLocalisation();
 };
 
 #endif  // INCLUDE_WAREHOUSE_ROBOT_LOCALISATION_HPP_
