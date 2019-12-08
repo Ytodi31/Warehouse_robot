@@ -20,7 +20,6 @@ find_package(catkin REQUIRED COMPONENTS
   aruco
   roslib
   open_manipulator_msgs
-  OpenCV
 )
 
 find_package(OpenCV REQUIRED
