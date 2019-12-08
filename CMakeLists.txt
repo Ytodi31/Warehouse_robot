@@ -162,18 +162,18 @@ include_directories(
 ## same as for the library above
 # add_dependencies(${PROJECT_NAME}_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
-add_executable(pathPlanner src/main.cpp src/PathPlanner.cpp src/PickPlace.cpp)
+#add_executable(pathPlanner src/main.cpp src/PathPlanner.cpp src/PickPlace.cpp)
 add_executable(pickPlace src/main.cpp  src/PickPlace.cpp)
-add_executable(localisation src/localisation.cpp src/main.cpp)
-add_executable(pidController src/pidController.cpp src/main.cpp)
-add_executable(turtlebotPerception src/turtlebotPerception.cpp src/main.cpp)
+#add_executable(localisation src/localisation.cpp src/main.cpp)
+#add_executable(pidController src/pidController.cpp src/main.cpp)
+#add_executable(turtlebotPerception src/turtlebotPerception.cpp src/main.cpp)
 
 ## Specify libraries to link a library or executable target against
-target_link_libraries(pathPlanner ${catkin_LIBRARIES})
+#target_link_libraries(pathPlanner ${catkin_LIBRARIES})
 target_link_libraries(pickPlace ${catkin_LIBRARIES})
-target_link_libraries(localisation ${catkin_LIBRARIES})
-target_link_libraries(pidController ${catkin_LIBRARIES})
-target_link_libraries(turtlebotPerception ${catkin_LIBRARIES})
+#target_link_libraries(localisation ${catkin_LIBRARIES})
+#target_link_libraries(pidController ${catkin_LIBRARIES})
+#target_link_libraries(turtlebotPerception ${catkin_LIBRARIES})
 
 #############
 ## Install ##
@@ -228,22 +228,22 @@ if(CATKIN_ENABLE_TESTING)
 	find_package(rostest REQUIRED)
 	add_rostest_gtest(allTestWarehouseRobot
     test/allTestWarehouseRobot.test
-    test/localisationTest.cpp
-	test/localisationTestClass.cpp
-	test/localisationTestClass.hpp
-    include/warehouse_robot/localisation.hpp
-    src/localisation.cpp
+    #test/localisationTest.cpp
+	#test/localisationTestClass.cpp
+	#test/localisationTestClass.hpp
+    #include/warehouse_robot/localisation.hpp
+    #src/localisation.cpp
     #test/testPathPlanner.cpp
     #include/warehouse_robot/PathPlanner.hpp
     #src/PathPlanner.cpp
-    #test/testPickPlace.cpp
-    #include/warehouse_robot/PickPlace.hpp
-    #src/PickPlace.cpp
-    test/testControlNPerception.cpp
-    include/warehouse_robot/pidController.hpp
-    include/warehouse_robot/turtlebotPerception.hpp
-    src/pidController.cpp
-    src/turtlebotPerception.cpp
+    test/testPickPlace.cpp
+    include/warehouse_robot/PickPlace.hpp
+    src/PickPlace.cpp
+    #test/testControlNPerception.cpp
+    #include/warehouse_robot/pidController.hpp
+    #include/warehouse_robot/turtlebotPerception.hpp
+    #src/pidController.cpp
+    #src/turtlebotPerception.cpp
     test/main.cpp)
     target_link_libraries(allTestWarehouseRobot ${catkin_LIBRARIES} ${OpenCV_LIBRARIES})
 
