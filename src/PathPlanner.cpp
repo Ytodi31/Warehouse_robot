@@ -46,101 +46,118 @@
  * @date 11-27-20 19
  */
 #include "../include/warehouse_robot/PathPlanner.hpp"
-#include <opencv2/opencv.hpp>
-#include <opencv2/highgui/highgui.hpp>
-#include <opencv2/core/core.hpp>
-#include <iostream>
 
 PathPlanner::PathPlanner() {
   setPathFound(false);
-  goalThreshold = 5;  // Euclidean distance threshold to the goal
-  mapSize = std::make_pair(402, 780);
-//  std::vector<std::vector<std::size_t> > vec(780,
-//                                             std::vector<std::size_t>(402, 0));
-//  map = vec;
+  goalThreshold = 5;  // Threshold distance around the goal
+  mapSize = std::make_pair(401, 779);
+  // Preassigned size for the vectors
   int vectorSize = (mapSize.first * mapSize.second) / 0.05;
   costGo.assign(vectorSize, INFINITY);
-  costCome.assign(vectorSize, 0.0);  // Euclidean distance
+  costCome.assign(vectorSize, 0.0);
   totalCost.assign(vectorSize, 0.0);
   visitStatus.assign(vectorSize, 0);
   parentNode.assign(vectorSize, 0);
   actionSequence.assign(vectorSize, 0);
   thetaSequence.assign(vectorSize, 45.0);
-//  stack.assign(vectorSize,0);
-  startIndex = hashIndex(getStart());
-  goalIndex = hashIndex(getGoal());
   currentIndex = 0;
   localGoal = std::make_pair(0, 0);
 
   // Reading Image file to populate the map
-  cv::String path = "../data/maps/ariac_load.pgm";
-  cv::Mat mapImage = cv::imread(path, CV_LOAD_IMAGE_GRAYSCALE);
-
+  std::string imagePath = ros::package::getPath("warehouse_robot");
+  imagePath.append("/data/maps/ariac_load.png");
+  // Reading the image in Greyscale
+  cv::Mat mapImage = cv::imread(imagePath, CV_LOAD_IMAGE_GRAYSCALE);
   int erosion_type = 0, erosion_size = 0;
-  erosion_type = cv::MORPH_RECT;
+  erosion_type = cv::MORPH_ELLIPSE;
   cv::Mat erodedImage;
+  erosion_size = 5;
+  // Eroding the image to get thicker boundaries around obstacles
   cv::Mat element = cv::getStructuringElement(
       erosion_type, cv::Size(2 * erosion_size + 1, 2 * erosion_size + 1),
       cv::Point(erosion_size, erosion_size));
   int rows = mapImage.rows;
   int cols = mapImage.cols;
 
-  std::vector<std::vector<std::size_t>> map;
-  for (auto i = 0; i <= rows; i++) {
-    for (auto j = 0; j <= cols; j++) {
-      if (mapImage.at<int>(i, j) != 255) {
-        mapImage.at<int>(i, j) = 0;
+  for (auto i = 0; i < rows; i++) {
+    for (auto j = 0; j < cols; j++) {
+      if (static_cast<int>(mapImage.at < uchar > (i, j) > 240)) {
+        mapImage.at < uchar > (i, j) = 255;
+      } else {
+        mapImage.at < uchar > (i, j) = 0;
       }
     }
   }
   // Eroding original image as a substitute for Minkowski Sum
   cv::erode(mapImage, erodedImage, element);
-  erodedImage = erodedImage / 255;
-
-  // Populating Map from Image
-  for (auto i = 0; i <= rows; i++) {
-    std::vector<std::size_t> tempCol;
-    for (auto j = 0; j <= cols; j++) {
-      tempCol.push_back(erodedImage.at<int>(i, j));
+  erodedImage = 1 - (erodedImage / 255);
+  std::vector<int> tempCol;
+  int val;
+  for (int i = 0; i < rows; i++) {
+    for (int j = 0; j < cols; j++) {
+      val = static_cast<int>(erodedImage.at < uchar > (i, j));
+      tempCol.push_back(val);
     }
     map.push_back(tempCol);
   }
-
+  // Populating Map with the image values
+  for (int i = 0; i < rows; i++) {
+    for (int j = 0; j < cols; j++) {
+      if (static_cast<int>(erodedImage.at < uchar > (i, j) == 0)) {
+        map[i][j] = 0;
+      } else {
+        map[i][j] = 1;
+      }
+    }
+  }
 }
 
-void PathPlanner::plannerMain() {
+std::vector<std::pair<double, double>> PathPlanner::plannerMain() {
   int index = 0;
   double stackLength = 0, thetaOld = 0;
   double lowestCost = 1000000, currentCost = INFINITY;
+  std::vector<std::pair<double, double>> shortPath;
   std::vector<std::size_t>::iterator it;
-  std::pair<double, double> currentNode = getStart();
+  std::pair<double, double> startNode = getStart();
+  std::pair<double, double> goalNode = getGoal();
+  std::pair<double, double> currentNode = startNode;
+
+  // Checking if the start and goal points are in the map
+  // and are not in obstacles
+  if (boundaryCheck(startNode) == 0) {
+    ROS_ERROR("INVALID START POINT!");
+    return shortPath;
+  } else if (boundaryCheck(goalNode) == 0) {
+    ROS_ERROR("INVALID GOAL POINT!");
+    return shortPath;
+  } else if (startNode.first == goalNode.first
+      && startNode.second == goalNode.second) {
+    ROS_ERROR("START AND GOAL NODES ARE SAME!");
+    return shortPath;
+  }
   startIndex = hashIndex(getStart());
-  std::cout << "START INDEX : " << startIndex << std::endl;  // REMOVE!!!
   goalIndex = hashIndex(getGoal());
-  std::cout << "GOAL INDEX : " << goalIndex << std::endl;  // REMOVE!!!
   stack.push_back(startIndex);
   costCome.at(startIndex) = 0;
   costGo.at(startIndex) = euclideanDist(start, goal);
   totalCost.at(startIndex) = costCome.at(startIndex) + costGo.at(startIndex);
   currentIndex = startIndex;
 
+  // While goal has not been reached
   while (goalFlag == 0) {
     if (goalCheck(currentNode) == true) {
-      std::cout << "Within goal threshold!" << std::endl;
+      ROS_DEBUG("Within goal threshold!");
       break;
-      //      ROS_DEBUG("Within goal threshold!");
     }
     stackLength = stack.size();
     if (stackLength == 0) {
-      std::cout << "Goal could not be reached!" << std::endl;
-//      ROS_DEBUG("Goal could not be reached!");
-      std::cout << "Current Position : " << currentNode.first
-                << currentNode.second << std::endl;
+      ROS_DEBUG("All nodes explored. Goal could not be reached!");
       break;
     }
     for (int i = 0; i < stackLength; i++) {
       double totCost = totalCost.at(stack[i]);
       if (totCost < lowestCost) {
+        // Taking the next node from stack as the current one
         currentIndex = stack[i];
         currentNode = hashCoordinates(currentIndex);
         currentCost = costGo.at(currentIndex);
@@ -150,13 +167,23 @@ void PathPlanner::plannerMain() {
     currentNode = hashCoordinates(currentIndex);
     currentCost = costGo.at(currentIndex);
     thetaOld = thetaSequence.at(currentIndex);
+    // Calling the function to explore all possible nodes
     allActions(currentIndex);
   }
+  // If goal has been reached, calculate the shortest path
+  if (goalFlag == 1) {
+    std::size_t localGoalIndex = hashIndex(localGoal);
+    shortPath = shortestPath(localGoalIndex);
+  } else {
+    ROS_DEBUG("Could not reach goal!");
+  }
+  return shortPath;
 }
 
 void PathPlanner::setGoal(std::pair<double, double> g) {
   goal.first = g.first;
   goal.second = g.second;
+  goalIndex = hashIndex(getGoal());
 }
 
 std::pair<double, double> PathPlanner::getGoal() {
@@ -166,6 +193,7 @@ std::pair<double, double> PathPlanner::getGoal() {
 void PathPlanner::setStart(std::pair<double, double> s) {
   start.first = s.first;
   start.second = s.second;
+  startIndex = hashIndex(s);
 }
 
 std::pair<double, double> PathPlanner::getStart() {
@@ -193,8 +221,6 @@ std::pair<double, double> PathPlanner::hashCoordinates(std::size_t hashIndex) {
   std::pair<double, double> cartesianCoord;
   double x = (hashIndex / mapRow);  // Quotient
   double y = (hashIndex % mapRow);  // Remainder
-//  x = x * 0.05;
-//  y = y * 0.05;
   cartesianCoord.first = x;
   cartesianCoord.second = y;
   return cartesianCoord;
@@ -202,9 +228,10 @@ std::pair<double, double> PathPlanner::hashCoordinates(std::size_t hashIndex) {
 
 bool PathPlanner::boundaryCheck(std::pair<double, double> node) {
   // Checking if the node is within the map
-  if ((node.first <= mapSize.second and node.first >= 0)
-      and (node.second <= mapSize.first and node.second >= 0)) {
-    if (map[node.second][node.first] == 0) {  // Checking if the new node is not in an obstacle
+  if ((node.first <= mapSize.second && node.first >= 0)
+      && (node.second <= mapSize.first && node.second >= 0)) {
+    // Checking if the new node is not in an obstacle
+    if (map[node.second][node.first] == 0) {
       return 1;
     }
   }
@@ -216,19 +243,17 @@ std::vector<std::pair<double, double>> PathPlanner::shortestPath(
   std::vector<std::pair<double, double>> shortPath;
   std::pair<double, double> currentNode;
   currentIndex = goalIndex;
-//  std::cout << "Parent Node size : " << parentNode.size() << std::endl;  // REMOVE!
-//  std::cout << "Goal Index : " << currentIndex << std::endl;  // REMOVE!
 
-//  for (int z = 1; z < parentIndexList.size(); z++) {
-//    std::cout << "Parent INDEX NODE " << z << " : " << parentIndexList[z].first<<":"<<parentIndexList[z].second<< std::endl;  // REMOVE!
-//  }
+  if (parentIndexList.size() == 0) {
+    ROS_ERROR("NO PATH FOUND!");
+    return shortPath;
+  }
 
   while (currentIndex != startIndex) {
     currentNode = hashCoordinates(currentIndex);
     shortPath.push_back(currentNode);
     for (int i = 1; i < parentIndexList.size(); i++) {
       if (parentIndexList[i].second == currentIndex) {
-        std::cout << "NEXT INDEX : " << parentIndexList[i].first << std::endl;
         currentIndex = parentIndexList[i].first;
         currentNode = hashCoordinates(currentIndex);
         shortPath.push_back(currentNode);
@@ -237,45 +262,40 @@ std::vector<std::pair<double, double>> PathPlanner::shortestPath(
   }
   std::reverse(shortPath.begin(), shortPath.end());
   shortPath.erase(unique(shortPath.begin(), shortPath.end()), shortPath.end());
-  std::cout << "Path size : " << shortPath.size() << std::endl;  // REMOVE!
   return shortPath;
 }
 
 bool PathPlanner::updateCost(std::size_t newIndex, std::size_t parentIndex,
                              double cost) {
   double size = stack.size();
-  std::cout << "CURRENT COST : " << costCome.at(newIndex) << std::endl;  // REMOVE!
-  std::cout << "NEW COST : " << cost << std::endl;  // REMOVE!
   std::pair<std::size_t, std::size_t> indexes;
+  // Checks if node has already been visited
   if (visitStatus.at(newIndex) == 0) {
-    std::cout << "VISITED" << std::endl;  // REMOVE!
     currentIndex = newIndex;
     visitStatus.at(currentIndex) = 1;
     indexes.first = parentIndex;
     indexes.second = newIndex;
     parentIndexList.push_back(indexes);
     parentNode[newIndex] = parentIndex;
-    stack.push_back(currentIndex);
+    stack.push_back(currentIndex);  // Pushing the current index to stack
     actionSequence.at(currentIndex) = actionNumber;
     std::pair<double, double> nodeParent = hashCoordinates(parentIndex);
     std::pair<double, double> nodeCurrent = hashCoordinates(currentIndex);
+
+    // Updating the cost
     costCome[currentIndex] = euclideanDist(nodeParent, nodeCurrent);
     costGo[currentIndex] = euclideanDist(nodeCurrent, goal);
     totalCost[currentIndex] = costCome.at(currentIndex)
         + costGo.at(currentIndex);
 
-    std::cout << "PARENT OF " << newIndex << " is " << parentNode.at(newIndex)
-              << std::endl;
-
   } else if (cost < costCome.at(newIndex)) {
-    std::cout << "COST UPDATE!" << std::endl;  // REMOVE!
+    ROS_INFO("COST UPDATED. COST : %f!", cost);
     costCome.at(newIndex) = cost;
     currentIndex = newIndex;
     indexes.first = parentIndex;
     indexes.second = newIndex;
     parentIndexList.push_back(indexes);
     parentNode[newIndex] = parentIndex;
-    actionSequence[newIndex] = actionNumber;
   } else {
     return false;
   }
@@ -304,6 +324,8 @@ std::pair<double, double> PathPlanner::differential(double leftRpm,
   std::pair<double, double> oldNode = hashCoordinates(oldIndex);
   std::pair<double, double> newNode = std::make_pair(0, 0);
   std::pair<double, double> firstNode = hashCoordinates(oldIndex);
+
+  // Calculates the differential path from one node to the next in 20 steps
   for (int i = 0; i <= 20; i++) {
     dx = ((r / 2) * (leftRpm + rightRpm) * cos(heading) * dt);
     newNode.first = oldNode.first + dx;
@@ -314,7 +336,7 @@ std::pair<double, double> PathPlanner::differential(double leftRpm,
     heading += dTheta;
     newIndex = hashIndex(newNode);
     boundary = boundaryCheck(newNode);
-    if (boundary == 0) {
+    if (boundary == 0) {  // Out of Map and Obstacle check
       break;
     }
     if (goalCheck(newNode)) {
@@ -326,7 +348,7 @@ std::pair<double, double> PathPlanner::differential(double leftRpm,
   }
 
   if (boundary == 1) {
-    thetaSequence.at(newIndex) = heading;
+    thetaSequence.at(newIndex) = heading;  // Updating the heading to vector
   }
   return newNode;
 }
@@ -367,7 +389,6 @@ void PathPlanner::allActions(std::size_t currentIndex) {
   dTheta = 0.10472 * (rightRpm - leftRpm) * (r / l) * dt;
   newNode = differential(leftRpm, rightRpm, newTheta, l, r, dt, currentIndex,
                          dTheta);
-  newNode.second += 1;
   newIndex = hashIndex(newNode);
   if (boundaryCheck(newNode) == 1) {
     updateCost(newIndex, currentIndex, currentCost);
@@ -381,7 +402,6 @@ void PathPlanner::allActions(std::size_t currentIndex) {
   dTheta = 0.10472 * (rightRpm - leftRpm) * (r / l) * dt;
   newNode = differential(leftRpm, rightRpm, newTheta, l, r, dt, currentIndex,
                          dTheta);
-  newNode.first -= 1;
   newIndex = hashIndex(newNode);
   if (boundaryCheck(newNode) == 1) {
     updateCost(newIndex, currentIndex, currentCost);
@@ -464,6 +484,6 @@ bool PathPlanner::goalCheck(std::pair<double, double> currentNode) {
   return false;
 }
 
-std::vector<std::vector<std::size_t>> PathPlanner::showMap() {
+std::vector<std::vector<int>> PathPlanner::showMap() {
   return map;
 }
