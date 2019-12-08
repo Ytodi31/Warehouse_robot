@@ -1,7 +1,7 @@
 # Autonomous Warehouse Management Robot (AuWaMaR)
 [![License](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause)
 [![Build Status](https://travis-ci.org/Ytodi31/warehouse_robot.svg?branch=Ydriver)](https://travis-ci.org/Ytodi31/warehouse_robot)
-[![Coverage Status](https://coveralls.io/repos/github/Ytodi31/warehouse_robot/badge.svg?branch=Ydriver)](https://coveralls.io/github/Ytodi31/warehouse_robot?branch=master)
+[![Coverage Status](https://coveralls.io/repos/github/Ytodi31/warehouse_robot/badge.svg?branch=Ydriver)](https://coveralls.io/github/Ytodi31/warehouse_robot?branch=Ydriver)
 
 ## Overview
 This project is developed for Warehouse Management wherein a Turtlebot3 Waffle Pi
