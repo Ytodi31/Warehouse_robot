@@ -1,7 +1,7 @@
 <launch>
   <arg
     name = "recordBag"
-    default = "true"
+    default = "false"
     />
    <arg name="map_file" default="$(find warehouse_robot)/data/maps/ariac.yaml"/>
    <include file="$(find warehouse_robot)/launch/ariac_world.launch">
