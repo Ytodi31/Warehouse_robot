@@ -33,13 +33,13 @@
       <include>       
        <uri> model://ariac</uri>
       </include>      
-      <pose frame='forklift/map'>9.737499 9.587498999999998 0 0 -0 0</pose>
+      <pose frame='forklift/map'>9.737499 9.587498999999998 0.0 0 -0 0</pose>
     </model>
     <model name='marker0'>
     	<include>
     		<uri>model://marker0</uri>
     	</include>
-    	<pose frame=''>9.5 9.7 1 0 0 0</pose>
+    	<pose frame=''>5.55 9.05 0.035 0 0 0.785</pose>
     </model>
     <light name='user_point_light_0' type='point'>
       <pose frame=''>36.5286 1.9714 1 0 -0 0</pose>
