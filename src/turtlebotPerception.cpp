@@ -46,133 +46,117 @@
  * @date 11-28-2019
  */
 
+#include <iostream>
+#include "ros/ros.h"
+#include <sensor_msgs/Image.h>
+#include <cv_bridge/cv_bridge.h>
+#include <opencv2/opencv.hpp>
+#include <opencv2/core/core.hpp>
 #include <aruco/aruco.h>
 #include <aruco/markerdetector.h>
 #include <aruco/arucofidmarkers.h>
 #include <aruco/cvdrawingutils.h>
 #include <aruco/exports.h>
-#include "turtlebotPerception.hpp"
-#include <opencv2/opencv.hpp>
-/**
- * @brief Setter method for the Ros Node
- * @param  New Node to be set
- * @return none
- */
+#include <pidController.hpp>
+#include <turtlebotPerception.hpp>
+
 void TurtlebotPerception::setPerceptionNode(ros::NodeHandle n) {
   TurtlebotPerception::perceptionNode = n;
 }
 
 void TurtlebotPerception::setSubscribers() {
-    imageSub = perceptionNode.subscribe("/om_with_tb3/camera/rgb/image_raw",
-            100, &TurtlebotPerception::sensorImageData, this);
+  imageSub = perceptionNode.subscribe("/om_with_tb3/camera/rgb/image_raw", 100,
+                                      &TurtlebotPerception::sensorImageData,
+                                      this);
 }
 
-
-
-void TurtlebotPerception::sensorImageData(const sensor_msgs::Image::
-                                         ConstPtr msg) {
-    cv_bridge::CvImageConstPtr cv_ptr;
-    cv_ptr = cv_bridge::toCvCopy(msg);
-    img = cv_ptr->image;
+void TurtlebotPerception::sensorImageData(
+    const sensor_msgs::Image::ConstPtr msg) {
+  cv_bridge::CvImageConstPtr cv_ptr;
+  cv_ptr = cv_bridge::toCvCopy(msg);
+  img = cv_ptr->image;
 }
 
-
-/**
- * @brief Function to detect the Aruco Marker
- * @param Frame containing the image to be processed and the markerId
- *  to be compared with
- * @return True if the marker detected matches the package required
- */
 bool TurtlebotPerception::detectArucoMarker(cv::Mat imageFrame,
                                             double markerId) {
-    aruco::MarkerDetector detector;
-    std::vector<aruco::Marker> markers;
-    ofstream myfile;
-    myfile.open("/home/suyash/Desktop/example.txt");
-    cv::Mat camParams = cv::Mat::zeros(3, 3, CV_32F);
-    cv::Mat distortion = cv::Mat::zeros(1, 5, CV_32F);
-    camParams.at<float>(0, 0) = 530.4669406576809;
-    camParams.at<float>(0, 1) = 0.0;
-    camParams.at<float>(0, 2) = 320.5;
-    camParams.at<float>(1, 0) =  0.0;
-    camParams.at<float>(1, 1) = 530.4669406576809;
-    camParams.at<float>(1, 2) = 240.5;
-    camParams.at<float>(2, 2) = 1;
-    aruco::CameraParameters params;
-    detector.setMinMaxSize(0.01, 1);
+  aruco::MarkerDetector detector;
+  std::vector < aruco::Marker > markers;
+  ofstream myfile;
+  myfile.open("/home/suyash/Desktop/example.txt");
+  cv::Mat camParams = cv::Mat::zeros(3, 3, CV_32F);
+  cv::Mat distortion = cv::Mat::zeros(1, 5, CV_32F);
+  camParams.at<float>(0, 0) = 530.4669406576809;
+  camParams.at<float>(0, 1) = 0.0;
+  camParams.at<float>(0, 2) = 320.5;
+  camParams.at<float>(1, 0) = 0.0;
+  camParams.at<float>(1, 1) = 530.4669406576809;
+  camParams.at<float>(1, 2) = 240.5;
+  camParams.at<float>(2, 2) = 1;
+  aruco::CameraParameters params;
+  detector.setMinMaxSize(0.01, 1);
 
-    detector.detect(imageFrame, markers, camParams, distortion, 0.073, false);
-    myfile << "Percpeption data.\n";
-    myfile << markers.size() << std::endl;
-    for ( auto mark : markers ) {
-        if ( mark.id == 985 ) {
-            markerDetected = true;
-            marker_x = mark.getCenter().x;
-            marker_y = mark.getCenter().y;
-            marker_area = mark.getArea();
-            translation = mark.Tvec;
-            rotMat = mark.Rvec;
-        }
+  detector.detect(imageFrame, markers, camParams, distortion, 0.073, false);
+  myfile << "Percpeption data.\n";
+  myfile << markers.size() << std::endl;
+  for (auto mark : markers) {
+    if (mark.id == 985) {
+      markerDetected = true;
+      marker_x = mark.getCenter().x;
+      marker_y = mark.getCenter().y;
+      marker_area = mark.getArea();
+      translation = mark.Tvec;
+      rotMat = mark.Rvec;
     }
-    myfile.close();
+  }
+  myfile.close();
   return markerDetected;  // Mock
 }
 
-
 void TurtlebotPerception::setKP(double kpin) {
-    kp = kpin;
+  kp = kpin;
 }
 
 void TurtlebotPerception::setKI(double kiin) {
-    ki = kiin;
+  ki = kiin;
 }
 
 void TurtlebotPerception::setKD(double kdin) {
-    kd = kdin;
+  kd = kdin;
 }
-
 
 geometry_msgs::Twist TurtlebotPerception::calcVel() {
-    geometry_msgs::Twist vel;
-    if (markerDetected) {
-        double error = 0;
-        double error_diff = 0;
-        error = img.rows/2 - marker_x;
-        if (abs(error) > 10) {
-            error_diff = error - lastAngularError;
-            angularVel = kp*error + ki * sumAngularError + kd * error_diff;
-            lastAngularError = error;
-            geometry_msgs::Twist vel;
-            vel.linear.x = 0;
-            vel.linear.y = 0;
-            vel.linear.z = 0;
-            vel.angular.x = 0;
-            vel.angular.y = 0;
-            vel.angular.z = angularVel;
-        } else {
-            vel.linear.x = 0;
-            vel.linear.y = 0;
-            vel.linear.z = 0;
-            vel.angular.x = 0;
-            vel.angular.y = 0;
-            vel.angular.z =  0;
-        }
+  geometry_msgs::Twist vel;
+  if (markerDetected) {
+    double error = 0;
+    double error_diff = 0;
+    error = img.rows / 2 - marker_x;
+    if (abs(error) > 10) {
+      error_diff = error - lastAngularError;
+      angularVel = kp * error + ki * sumAngularError + kd * error_diff;
+      lastAngularError = error;
+      geometry_msgs::Twist vel;
+      vel.linear.x = 0;
+      vel.linear.y = 0;
+      vel.linear.z = 0;
+      vel.angular.x = 0;
+      vel.angular.y = 0;
+      vel.angular.z = angularVel;
     } else {
-        vel.linear.x = 0;
-        vel.linear.y = 0;
-        vel.linear.z = 0;
-        vel.angular.x = 0;
-        vel.angular.y = 0;
-        vel.angular.z = 0.08;
+      vel.linear.x = 0;
+      vel.linear.y = 0;
+      vel.linear.z = 0;
+      vel.angular.x = 0;
+      vel.angular.y = 0;
+      vel.angular.z = 0;
     }
-    return vel;
+  } else {
+    vel.linear.x = 0;
+    vel.linear.y = 0;
+    vel.linear.z = 0;
+    vel.angular.x = 0;
+    vel.angular.y = 0;
+    vel.angular.z = 0.08;
+  }
+  return vel;
 }
-
-
-
-
-
-
-
-
 

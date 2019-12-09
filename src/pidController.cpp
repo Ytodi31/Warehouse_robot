@@ -48,188 +48,124 @@
 
 #include <math.h>
 #include <geometry_msgs/Twist.h>
+#include <tf/transform_broadcaster.h>
+#include <ros/ros.h>
+#include <iostream>
+#include <vector>
 #include "pidController.hpp"
 
-/**
- * @brief Setter method for the Ros Node
- * @param New Node to be set
- * @return none
- */
 void PidController::setControllerNode(ros::NodeHandle n) {
   PidController::controllerNode = n;
 }
 
-/**
- * @brief Setter method for the velocity publisher
- * @param New velocity publisher to be set
- * @return none
- */
 void PidController::setVelocityPub() {
-  velocityPub = controllerNode.advertise<geometry_msgs
-          ::Twist>("/om_with_tb3/cmd_vel", 100);
+  velocityPub = controllerNode.advertise < geometry_msgs::Twist
+      > ("/om_with_tb3/cmd_vel", 100);
 }
 
-/**
- * @brief Setter method for the pose subscriber
- * @param New pose subscriber to be set
- * @return none
- */
 void PidController::setPoseSub() {
   poseSub = controllerNode.subscribe("/rawPose", 100,
-          &PidController::distCallBack, this);
+                                     &PidController::distCallBack, this);
 }
-/**
- * @brief Getter method for the pose
- * @param none
- * @return The current pose of the turtlebot
- */
+
 tf::Pose PidController::getPose() {
   return PidController::pose;
 }
 
-/**
- * @brief Getter method for the linear velocity
- * @param none
- * @return The current linear velocity of the turtlebot
- */
 double PidController::getLinearVel() {
   return PidController::linearVel;
 }
 
-/**
- * @brief Getter method for the angular velocity
- * @param none
- * @return The current angular velocity of the turtlebot
- */
 double PidController::getAngularVel() {
   return PidController::angularVel;
 }
 
-/**
- * @brief Getter method for the Propotional gain
- * @param none
- * @return The current propotional gain of the controller
- */
 std::vector<double> PidController::getKP() {
   return PidController::kP;
 }
-/**
- * @brief Setter method for the propotional gain
- * @param New propotional gain to be set
- * @return none
- */
+
 void PidController::setKP(double kP_linear, double kP_angular) {
   kP.push_back(kP_linear);
   kP.push_back(kP_angular);
 }
-/**
- * @brief Getter method for the derivative gain
- * @param none
- * @return The current derivative gain of the controller
- */
+
 std::vector<double> PidController::getKD() {
-    return kD;
+  return kD;
 }
-/**
- * @brief Setter method for the derivative gain
- * @param New derivative gain to be set
- * @return none
- */
+
 void PidController::setKD(double kD_linear, double kD_angular) {
   kD.push_back(kD_linear);
   kD.push_back(kD_angular);
 }
-/**
- * @brief Getter method for the integral gain
- * @param none
- * @return The current integral gain of the controller
- */
+
 std::vector<double> PidController::getKI() {
   return PidController::kI;
 }
-/**
- * @brief Setter method for the integral gain
- * @param New integral gain to be set
- * @return none
- */
+
 void PidController::setKI(double kI_linear, double kI_angular) {
   kI.push_back(kI_linear);
   kI.push_back(kI_angular);
 }
-/**
- * @brief Callback function to get the pose data from the Turtlebot
- * @param Turtlebot Pose
- * @return none
- */
+
 void PidController::distCallBack(
     const geometry_msgs::PoseStamped::ConstPtr &msg) {
-    pose.setOrigin(tf::Vector3(msg->pose.position.x, msg->pose.position.y,
-            msg->pose.position.z));
-    pose.setRotation(tf::Quaternion(msg->pose.orientation.x,
-            msg->pose.orientation.y,
-            msg->pose.orientation.z, msg->pose.orientation.w));
-    return;
-}
-/**
- * @brief Mock of the euclidean distance calculator
- * @param Current pose and desired pose
- * @return Calculated distance
- */
-double PidController::euclideanDist(tf::Pose currentPose,
-                                    tf::Pose desiredPose) {
-    double dist = 0;
-    dist = currentPose.getOrigin().distance(desiredPose.getOrigin());
-    return dist;
+  pose.setOrigin(
+      tf::Vector3(msg->pose.position.x, msg->pose.position.y,
+                  msg->pose.position.z));
+  pose.setRotation(
+      tf::Quaternion(msg->pose.orientation.x, msg->pose.orientation.y,
+                     msg->pose.orientation.z, msg->pose.orientation.w));
+  return;
 }
 
-/**
- * @brief Mock method to calculate the linear and angular velocity for the robot
- * @param Current pose and desired pose
- * @return Calculated linear and angular velocity
- */
+double PidController::euclideanDist(tf::Pose currentPose,
+                                    tf::Pose desiredPose) {
+  double dist = 0;
+  dist = currentPose.getOrigin().distance(desiredPose.getOrigin());
+  return dist;
+}
+
 void PidController::calcVel(tf::Pose currentPose, tf::Pose desiredPose) {
-    double dist = euclideanDist(currentPose, desiredPose);
-    double linearError = dist;
-    double angularDesired = atan2(desiredPose.getOrigin().y() -
-                                currentPose.getOrigin().y(),
-                                 desiredPose.getOrigin().x() -
-                                 currentPose.getOrigin().x()) + M_PI;
-    ros::start();
-    tf::Matrix3x3 rotMat(currentPose.getRotation());
-    double roll, pitch, yaw;
-    rotMat.getRPY(roll, pitch, yaw);
-    double angularError;
-    angularError = yaw - angularDesired;
-    ROS_DEBUG_STREAM("angular Error: " << angularError);
-    double linearErrorDiff;
-    linearErrorDiff = linearError - lastLinearError;
-    double angularErrorDiff;
-    angularErrorDiff = angularError - lastAngularError;
-    linearVel = kP[0] * linearError + kI[0] * sumLinearError +
-                kD[0] * linearErrorDiff;
-    angularVel = kP[1] * angularError + kI[1] * sumAngularError +
-                 kD[1] * angularErrorDiff;
-    geometry_msgs::Twist msg;
-    if ( linearVel > linearVelThreshold ) {
-        linearVel = linearVelThreshold;
-    } else if ( linearVel < -linearVelThreshold ) {
-        linearVel = -linearVelThreshold;
-    }
-    if ( angularVel > angularVelThreshold ) {
-        angularVel = angularVelThreshold;
-    } else if ( angularVel < -angularVelThreshold ) {
-        angularVel = -angularVelThreshold;
-    }
-    std::cout << "Angular vel: " << angularVel;
-    msg.linear.x = linearVel;
-    msg.linear.y = 0;
-    msg.linear.z = 0;
-    msg.angular.x = 0;
-    msg.angular.y = 0;
-    msg.angular.z = angularVel;
-    velocityPub.publish(msg);
-    lastAngularError = angularError;
-    lastLinearError = linearError;
-    sumLinearError = sumLinearError + linearError;
-    sumAngularError = sumAngularError + angularError;
+  auto dist = euclideanDist(currentPose, desiredPose);
+  auto linearError = dist;
+  auto angularDesired = atan2(
+      desiredPose.getOrigin().y() - currentPose.getOrigin().y(),
+      desiredPose.getOrigin().x() - currentPose.getOrigin().x()) + M_PI;
+  ros::start();
+  tf::Matrix3x3 rotMat(currentPose.getRotation());
+  double roll, pitch, yaw;
+  rotMat.getRPY(roll, pitch, yaw);
+  double angularError;
+  angularError = yaw - angularDesired;
+  ROS_DEBUG_STREAM("angular Error: " << angularError);
+  double linearErrorDiff;
+  linearErrorDiff = linearError - lastLinearError;
+  double angularErrorDiff;
+  angularErrorDiff = angularError - lastAngularError;
+  linearVel = kP[0] * linearError + kI[0] * sumLinearError
+      + kD[0] * linearErrorDiff;
+  angularVel = kP[1] * angularError + kI[1] * sumAngularError
+      + kD[1] * angularErrorDiff;
+  geometry_msgs::Twist msg;
+  if (linearVel > linearVelThreshold) {
+    linearVel = linearVelThreshold;
+  } else if (linearVel < -linearVelThreshold) {
+    linearVel = -linearVelThreshold;
+  }
+  if (angularVel > angularVelThreshold) {
+    angularVel = angularVelThreshold;
+  } else if (angularVel < -angularVelThreshold) {
+    angularVel = -angularVelThreshold;
+  }
+  msg.linear.x = linearVel;
+  msg.linear.y = 0;
+  msg.linear.z = 0;
+  msg.angular.x = 0;
+  msg.angular.y = 0;
+  msg.angular.z = angularVel;
+  velocityPub.publish(msg);
+  lastAngularError = angularError;
+  lastLinearError = linearError;
+  sumLinearError = sumLinearError + linearError;
+  sumAngularError = sumAngularError + angularError;
 }

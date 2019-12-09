@@ -45,6 +45,14 @@
  *
  * @date 11-28-2019
  */
+
+#include <ros/ros.h>
+#include <std_msgs/Float64MultiArray.h>
+#include <geometry_msgs/Pose.h>
+#include <open_manipulator_msgs/SetKinematicsPose.h>
+#include <open_manipulator_msgs/SetJointPosition.h>
+#include <vector>
+#include <utility>
 #include "PickPlace.hpp"
 
 PickPlace::PickPlace() {
@@ -53,17 +61,15 @@ PickPlace::PickPlace() {
   homePose.position.y = 6.60363761286e-05;
   homePose.position.z = 0.301622770805;
   homePose.orientation.x = -5.11700663643e-07;
-  homePose.orientation.y =  0.00431527188029;
+  homePose.orientation.y = 0.00431527188029;
   homePose.orientation.z = 0.000118577904216;
   homePose.orientation.w = 0.99999068214;
 }
 
-
 bool PickPlace::setPose(geometry_msgs::Pose armPose) {
   // Creating service client to set manipulator pose to pick object
-  setArmPose = pnpNode.serviceClient
-  <open_manipulator_msgs::SetKinematicsPose>
-  ("/arm/moveit/set_kinematics_pose");
+  setArmPose = pnpNode.serviceClient < open_manipulator_msgs::SetKinematicsPose
+      > ("/arm/moveit/set_kinematics_pose");
   // Defining reuqest and response for service
   open_manipulator_msgs::SetKinematicsPose::Request initPose;
   open_manipulator_msgs::SetKinematicsPose::Response setPoseResp;
@@ -85,36 +91,36 @@ bool PickPlace::setPose(geometry_msgs::Pose armPose) {
   return setArmPose.call(initPose, setPoseResp);
 }
 
-  bool PickPlace::setGripper(std::vector<double>state) {
-    // Creating service client to set gripper position
-    setGripperState = pnpNode.serviceClient
-    <open_manipulator_msgs::SetJointPosition>("/om_with_tb3/gripper");
-    // Defining request and response for service
-    open_manipulator_msgs::SetJointPosition::Request initialState;
-    open_manipulator_msgs::SetJointPosition::Response finalState;
-    // Defining message to be sent over service to set gripper position
-    initialState.planning_group = "";
-    initialState.joint_position.position = state;
-    initialState.joint_position.max_accelerations_scaling_factor = 1;
-    initialState.joint_position.max_velocity_scaling_factor = 1;
-    initialState.path_time = 0;
-    // Calling and returning response from service
-    return setGripperState.call(initialState, finalState);
-  }
+bool PickPlace::setGripper(std::vector<double> state) {
+  // Creating service client to set gripper position
+  setGripperState = pnpNode.serviceClient
+      < open_manipulator_msgs::SetJointPosition > ("/om_with_tb3/gripper");
+  // Defining request and response for service
+  open_manipulator_msgs::SetJointPosition::Request initialState;
+  open_manipulator_msgs::SetJointPosition::Response finalState;
+  // Defining message to be sent over service to set gripper position
+  initialState.planning_group = "";
+  initialState.joint_position.position = state;
+  initialState.joint_position.max_accelerations_scaling_factor = 1;
+  initialState.joint_position.max_velocity_scaling_factor = 1;
+  initialState.path_time = 0;
+  // Calling and returning response from service
+  return setGripperState.call(initialState, finalState);
+}
 
 bool PickPlace::executePick(ros::NodeHandle m) {
   // Setting main node handle to local handle
   pnpNode = m;
   // Sending command to open gripperState
-  std::vector<double>open{0.01};
+  std::vector<double> open { 0.01 };
   bool gripperState = setGripper(open);
   ros::Duration(1).sleep();
   bool pickSet = setPose(pickPose);
-  std::cout << "Pick pose set result: " << pickSet << std::endl;
+  ROS_INFO_STREAM("SETTING POSE FOR PICKING!");
   ros::Duration(1).sleep();
   // Closing gripper if pose was succesfully set
   if (pickSet == true) {
-    std::vector<double>close{-0.01};
+    std::vector<double> close { -0.01 };
     gripperState = setGripper(close);
     ROS_INFO_STREAM("Closing gripper");
   }
@@ -126,18 +132,17 @@ bool PickPlace::executePick(ros::NodeHandle m) {
 bool PickPlace::executePlace(ros::NodeHandle m) {
   // Setting main node handle to local handle
   pnpNode = m;
-    // Creating service client to set manipulator pose to place object
-  setArmPose = pnpNode.serviceClient
-  <open_manipulator_msgs::SetKinematicsPose>
-  ("/arm/moveit/set_kinematics_pose");
+  // Creating service client to set manipulator pose to place object
+  setArmPose = pnpNode.serviceClient < open_manipulator_msgs::SetKinematicsPose
+      > ("/arm/moveit/set_kinematics_pose");
   bool placeSet = setPose(placePose);
-  std::cout << "Place pose set result: " << placeSet << std::endl;
+  ROS_INFO_STREAM("SETTING POSE FOR PLACING!");
   ros::Duration(1).sleep();
   // Creating service client to set gripper position
   setGripperState = pnpNode.serviceClient
-  <open_manipulator_msgs::SetJointPosition>("/om_with_tb3/gripper");
+      < open_manipulator_msgs::SetJointPosition > ("/om_with_tb3/gripper");
   if (placeSet == true) {
-    std::vector<double>state{0.01};
+    std::vector<double> state { 0.01 };
     bool gripperState = setGripper(state);
     ROS_INFO_STREAM("Opening gripper");
   }
@@ -146,4 +151,5 @@ bool PickPlace::executePlace(ros::NodeHandle m) {
   return goHome;
 }
 
-PickPlace::~PickPlace() {}
+PickPlace::~PickPlace() {
+}

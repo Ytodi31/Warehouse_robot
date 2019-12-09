@@ -45,6 +45,16 @@
  *
  * @date 11-27-20 19
  */
+#include<math.h>
+#include <ros/package.h>
+#include<iostream>
+#include<vector>
+#include<utility>
+#include<algorithm>
+#include <opencv2/opencv.hpp>
+#include <opencv2/highgui/highgui.hpp>
+#include <opencv2/core/core.hpp>
+#include "ros/ros.h"
 #include "../include/warehouse_robot/PathPlanner.hpp"
 
 PathPlanner::PathPlanner() {
@@ -125,14 +135,14 @@ std::vector<std::pair<double, double>> PathPlanner::plannerMain() {
   // Checking if the start and goal points are in the map
   // and are not in obstacles
   if (boundaryCheck(startNode) == 0) {
-    ROS_ERROR("INVALID START POINT!");
+    ROS_ERROR_STREAM("INVALID START POINT!");
     return shortPath;
   } else if (boundaryCheck(goalNode) == 0) {
-    ROS_ERROR("INVALID GOAL POINT!");
+    ROS_ERROR_STREAM("INVALID GOAL POINT!");
     return shortPath;
   } else if (startNode.first == goalNode.first
       && startNode.second == goalNode.second) {
-    ROS_ERROR("START AND GOAL NODES ARE SAME!");
+    ROS_ERROR_STREAM("START AND GOAL NODES ARE SAME!");
     return shortPath;
   }
   startIndex = hashIndex(getStart());
@@ -146,19 +156,22 @@ std::vector<std::pair<double, double>> PathPlanner::plannerMain() {
   // While goal has not been reached
   while (goalFlag == 0) {
     if (goalCheck(currentNode) == true) {
-      ROS_DEBUG("Within goal threshold!");
+      setPathFound(true);
+      ROS_DEBUG_STREAM("Within goal threshold!");
       break;
     }
     stackLength = stack.size();
     if (stackLength == 0) {
-      ROS_DEBUG("All nodes explored. Goal could not be reached!");
+      ROS_DEBUG_STREAM("All nodes explored. Goal could not be reached!");
       break;
     }
-    for (int i = 0; i < stackLength; i++) {
-      double totCost = totalCost.at(stack[i]);
+    for (std::vector<std::size_t>::iterator it = stack.begin();
+        it != stack.end(); ++it) {
+      auto loc = *it;
+      auto totCost = totalCost.at(loc);
       if (totCost < lowestCost) {
         // Taking the next node from stack as the current one
-        currentIndex = stack[i];
+        currentIndex = *it;
         currentNode = hashCoordinates(currentIndex);
         currentCost = costGo.at(currentIndex);
         lowestCost = totCost;
@@ -175,7 +188,7 @@ std::vector<std::pair<double, double>> PathPlanner::plannerMain() {
     std::size_t localGoalIndex = hashIndex(localGoal);
     shortPath = shortestPath(localGoalIndex);
   } else {
-    ROS_DEBUG("Could not reach goal!");
+    ROS_DEBUG_STREAM("Could not reach goal!");
   }
   return shortPath;
 }
@@ -245,7 +258,7 @@ std::vector<std::pair<double, double>> PathPlanner::shortestPath(
   currentIndex = goalIndex;
 
   if (parentIndexList.size() == 0) {
-    ROS_ERROR("NO PATH FOUND!");
+    ROS_ERROR_STREAM("NO PATH FOUND!");
     return shortPath;
   }
 
@@ -268,7 +281,7 @@ std::vector<std::pair<double, double>> PathPlanner::shortestPath(
 bool PathPlanner::updateCost(std::size_t newIndex, std::size_t parentIndex,
                              double cost) {
   double size = stack.size();
-  std::pair<std::size_t, std::size_t> indexes;
+  std::pair < std::size_t, std::size_t > indexes;
   // Checks if node has already been visited
   if (visitStatus.at(newIndex) == 0) {
     currentIndex = newIndex;
@@ -289,7 +302,7 @@ bool PathPlanner::updateCost(std::size_t newIndex, std::size_t parentIndex,
         + costGo.at(currentIndex);
 
   } else if (cost < costCome.at(newIndex)) {
-    ROS_INFO("COST UPDATED. COST : %f!", cost);
+    ROS_INFO_STREAM("COST UPDATED. COST : %f!", cost);
     costCome.at(newIndex) = cost;
     currentIndex = newIndex;
     indexes.first = parentIndex;
@@ -341,6 +354,7 @@ std::pair<double, double> PathPlanner::differential(double leftRpm,
     }
     if (goalCheck(newNode)) {
       goalFlag = 1;
+      setPathFound(true);
       break;
     }
     oldNode = newNode;

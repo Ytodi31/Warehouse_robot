@@ -108,11 +108,11 @@ TEST(PIDControllerTest, EuclideanDistancePass) {
   currentPose.getOrigin().setX(10);
   currentPose.getOrigin().setY(10);
   currentPose.getOrigin().setZ(0);
-  currentPose.getRotation().setEulerZYX(0, 0, 0);
+  currentPose.getRotation().setRPY(0, 0, 0);
   desiredPose.getOrigin().setX(14);
   desiredPose.getOrigin().setY(13);
   desiredPose.getOrigin().setZ(0);
-  desiredPose.getRotation().setEulerZYX(0, 0, 0);
+  desiredPose.getRotation().setRPY(0, 0, 0);
   double expectPass = 5;
   double dist = pidController.euclideanDist(currentPose, desiredPose);
   EXPECT_NEAR(expectPass, dist, 0.01);  // Should Pass
@@ -127,11 +127,11 @@ TEST(PIDControllerTest, EuclideanDistanceTypePass) {
   currentPose.getOrigin().setX(10);
   currentPose.getOrigin().setY(10);
   currentPose.getOrigin().setZ(0);
-  currentPose.getRotation().setEulerZYX(0, 0, 0);
+  currentPose.getRotation().setRPY(0, 0, 0);
   desiredPose.getOrigin().setX(14);
   desiredPose.getOrigin().setY(13);
   desiredPose.getOrigin().setZ(0);
-  desiredPose.getRotation().setEulerZYX(0, 0, 0);
+  desiredPose.getRotation().setRPY(0, 0, 0);
   double dist = pidController.euclideanDist(currentPose, desiredPose);
   EXPECT_EQ(typeid(dist), typeid(double));  // Should Pass
 }
@@ -194,11 +194,11 @@ TEST(PIDControllerTest, VelocityTypePass) {
   currentPose.getOrigin().setX(10);
   currentPose.getOrigin().setY(10);
   currentPose.getOrigin().setZ(0);
-  currentPose.getRotation().setEulerZYX(0, 0, 0);
+  currentPose.getRotation().setRPY(0, 0, 0);
   desiredPose.getOrigin().setX(14);
   desiredPose.getOrigin().setY(13);
   desiredPose.getOrigin().setZ(0);
-  desiredPose.getRotation().setEulerZYX(0.1, 0, 0);
+  desiredPose.getRotation().setRPY(0.1, 0, 0);
   pidController.setKP(80, 80);
   pidController.setKD(3, 3);
   pidController.setKI(4, 4);

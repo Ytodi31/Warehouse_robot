@@ -47,9 +47,8 @@
  */
  #include "ros/ros.h"
  #include "gtest/gtest.h"
-
- #include "PickPlace.hpp"
  #include <open_manipulator_msgs/GetKinematicsPose.h>
+ #include "PickPlace.hpp"
 
  /**
   * @brief Test to check the member function setPose of class

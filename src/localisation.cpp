@@ -38,11 +38,15 @@
  *  Please refer the listener.cpp file in file section
  *  and function members sections for detailed documentation
  */
-#include "localisation.hpp"
 #include  <cstdlib>
 #include <tf/transform_datatypes.h>
+#include <ros/ros.h>
+#include <geometry_msgs/Pose.h>
+#include <std_msgs/Float64.h>
+#include <tf/transform_listener.h>
+#include "localisation.hpp"
 
-void Localisation::EntropyCallback(const std_msgs::Float64::ConstPtr& msg) {
+void Localisation::EntropyCallback(const std_msgs::Float64::ConstPtr &msg) {
   entropy = msg->data;
 }
 
@@ -52,76 +56,81 @@ bool Localisation::SetEntropyThreshold(double thresholdValue) {
     return true;
   } else {
     ROS_WARN_STREAM(" Threshold value must be positive, using default value");
-   // Setting default value of entropy threshold
+    // Setting default value of entropy threshold
     entropyThreshold = 5;
     return false;
   }
 }
 
 void Localisation::GetRobotCoordinate(tf::StampedTransform mapToRobot) {
-    try {
-      mapToBaseTfListen.lookupTransform("/map", "/om_with_tb3/base_footprint",
-      ros::Time(0), mapToRobot);
-    } catch (tf::TransformException ex) {
-      ROS_ERROR("%s",ex.what());
-      ros::Duration(1.0).sleep();
-    }
-    // Getting pose of robot
-    localisationPose.position.x = mapToRobot.getOrigin().x();
-    localisationPose.position.y = mapToRobot.getOrigin().y();
-    localisationPose.position.z = mapToRobot.getOrigin().z();
-    localisationPose.orientation.x = mapToRobot.getRotation().x();
-    localisationPose.orientation.y = mapToRobot.getRotation().y();
-    localisationPose.orientation.z = mapToRobot.getRotation().z();
-    localisationPose.orientation.w = mapToRobot.getRotation().w();
+  try {
+    mapToBaseTfListen.lookupTransform("/map", "/om_with_tb3/base_footprint",
+                                      ros::Time(0), mapToRobot);
+  } catch (tf::TransformException ex) {
+    ROS_ERROR_STREAM("%s", ex.what());
+    ros::Duration(1.0).sleep();
+  }
+  // Getting pose of robot
+  localisationPose.position.x = mapToRobot.getOrigin().x();
+  localisationPose.position.y = mapToRobot.getOrigin().y();
+  localisationPose.position.z = mapToRobot.getOrigin().z();
+  localisationPose.orientation.x = mapToRobot.getRotation().x();
+  localisationPose.orientation.y = mapToRobot.getRotation().y();
+  localisationPose.orientation.z = mapToRobot.getRotation().z();
+  localisationPose.orientation.w = mapToRobot.getRotation().w();
 
-    // Assuming we have receieved correct pose
-    bool poseCheck = true;
+  // Assuming we have receieved correct pose
+  bool poseCheck = true;
 
-    tf::Quaternion poseQuat(localisationPose.orientation.x,
-      localisationPose.orientation.y, localisationPose.orientation.z,
-      localisationPose.orientation.w);
-    tf::Matrix3x3 euler(poseQuat);
-    double roll, pitch, yaw;
-    // Converting quarternion to euler angles
-    euler.getRPY(roll, pitch, yaw);
-    // Checking if the robot has toppled
-    if (abs(roll) || abs(pitch) >= 0.1745) {
-      ROS_WARN_STREAM ("Robot localisation unsuccessful- pose is not correct, seems to have fallen");
-      poseCheck = false;
-    }
-    // Checking if the received position is out of the map
-    if (localisationPose.position.x > 38.95 || localisationPose.position.x < 0 ||
-        localisationPose.position.y > 20.1 || localisationPose.position.y < 0 ||
-      localisationPose.position.z > 0.15 || localisationPose.position.z < 0 ) {
-      ROS_WARN_STREAM ("Robot  localisation unsuccessful- pose is not correct,seems out of bounds of map");
-      poseCheck = false;
-    }
-    // Checking if the reliability of the pose recieved is lower than threshold
-    if (entropy > entropyThreshold) {
-      ROS_WARN_STREAM ("Robot localisation unsuccessful- pose is not correct, high uncertainity of Robot pose");
-      poseCheck = false;
-    }
-    if (poseCheck == false) {
-      // Discarding recieved pose in case above conditions are met
-      localisationPose.position.x = 0;
-      localisationPose.position.y = 0;
-      localisationPose.position.z = 0;
-      localisationPose.orientation.x = 0;
-      localisationPose.orientation.y = 0;
-      localisationPose.orientation.z = 0;
-      localisationPose.orientation.w = 0;
-      return;
-    }
-    ROS_INFO_STREAM ("Localisation Succesful");
+  tf::Quaternion poseQuat(localisationPose.orientation.x,
+                          localisationPose.orientation.y,
+                          localisationPose.orientation.z,
+                          localisationPose.orientation.w);
+  tf::Matrix3x3 euler(poseQuat);
+  double roll, pitch, yaw;
+  // Converting quarternion to euler angles
+  euler.getRPY(roll, pitch, yaw);
+  // Checking if the robot has toppled
+  if (abs(roll) || abs(pitch) >= 0.1745) {
+    ROS_WARN_STREAM(
+        "Robot localisation unsuccessful- pose is not correct, seems to have fallen");
+    poseCheck = false;
+  }
+  // Checking if the received position is out of the map
+  if (localisationPose.position.x > 38.95 || localisationPose.position.x < 0
+      || localisationPose.position.y > 20.1 || localisationPose.position.y < 0
+      || localisationPose.position.z > 0.15
+      || localisationPose.position.z < 0) {
+    ROS_WARN_STREAM(
+        "Robot  localisation unsuccessful- pose is not correct,seems out of bounds of map");
+    poseCheck = false;
+  }
+  // Checking if the reliability of the pose recieved is lower than threshold
+  if (entropy > entropyThreshold) {
+    ROS_WARN_STREAM(
+        "Robot localisation unsuccessful- pose is not correct, high uncertainity of Robot pose");
+    poseCheck = false;
+  }
+  if (poseCheck == false) {
+    // Discarding recieved pose in case above conditions are met
+    localisationPose.position.x = 0;
+    localisationPose.position.y = 0;
+    localisationPose.position.z = 0;
+    localisationPose.orientation.x = 0;
+    localisationPose.orientation.y = 0;
+    localisationPose.orientation.z = 0;
+    localisationPose.orientation.w = 0;
+    return;
+  }
+  ROS_INFO_STREAM("Localisation Succesful");
 }
 
 void Localisation::PublishMapPose() {
   geometry_msgs::Pose localMapPose;
   // Converting actual pose in map to pose percieved in pixels
-  localMapPose.position.x = localisationPose.position.x/0.05;
-  localMapPose.position.y = localisationPose.position.y/0.05;
-  localMapPose.position.z = localisationPose.position.z/0.05;
+  localMapPose.position.x = localisationPose.position.x / 0.05;
+  localMapPose.position.y = localisationPose.position.y / 0.05;
+  localMapPose.position.z = localisationPose.position.z / 0.05;
   localMapPose.orientation = localisationPose.orientation;
   // Publishing pixel pose to topic mapPose
   mapPosePublisher.publish(localMapPose);
@@ -133,32 +142,25 @@ void Localisation::PublishRawPose() {
 }
 
 void Localisation::initSubscribers(ros::NodeHandle n) {
-    localizationNode = n;
-    entropySubscriber = localizationNode.subscribe<std_msgs::Float64>
-      ("/turtlebot3_slam_gmapping/entropy", 1000, &Localisation::EntropyCallback,this);
+  // Setting local node handle to master node handle
+  // Subscribing to entropy topic
+  localizationNode = n;
+  entropySubscriber =
+      localizationNode.subscribe < std_msgs::Float64
+          > ("/turtlebot3_slam_gmapping/entropy", 1000, &Localisation::EntropyCallback, this);
 
-     // Defining publisher for mapPose topic
-      mapPosePublisher = localizationNode.advertise<geometry_msgs::Pose>
-                         ("/mapPose", 1000);
+  // Defining publisher for mapPose topic
+  mapPosePublisher = localizationNode.advertise < geometry_msgs::Pose
+      > ("/mapPose", 1000);
 
-      // Defining publisher for rawPose topic
-      rawPosePublisher = localizationNode.advertise<geometry_msgs::Pose>
-                         ("/rawPose", 1000);
+  // Defining publisher for rawPose topic
+  rawPosePublisher = localizationNode.advertise < geometry_msgs::Pose
+      > ("/rawPose", 1000);
 }
 
 void Localisation::ExecuteLocalisation() {
-  // Setting local node handle to master node handle
-
-  // Subscribing to entropy topic
-
-
   tf::StampedTransform mapToRobot;
-  //ros::Rate rate(10.0);
-  // while(ros::ok()) {
-      GetRobotCoordinate(mapToRobot);
-      PublishMapPose();
-      PublishRawPose();
-  //     ros::spinOnce();
-  //     rate.sleep();
-  // }
+  GetRobotCoordinate(mapToRobot);
+  PublishMapPose();
+  PublishRawPose();
 }

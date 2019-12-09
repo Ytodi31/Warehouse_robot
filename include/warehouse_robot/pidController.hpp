@@ -49,6 +49,8 @@
 #ifndef INCLUDE_WAREHOUSE_ROBOT_PIDCONTROLLER_HPP_
 #define INCLUDE_WAREHOUSE_ROBOT_PIDCONTROLLER_HPP_
 
+#include <math.h>
+#include <geometry_msgs/Twist.h>
 #include <tf/transform_broadcaster.h>
 #include <ros/ros.h>
 #include <iostream>
@@ -65,8 +67,7 @@ class PidController {
  private:
   // ROS Node handle object for controller
   ros::NodeHandle controllerNode;
-  // ROS publisher object for velocity publishing
-
+  // Subscriber Object for Pose
   ros::Subscriber poseSub;
   tf::Pose pose;
   double linearVel;
@@ -82,6 +83,7 @@ class PidController {
   double angularVel;
   double sumAngularError = 0;
   double lastAngularError = 0;
+  // ROS publisher object for velocity publishing
   ros::Publisher velocityPub;
   /**
    * @brief Setter method for the Ros Node

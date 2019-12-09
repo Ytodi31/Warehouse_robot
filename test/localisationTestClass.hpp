@@ -49,8 +49,12 @@
 #ifndef TEST_LOCALISATIONTESTCLASS_HPP_
 #define TEST_LOCALISATIONTESTCLASS_HPP_
 
+#include <gtest/gtest.h>
+#include <tf/transform_listener.h>
+#include <tf/transform_broadcaster.h>
 #include <ros/ros.h>
 #include <geometry_msgs/Pose.h>
+#include "localisationTestClass.hpp"
 
 
 class LocalisationTest {
