@@ -101,7 +101,7 @@ void Localisation::GetRobotCoordinate(tf::StampedTransform mapToRobot) {
   if (localisationPose.position.x > 38.95 || localisationPose.position.x < 0
       || localisationPose.position.y > 20.1 || localisationPose.position.y < 0
       || localisationPose.position.z > 0.15
-      || localisationPose.position.z < 0) {
+      || localisationPose.position.z < -0.01) {
     ROS_WARN_STREAM(
         "Robot  localisation unsuccessful- pose is not correct,seems out of" <<
         ", bounds of map");

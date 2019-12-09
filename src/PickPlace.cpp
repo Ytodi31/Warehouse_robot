@@ -85,7 +85,7 @@ bool PickPlace::setPose(geometry_msgs::Pose armPose) {
   initPose.kinematics_pose.pose.orientation.w = armPose.orientation.w;
   initPose.kinematics_pose.max_accelerations_scaling_factor = 1;
   initPose.kinematics_pose.max_velocity_scaling_factor = 1;
-  initPose.kinematics_pose.tolerance = 0.01;
+  initPose.kinematics_pose.tolerance = 0.1;
   initPose.path_time = 0.0;
   // Calling and returning response from service
   return setArmPose.call(initPose, setPoseResp);

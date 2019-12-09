@@ -87,7 +87,6 @@ bool queryUserInput(warehouse_robot::user_input::Request & req,
     loc.SetEntropyThreshold(25);
     controller.setControllerNode(n);
     controller.setVelocityPub();
-    //controller.setPoseSub();
     ros::Rate loop_rate(100);
     pathBox.setGoal(std::make_pair(mapBox_x, mapBox_y));
     std::vector<std::pair<double, double>> shortestPathBox;
@@ -110,7 +109,8 @@ bool queryUserInput(warehouse_robot::user_input::Request & req,
                 current.setOrigin(tf::Vector3(loc.localisationPose.position.x,
                         loc.localisationPose.position.y,
                         loc.localisationPose.position.z));
-                current.setRotation(tf::Quaternion(loc.localisationPose.orientation.x,
+                current.setRotation(tf::Quaternion(
+                        loc.localisationPose.orientation.x,
                         loc.localisationPose.orientation.y,
                         loc.localisationPose.orientation.z,
                         loc.localisationPose.orientation.w));
@@ -118,9 +118,11 @@ bool queryUserInput(warehouse_robot::user_input::Request & req,
                 desired.setOrigin(tf::Vector3(currentGoal.first*0.05,
                             currentGoal.second*0.05, 0));
                 controller.calcVel(current, desired);
-                ROS_ERROR_STREAM( "Error is: " << controller.euclideanDist(current, desired));
-                ROS_ERROR_STREAM( "Node is: " << index);
-                ROS_ERROR_STREAM( "Nodes :" << shortestPathBox[14].first << " " << shortestPathBox[14].second);
+                ROS_WARN_STREAM("Error is: " <<
+                        controller.euclideanDist(current, desired));
+                ROS_WARN_STREAM("Node is: " << index);
+                ROS_WARN_STREAM("Nodes :" << shortestPathBox[14].first
+                        << " " << shortestPathBox[14].second);
 
                 if ( controller.euclideanDist(current, desired) < 0.10 ) {
                     controller.firstPoseFlag = true;
@@ -133,10 +135,9 @@ bool queryUserInput(warehouse_robot::user_input::Request & req,
                       msg.angular.y = 0;
                       msg.angular.z = 0;
                       controller.velocityPub.publish(msg);
-
                 }
           }
-                if(index == shortestPathBox.size()) {
+                if (index == shortestPathBox.size()) {
                     status = true;
                     stage = 3;
                 }
@@ -147,9 +148,10 @@ bool queryUserInput(warehouse_robot::user_input::Request & req,
             perception.setKD(0);
             geometry_msgs::Twist vel;
             perception.detectArucoMarker(perception.img, 0);
-            vel=perception.calcVel();
-            ROS_ERROR_STREAM("Perception translation:"<< perception.translation.at<float>(2,0));
-            if(perception.marker_area < 16000 ) {
+            vel = perception.calcVel();
+            ROS_WARN_STREAM("Perception translation:"<<
+                    perception.translation.at<float>(2, 0));
+            if (perception.marker_area < 16000) {
                 vel.linear.x = 0.25;
             } else {
                 stage = 4;
@@ -169,7 +171,7 @@ bool queryUserInput(warehouse_robot::user_input::Request & req,
             controller.velocityPub.publish(msg);
             geometry_msgs::Pose pickPose;
             perception.detectArucoMarker(perception.img, 0);
-            pickPose.position.x = perception.translation.at<float>(2,0);
+            pickPose.position.x = perception.translation.at<float>(2, 0);
             pickPose.position.y = 0;
             pickPose.position.z = 0.03;
             pickPose.orientation.x = 0;
@@ -190,13 +192,11 @@ bool queryUserInput(warehouse_robot::user_input::Request & req,
 }
 
 
- int main(int argc, char **argv) {
+int main(int argc, char **argv) {
      ros::init(argc, argv, "picknplace");
      ros::NodeHandle n;
      ros::ServiceServer service = n.advertiseService("user_input",
              queryUserInput);
      ros::spin();
-
-
-   return 0;
- }
+     return 0;
+}

@@ -167,7 +167,7 @@ TEST(PIDControllerTest, VelocityPassPos) {
   PidController pidController;
   ros::NodeHandle n;
   tf::Pose currentPose, desiredPose;
-  double linearVel, angVel, expectPassLin = 0.8, expectPassAng = -0.04;
+  double linearVel, angVel, expectPassLin = 0.8, expectPassAng = -0.1;
   currentPose.setOrigin(tf::Vector3(10, 10, 0));
   currentPose.setRotation(tf::createQuaternionFromRPY(0, 0, 0));
   currentPose.setOrigin(tf::Vector3(14, 13, 0));
@@ -275,6 +275,6 @@ TEST(TurtlebotPerceptionTest, calcVelPass) {
   EXPECT_EQ(vel.linear.z, 0);
   EXPECT_EQ(vel.angular.x, 0);
   EXPECT_EQ(vel.angular.y, 0);
-  EXPECT_EQ(vel.angular.z, 0);
+  EXPECT_EQ(vel.angular.z, -201.9);
 }
 

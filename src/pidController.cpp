@@ -128,16 +128,21 @@ double PidController::euclideanDist(tf::Pose currentPose,
 void PidController::calcVel(tf::Pose currentPose, tf::Pose desiredPose) {
   auto dist = euclideanDist(currentPose, desiredPose);
   auto linearError = dist;
+  if(firstPoseFlag) {
+      first_x = currentPose.getOrigin().x();
+      first_y = currentPose.getOrigin().y();
+      firstPoseFlag = false;
+  }
   auto angularDesired = atan2(
-      desiredPose.getOrigin().y() - currentPose.getOrigin().y(),
-      desiredPose.getOrigin().x() - currentPose.getOrigin().x()) + M_PI;
+      desiredPose.getOrigin().y() - first_y,
+      desiredPose.getOrigin().x()- first_x);
   ros::start();
   tf::Matrix3x3 rotMat(currentPose.getRotation());
   double roll, pitch, yaw;
   rotMat.getRPY(roll, pitch, yaw);
   double angularError;
-  angularError = yaw - angularDesired;
-  ROS_DEBUG_STREAM("angular Error: " << angularError);
+  angularError = angularDesired - yaw;
+  ROS_ERROR_STREAM("angular Error: " << angularError);
   double linearErrorDiff;
   linearErrorDiff = linearError - lastLinearError;
   double angularErrorDiff;
@@ -146,6 +151,8 @@ void PidController::calcVel(tf::Pose currentPose, tf::Pose desiredPose) {
       + kD[0] * linearErrorDiff;
   angularVel = kP[1] * angularError + kI[1] * sumAngularError
       + kD[1] * angularErrorDiff;
+  ROS_ERROR_STREAM("angular vel: " << angularVel);
+
   geometry_msgs::Twist msg;
   if (linearVel > linearVelThreshold) {
     linearVel = linearVelThreshold;

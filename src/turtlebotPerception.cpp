@@ -103,8 +103,12 @@ bool TurtlebotPerception::detectArucoMarker(cv::Mat imageFrame,
       marker_x = mark.getCenter().x;
       marker_y = mark.getCenter().y;
       marker_area = mark.getArea();
-      translation = mark.Tvec;
-      rotMat = mark.Rvec;
+      translation = mark.Tvec.clone();
+      rotMat = mark.Rvec.clone();
+      ROS_ERROR_STREAM("marker x" << mark.getCenter().x);
+      ROS_ERROR_STREAM("marker y" << mark.getCenter().y);
+      ROS_ERROR_STREAM("translation" << translation);
+      ROS_ERROR_STREAM("rotation" << rotMat);
     }
   }
   myfile.close();
@@ -113,6 +117,7 @@ bool TurtlebotPerception::detectArucoMarker(cv::Mat imageFrame,
 
 void TurtlebotPerception::setKP(double kpin) {
   kp = kpin;
+  ROS_ERROR_STREAM("KP:" << kp);
 }
 
 void TurtlebotPerception::setKI(double kiin) {
@@ -128,12 +133,12 @@ geometry_msgs::Twist TurtlebotPerception::calcVel() {
   if (markerDetected) {
     double error = 0;
     double error_diff = 0;
-    error = img.rows / 2 - marker_x;
+    error = img.cols / 2 - marker_x;
+    ROS_ERROR_STREAM("Perception ERROR: " << error);
     if (abs(error) > 10) {
       error_diff = error - lastAngularError;
       angularVel = kp * error + ki * sumAngularError + kd * error_diff;
       lastAngularError = error;
-      geometry_msgs::Twist vel;
       vel.linear.x = 0;
       vel.linear.y = 0;
       vel.linear.z = 0;
@@ -156,5 +161,6 @@ geometry_msgs::Twist TurtlebotPerception::calcVel() {
     vel.angular.y = 0;
     vel.angular.z = 0.08;
   }
+  ROS_ERROR_STREAM("Angular velocity" << vel.angular.z);
   return vel;
 }

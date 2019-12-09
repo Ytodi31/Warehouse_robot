@@ -101,10 +101,10 @@ PathPlanner::PathPlanner() {
   // Eroding original image as a substitute for Minkowski Sum
   cv::erode(mapImage, erodedImage, element);
   erodedImage = 1 - (erodedImage / 255);
-  std::vector<int> tempCol;
   int val;
   for (int i = 0; i < rows; i++) {
-    for (int j = 0; j < cols; j++) {
+      std::vector<int> tempCol;
+      for (int j = 0; j < cols; j++) {
       val = static_cast<int>(erodedImage.at < uchar > (i, j));
       tempCol.push_back(val);
     }
@@ -120,6 +120,7 @@ PathPlanner::PathPlanner() {
       }
     }
   }
+  ROS_ERROR_STREAM("rEACHED DERE");
 }
 
 std::vector<std::pair<double, double>> PathPlanner::plannerMain() {
