@@ -47,7 +47,7 @@
  */
 
 #include <gtest/gtest.h>
-#include <tf/transform_listener.h>s
+#include <tf/transform_listener.h>
 #include <tf/transform_broadcaster.h>
 #include <ros/ros.h>
 #include <geometry_msgs/Pose.h>
@@ -75,4 +75,3 @@ void LocalisationTest::InitPose() {
   robotPose.orientation.z = 0;
   robotPose.orientation.w = 0;
 }
-
