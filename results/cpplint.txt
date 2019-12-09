@@ -1,0 +1,21 @@
+./src/main.cpp:63:  Is this a non-const reference? If so, make const or use a pointer: warehouse_robot::user_input::Request & req  [runtime/references] [2]
+./src/main.cpp:64:  Is this a non-const reference? If so, make const or use a pointer: warehouse_robot::user_input::Response &res  [runtime/references] [2]
+Done processing ./test/main.cpp
+Done processing ./test/localisationTestClass.hpp
+Done processing ./test/localisationTestClass.cpp
+Done processing ./test/testPickPlace.cpp
+Done processing ./test/testControlNPerception.cpp
+Done processing ./test/testPathPlanner.cpp
+Done processing ./test/localisationTest.cpp
+Done processing ./include/warehouse_robot/turtlebotPerception.hpp
+Done processing ./include/warehouse_robot/localisation.hpp
+Done processing ./include/warehouse_robot/pidController.hpp
+Done processing ./include/warehouse_robot/PickPlace.hpp
+Done processing ./include/warehouse_robot/PathPlanner.hpp
+Done processing ./src/PickPlace.cpp
+Done processing ./src/main.cpp
+Done processing ./src/localisation.cpp
+Done processing ./src/turtlebotPerception.cpp
+Done processing ./src/pidController.cpp
+Done processing ./src/PathPlanner.cpp
+Total errors found: 2
