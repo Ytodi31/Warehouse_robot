@@ -120,7 +120,7 @@ PathPlanner::PathPlanner() {
       }
     }
   }
-  ROS_ERROR_STREAM("rEACHED DERE");
+  ROS_ERROR_STREAM("Reached at point");
 }
 
 std::vector<std::pair<double, double>> PathPlanner::plannerMain() {

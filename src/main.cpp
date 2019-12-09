@@ -53,15 +53,13 @@
 #include "PickPlace.hpp"
 #include "warehouse_robot/user_input.h"
 #include <boost/bind.hpp>
- /**
-  * @brief Main file to call classes
-  * @param Parameter 1, Number of inputs
-  * @param Parameter 2, Input
-  * @return int, 0 if executed successfully
-  */
 
-
-
+/**
+ * @brief Function to call the SERVICES
+ * @param Parameter 1, Parameter to get service request
+ * @param Parameter 2, Parameter to get service response
+ * @return int, 0 if executed successfully
+ */
 bool queryUserInput(warehouse_robot::user_input::Request & req,
                     warehouse_robot::user_input::Response &res) {
     ros::NodeHandle n;
@@ -182,16 +180,18 @@ bool queryUserInput(warehouse_robot::user_input::Request & req,
             pp.executePick(n);
             break;
         }
-//        if (perception.markerDetected == true) {
-//            break;
-//        }
         ros::spinOnce();
         loop_rate.sleep();
     }
     return status;
 }
 
-
+/**
+ * @brief Main file to call classes
+ * @param Parameter 1, Number of inputs
+ * @param Parameter 2, Input
+ * @return int, 0 if executed successfully
+ */
 int main(int argc, char **argv) {
      ros::init(argc, argv, "picknplace");
      ros::NodeHandle n;

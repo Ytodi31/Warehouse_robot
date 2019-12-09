@@ -49,18 +49,12 @@
  * @ingroup warehouse_robot
  * @brief Class declaration for Localisation module
  */
-
 class Localisation {
  private:
    /**
     * @brief ros Node handle for local operations
     */
     ros::NodeHandle localizationNode;
-
-    /**
-     * @brief Robot pose holding the robot pose received from SLAM
-     */
-    geometry_msgs::Pose localisationPose;
 
     /**
      * @brief double value holding uncertainity of pose received from SLAM
@@ -92,7 +86,6 @@ class Localisation {
      */
     tf::TransformListener mapToBaseTfListen;
 
- private:
     /*
      * @brief Callback function when subscribed to the topic which provides entropy (measure of accuracy) of the SLAM algorithm
      * @param msg entropy message holding the entropy value
@@ -126,13 +119,25 @@ class Localisation {
     void GetRobotCoordinate(tf::StampedTransform mapToRobot);
 
  public:
+   /**
+    * @brief Robot pose holding the robot pose received from SLAM
+    */
+    geometry_msgs::Pose localisationPose;
+
+   /*
+    * @brief Function to initialise members
+    * @param ros node handle
+    * @return none
+    */
     void initSubscribers(ros::NodeHandle n);
+
     /*
      * @brief function to set the threshold of entropy
      * @param thresholdValue threshold value to be set
      * @return bool Boolean value specifying if the threshold was set or not
      */
     bool SetEntropyThreshold(double thresholdValue);
+
     /*
      * @brief function to execute the localisation functionality
      * assuming that the slam nodes of the robot have been launched

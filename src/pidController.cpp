@@ -128,7 +128,7 @@ double PidController::euclideanDist(tf::Pose currentPose,
 void PidController::calcVel(tf::Pose currentPose, tf::Pose desiredPose) {
   auto dist = euclideanDist(currentPose, desiredPose);
   auto linearError = dist;
-  if(firstPoseFlag) {
+  if (firstPoseFlag) {
       first_x = currentPose.getOrigin().x();
       first_y = currentPose.getOrigin().y();
       firstPoseFlag = false;

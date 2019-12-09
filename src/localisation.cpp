@@ -35,8 +35,12 @@
  *  @brief main file
  *  Copyright 2019 Suyash Yeotikar, Yashaarth Todi, Gautam Balachandran  [legal/copyright]
  *  @mainpage project page
- *  Please refer the listener.cpp file in file section
- *  and function members sections for detailed documentation
+ *  This project is developed for Warehouse Management wherein a Turtlebot3
+ *  Waffle Pi is employed to transport packages from one location to another.
+ *  The robot detects the location of the package from the Aruco marker and
+ *  will drop the package to a user defined location.Turtlebot3 uses
+ *  OpenManipulator for its pick and place operation,
+ *  and would be using A-star algorithm to plan its path.
  */
 #include <tf/transform_datatypes.h>
 #include <ros/ros.h>

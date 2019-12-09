@@ -62,45 +62,98 @@
 #include "ros/ros.h"
 #include <pidController.hpp>
 
-
+/**
+ * @class TurtlebotPerception
+ * @ingroup warehouse_robot
+ * @brief To detect markers and provide pose to robot
+ */
 class TurtlebotPerception : public PidController {
  private:
-  // Ros perception node
+   /**
+    * @brief Ros perception node
+    */
   ros::NodeHandle perceptionNode;
-  // Distance publisher for ROS
+
+  /**
+   * @brief Distance publisher for ROS
+   */
   ros::Publisher distPub;
-  // Image subscriber
+
+  /**
+   * @brief Image subscriber
+   */
   ros::Subscriber imageSub;
-  // Image variable
-  cv::Mat img;
-  // Flag set when the Aruco marker is detected
-  bool markerDetected = false;
-  // Marker x location
+
+  /**
+   * @brief Marker x location
+   */
   double marker_x = 0;
-  // Marker Y location
+
+  /**
+   * @brief Marker Y location
+   */
   double marker_y = 0;
-  // Marker Area
-  double marker_area = 0;
-  // Controller Propotional gain
+
+  /**
+   * @brief  Controller Propotional gain
+   */
   double kp;
-  // Controller Integral gain
+
+  /**
+   * @brief Controller Integral gain
+   */
   double ki;
-  // Controller differential gain
+
+  /**
+   * @brief Controller differential gain
+   */
   double kd;
 
  public:
-  // Image translation matrix
+   /**
+    * @brief Image translation matrix
+    */
   cv::Mat translation;
-  // Image rotation matrix
+
+  /**
+   * @brief Image rotation matrix
+   */
   cv::Mat rotMat;
-  // velocity function derived from PID controller module
+
+  /**
+   * @brief velocity function derived from PID controller module
+   */
   using PidController::calcVel;
-  // Propotional gain setter derived from PID controller module
+
+  /**
+   * @brief Propotional gain setter derived from PID controller module
+   */
   using PidController::setKP;
-  // Integral gain setter derived from PID controller module
+
+  /**
+   * @brief Integral gain setter derived from PID controller module
+   */
   using PidController::setKI;
-  // Derivative gain setter derived from PID controller module
+
+  /**
+   * @brief Derivative gain setter derived from PID controller module
+   */
   using PidController::setKD;
+
+  /**
+   * @brief Image variable
+   */
+  cv::Mat img;
+
+  /**
+   * @brief Marker Area
+   */
+  double marker_area = 0;
+
+  /**
+   * @brief Flag set when the Aruco marker is detected
+   */
+  bool markerDetected = false;
 
   /**
    * @brief Setter method for the derivative gain

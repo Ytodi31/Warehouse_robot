@@ -56,46 +56,102 @@
 #include <iostream>
 #include <vector>
 
-/*
- * pidController.hpp
- *
- *  Created on: Nov 26, 2019
- *  Author: Gautam Balachandran
+/**
+ * @class PidController
+ * @ingroup warehouse_robot
+ * @brief Controller for position controller of Turtlebot3
  */
-
 class PidController {
  private:
-  // ROS Node handle object for controller
+   /**
+    * @brief ROS Node handle object for controller
+    */
   ros::NodeHandle controllerNode;
-  // Subscriber Object for Pose
+
+  /**
+   * @brief Subscriber Object for Pose
+   */
   ros::Subscriber poseSub;
-  // Robot pose object
+
+  /**
+   * @brief Robot pose object
+   */
   tf::Pose pose;
-  // Linear velocity of the robot
+
+  /**
+   * @brief Linear velocity of the robot
+   */
   double linearVel;
-  // Controller propotional gains
+
+ /**
+   * @brief Controller propotional gains
+   */
   std::vector<double> kP;
-  // Controller integral gains
+
+  /**
+    * @brief Controller integral gains
+    */
   std::vector<double> kI;
-  // Controller differential gains
+
+  /**
+    * @brief Controller differential gains
+    */
   std::vector<double> kD;
-  // Linear error recently calculated
+
+  /**
+    * @brief  Linear error recently calculated
+    */
   double lastLinearError = 0;
-  // Sum of all linear errors
+
+  /**
+    * @brief Sum of all linear errors
+    */
   double sumLinearError = 0;
-  // Linear velocity threshold for the robot
+
+  /**
+    * @brief Linear velocity threshold for the robot
+    */
   double linearVelThreshold = 0.8;
-  // Angular velocity threshold for the robot
+
+  /**
+    * @brief Angular velocity threshold for the robot
+    */
   double angularVelThreshold = 0.1;
 
  public:
-  // Angular velocity of the robot
+   /**
+    * @brief First x coordinate of goal
+    */
+    double first_x;
+
+   /**
+    * @brief First y coordinate of goal
+    */
+    double first_y;
+
+   /**
+    * @brief Flag to record the firs poseSub
+    */
+    double firstPoseFlag;
+
+   /**
+    * @brief Angular velocity of the robot
+    */
   double angularVel;
-  // Sum of all angular errors
+
+  /**
+   * @brief Sum of all angular errors
+   */
   double sumAngularError = 0;
-  // Angular error recently calculated
+
+  /**
+   * @brief Angular error recently calculated
+   */
   double lastAngularError = 0;
-  // ROS publisher object for velocity publishing
+
+  /**
+   * @brief ROS publisher object for velocity publishing
+   */
   ros::Publisher velocityPub;
   /**
    * @brief Setter method for the Ros Node

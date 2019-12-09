@@ -80,8 +80,6 @@ bool TurtlebotPerception::detectArucoMarker(cv::Mat imageFrame,
                                             double markerId) {
   aruco::MarkerDetector detector;
   std::vector < aruco::Marker > markers;
-  ofstream myfile;
-  myfile.open("/home/suyash/Desktop/example.txt");
   cv::Mat camParams = cv::Mat::zeros(3, 3, CV_32F);
   cv::Mat distortion = cv::Mat::zeros(1, 5, CV_32F);
   camParams.at<float>(0, 0) = 530.4669406576809;
@@ -95,8 +93,6 @@ bool TurtlebotPerception::detectArucoMarker(cv::Mat imageFrame,
   detector.setMinMaxSize(0.01, 1);
 
   detector.detect(imageFrame, markers, camParams, distortion, 0.073, false);
-  myfile << "Percpeption data.\n";
-  myfile << markers.size() << std::endl;
   for (auto mark : markers) {
     if (mark.id == 985) {
       markerDetected = true;
@@ -111,8 +107,7 @@ bool TurtlebotPerception::detectArucoMarker(cv::Mat imageFrame,
       ROS_ERROR_STREAM("rotation" << rotMat);
     }
   }
-  myfile.close();
-  return markerDetected;  // Mock
+  return markerDetected;
 }
 
 void TurtlebotPerception::setKP(double kpin) {

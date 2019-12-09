@@ -59,7 +59,10 @@
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/core/core.hpp>
 #include "ros/ros.h"
+
 /**
+ * @class PathPlanner
+ * @ingroup warehouse_robot
  * @brief PathPlanner class computes the shortest path from start to goal
  */
 class PathPlanner {

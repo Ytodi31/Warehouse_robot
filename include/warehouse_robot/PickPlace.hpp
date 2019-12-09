@@ -57,10 +57,12 @@
 #include <vector>
 #include <utility>
 #include "open_manipulator_libs/open_manipulator.h"
-/**
- * @brief PickPlace class controls the manipulator on the Turtlebot,
- * enabling it to pick and place the object
- */
+
+ /**
+  * @class PickPlace
+  * @ingroup warehouse_robot
+  * @brief PickPlace class controls the manipulator on the Turtlebot
+  */
 class PickPlace {
  public:
   /**
