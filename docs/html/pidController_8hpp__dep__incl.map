@@ -1,0 +1,6 @@
+<map id="include/warehouse_robot/pidController.hpp" name="include/warehouse_robot/pidController.hpp">
+<area shape="rect" id="node2" href="$testControlNPerception_8cpp.html" title="This file tests the member functions of class pidController and turtlebotPerception. " alt="" coords="5,184,215,211"/>
+<area shape="rect" id="node3" href="$turtlebotPerception_8hpp.html" title="This file provides the header file for the Perception module. " alt="" coords="143,95,309,136"/>
+<area shape="rect" id="node4" href="$turtlebotPerception_8cpp.html" title="This file provides the implementation for the perception module. " alt="" coords="251,184,430,211"/>
+<area shape="rect" id="node5" href="$pidController_8cpp.html" title="This file provides the implementation of the Controller module. " alt="" coords="385,102,528,129"/>
+</map>

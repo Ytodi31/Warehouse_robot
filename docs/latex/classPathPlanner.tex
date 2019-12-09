@@ -1,0 +1,433 @@
+\hypertarget{classPathPlanner}{}\section{Path\+Planner Class Reference}
+\label{classPathPlanner}\index{Path\+Planner@{Path\+Planner}}
+
+
+\hyperlink{classPathPlanner}{Path\+Planner} class computes the shortest path from start to goal.  
+
+
+
+
+{\ttfamily \#include $<$Path\+Planner.\+hpp$>$}
+
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classPathPlanner_a376f30d795cfe0a40f8923f49336f7da}{Path\+Planner} ()\hypertarget{classPathPlanner_a376f30d795cfe0a40f8923f49336f7da}{}\label{classPathPlanner_a376f30d795cfe0a40f8923f49336f7da}
+
+\begin{DoxyCompactList}\small\item\em Constructor for the class. \end{DoxyCompactList}\item 
+double \hyperlink{classPathPlanner_af535c5d5ee4efd61ce39e09263bdd91d}{euclidean\+Dist} (std\+::pair$<$ double, double $>$ point1, std\+::pair$<$ double, double $>$ point2)
+\begin{DoxyCompactList}\small\item\em Method to coompute the Euclidean distance between two nodes. \end{DoxyCompactList}\item 
+std\+::vector$<$ std\+::pair$<$ double, double $>$ $>$ \hyperlink{classPathPlanner_a0856952abd30c8afb7d010bc1f12f42c}{planner\+Main} ()
+\begin{DoxyCompactList}\small\item\em Main function that calls all the other functions. \end{DoxyCompactList}\item 
+void \hyperlink{classPathPlanner_a7ddf7846499907f012e5a3d24e040c26}{set\+Goal} (std\+::pair$<$ double, double $>$ g)
+\begin{DoxyCompactList}\small\item\em Setter for private member, goal. \end{DoxyCompactList}\item 
+std\+::pair$<$ double, double $>$ \hyperlink{classPathPlanner_aaaf398ecfee4b6a3a7d7249b2c033caa}{get\+Goal} ()
+\begin{DoxyCompactList}\small\item\em Getter for private member, goal. \end{DoxyCompactList}\item 
+void \hyperlink{classPathPlanner_ae689342fe07926fb9510783e2f07b991}{set\+Start} (std\+::pair$<$ double, double $>$ s)
+\begin{DoxyCompactList}\small\item\em Setter for private member, start. \end{DoxyCompactList}\item 
+std\+::pair$<$ double, double $>$ \hyperlink{classPathPlanner_ab803e1ce6ac612be78c8679f10d451b5}{get\+Start} ()
+\begin{DoxyCompactList}\small\item\em Getter for private member, start. \end{DoxyCompactList}\item 
+void \hyperlink{classPathPlanner_add1eafe65f68d6f3aeb636ac4c43df20}{set\+Path\+Found} (bool flag)
+\begin{DoxyCompactList}\small\item\em Setter for private member path\+Found. \end{DoxyCompactList}\item 
+bool \hyperlink{classPathPlanner_a8de53119e913bcc4f0d69a68a5036a57}{get\+Path\+Found} ()
+\begin{DoxyCompactList}\small\item\em Getter for private member path\+Found. \end{DoxyCompactList}\item 
+std\+::size\+\_\+t \hyperlink{classPathPlanner_ab111391044dcb787797a087ec7e57e4a}{hash\+Index} (std\+::pair$<$ double, double $>$ node)
+\begin{DoxyCompactList}\small\item\em Function to convert cartesian coordinates to hash index. \end{DoxyCompactList}\item 
+std\+::pair$<$ double, double $>$ \hyperlink{classPathPlanner_a1ac7ef2a9a599c2db3b4670391b919e4}{hash\+Coordinates} (std\+::size\+\_\+t hash\+Ind)
+\begin{DoxyCompactList}\small\item\em Function to convert hash index to cartesian coordinates. \end{DoxyCompactList}\item 
+bool \hyperlink{classPathPlanner_aa9aed95ef982c4c5fbfae33a5ca6668b}{boundary\+Check} (std\+::pair$<$ double, double $>$ node)
+\begin{DoxyCompactList}\small\item\em Function to conduct boundary check and free space check. \end{DoxyCompactList}\item 
+std\+::vector$<$ std\+::pair$<$ double, double $>$ $>$ \hyperlink{classPathPlanner_ac0be211569bcef9d59cb6780fbcef3d8}{shortest\+Path} (std\+::size\+\_\+t goal\+Hash)
+\begin{DoxyCompactList}\small\item\em Function to find the shortest path once goal is reached. \end{DoxyCompactList}\item 
+bool \hyperlink{classPathPlanner_afd383f2dd9d6b7bc45b8a1977597e953}{update\+Cost} (std\+::size\+\_\+t current\+Hash, std\+::size\+\_\+t parent\+Hash, double cost)
+\begin{DoxyCompactList}\small\item\em Function to update the cost of node and parent of node. \end{DoxyCompactList}\item 
+std\+::pair$<$ double, double $>$ \hyperlink{classPathPlanner_a529920e695c8ae9a384a59138c3ae724}{differential} (double left\+Rpm, double right\+Rpm, double heading, double l, double r, double dt, std\+::size\+\_\+t current\+Hash, double d\+Theta)
+\begin{DoxyCompactList}\small\item\em Function to calculate the new node using differential constrains. \end{DoxyCompactList}\item 
+void \hyperlink{classPathPlanner_a7058d231726ba515e4b1d2cfa4f88e3c}{all\+Actions} (std\+::size\+\_\+t new\+Index)
+\begin{DoxyCompactList}\small\item\em Function to calculate new nodes in all directions from current node. \end{DoxyCompactList}\item 
+bool \hyperlink{classPathPlanner_a77e91065460a5ed65eab0df8c1362e74}{goal\+Check} (std\+::pair$<$ double, double $>$)
+\begin{DoxyCompactList}\small\item\em Function to check if the goal has been reached. \end{DoxyCompactList}\item 
+std\+::vector$<$ std\+::vector$<$ int $>$ $>$ \hyperlink{classPathPlanner_a485d7197e9c2bcfe4a99cafff8baeff7}{show\+Map} ()
+\begin{DoxyCompactList}\small\item\em Function to display the map. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+std\+::vector$<$ std\+::vector$<$ int $>$ $>$ \hyperlink{classPathPlanner_a8a53e6344c45f2de3f0172790f97bfb5}{map}\hypertarget{classPathPlanner_a8a53e6344c45f2de3f0172790f97bfb5}{}\label{classPathPlanner_a8a53e6344c45f2de3f0172790f97bfb5}
+
+\begin{DoxyCompactList}\small\item\em 2D Vector, holding the occupancy grid of the environment \end{DoxyCompactList}\item 
+std\+::pair$<$ std\+::size\+\_\+t, std\+::size\+\_\+t $>$ \hyperlink{classPathPlanner_a3879a2e588346eac8c102492b5f7e83f}{map\+Size}\hypertarget{classPathPlanner_a3879a2e588346eac8c102492b5f7e83f}{}\label{classPathPlanner_a3879a2e588346eac8c102492b5f7e83f}
+
+\begin{DoxyCompactList}\small\item\em pair holding the rows and columns size of the map environment \end{DoxyCompactList}\item 
+std\+::vector$<$ double $>$ \hyperlink{classPathPlanner_af81e5aae0bbe71bb0483943e3051f90b}{cost\+Go}\hypertarget{classPathPlanner_af81e5aae0bbe71bb0483943e3051f90b}{}\label{classPathPlanner_af81e5aae0bbe71bb0483943e3051f90b}
+
+\begin{DoxyCompactList}\small\item\em vector holding the cost to go heuristic for Astar algorithm \end{DoxyCompactList}\item 
+std\+::vector$<$ double $>$ \hyperlink{classPathPlanner_aeb2506ae7a5fff04ad938d6a1da8e4b2}{cost\+Come}\hypertarget{classPathPlanner_aeb2506ae7a5fff04ad938d6a1da8e4b2}{}\label{classPathPlanner_aeb2506ae7a5fff04ad938d6a1da8e4b2}
+
+\begin{DoxyCompactList}\small\item\em vector holding the cost to come heuristic for Astar algorithm \end{DoxyCompactList}\item 
+std\+::vector$<$ double $>$ \hyperlink{classPathPlanner_a4e3603445e01a2bf866d459522aba5e5}{total\+Cost}\hypertarget{classPathPlanner_a4e3603445e01a2bf866d459522aba5e5}{}\label{classPathPlanner_a4e3603445e01a2bf866d459522aba5e5}
+
+\begin{DoxyCompactList}\small\item\em vector holding the total, cost i.\+e. cost to come + cost to go from A-\/star algorithm \end{DoxyCompactList}\item 
+std\+::vector$<$ bool $>$ \hyperlink{classPathPlanner_a0b87bfdf63d46b850df6e1c51521646e}{visit\+Status}\hypertarget{classPathPlanner_a0b87bfdf63d46b850df6e1c51521646e}{}\label{classPathPlanner_a0b87bfdf63d46b850df6e1c51521646e}
+
+\begin{DoxyCompactList}\small\item\em boolean vector, holding visit status, 1 if node is previously visited, 0 otherwise \end{DoxyCompactList}\item 
+std\+::vector$<$ std\+::size\+\_\+t $>$ \hyperlink{classPathPlanner_a11cc8bafd250349a2068dffa47f7f009}{parent\+Node}\hypertarget{classPathPlanner_a11cc8bafd250349a2068dffa47f7f009}{}\label{classPathPlanner_a11cc8bafd250349a2068dffa47f7f009}
+
+\begin{DoxyCompactList}\small\item\em vector holding the information of parent node for each child node \end{DoxyCompactList}\item 
+std\+::vector$<$ std\+::pair$<$ std\+::size\+\_\+t, std\+::size\+\_\+t $>$ $>$ \hyperlink{classPathPlanner_a7aa56f17d8fe34d39be8fec0b1407be7}{parent\+Index\+List}\hypertarget{classPathPlanner_a7aa56f17d8fe34d39be8fec0b1407be7}{}\label{classPathPlanner_a7aa56f17d8fe34d39be8fec0b1407be7}
+
+\begin{DoxyCompactList}\small\item\em vector holding the information of each parent child index pairs \end{DoxyCompactList}\item 
+std\+::vector$<$ std\+::size\+\_\+t $>$ \hyperlink{classPathPlanner_addabde60666317748139616c18bcfafe}{action\+Sequence}\hypertarget{classPathPlanner_addabde60666317748139616c18bcfafe}{}\label{classPathPlanner_addabde60666317748139616c18bcfafe}
+
+\begin{DoxyCompactList}\small\item\em vector holding the action of the node that was used to get from the parent node to the child node and has the least cost \end{DoxyCompactList}\item 
+int \hyperlink{classPathPlanner_afab251a1e7b2288fe371314ffdccef6c}{action\+Number}\hypertarget{classPathPlanner_afab251a1e7b2288fe371314ffdccef6c}{}\label{classPathPlanner_afab251a1e7b2288fe371314ffdccef6c}
+
+\begin{DoxyCompactList}\small\item\em integer value that indicates the action being taken \end{DoxyCompactList}\item 
+std\+::vector$<$ double $>$ \hyperlink{classPathPlanner_a21aea5a166c62ab1227af43058b40a08}{theta\+Sequence}\hypertarget{classPathPlanner_a21aea5a166c62ab1227af43058b40a08}{}\label{classPathPlanner_a21aea5a166c62ab1227af43058b40a08}
+
+\begin{DoxyCompactList}\small\item\em vector holding the theta value of the node that was used to get from the parent node to the child node \end{DoxyCompactList}\item 
+std\+::vector$<$ std\+::size\+\_\+t $>$ \hyperlink{classPathPlanner_a8ba6f4259695316e720e739756bc8e3c}{stack}\hypertarget{classPathPlanner_a8ba6f4259695316e720e739756bc8e3c}{}\label{classPathPlanner_a8ba6f4259695316e720e739756bc8e3c}
+
+\begin{DoxyCompactList}\small\item\em vector holding the list of nodes to be expanded, i.\+e. the queue \end{DoxyCompactList}\item 
+float \hyperlink{classPathPlanner_a718c814fcb3d400672e560c499993829}{goal\+Threshold}\hypertarget{classPathPlanner_a718c814fcb3d400672e560c499993829}{}\label{classPathPlanner_a718c814fcb3d400672e560c499993829}
+
+\begin{DoxyCompactList}\small\item\em float value, holding the value to create the goal region around goal node \end{DoxyCompactList}\item 
+std\+::size\+\_\+t \hyperlink{classPathPlanner_a19efd1bc9355469eca4c11d6d2fae9e5}{start\+Index}\hypertarget{classPathPlanner_a19efd1bc9355469eca4c11d6d2fae9e5}{}\label{classPathPlanner_a19efd1bc9355469eca4c11d6d2fae9e5}
+
+\begin{DoxyCompactList}\small\item\em variable holding hash index of start node \end{DoxyCompactList}\item 
+std\+::size\+\_\+t \hyperlink{classPathPlanner_a8208e1e8bad3fce2252ae4c4d16f6c53}{goal\+Index}\hypertarget{classPathPlanner_a8208e1e8bad3fce2252ae4c4d16f6c53}{}\label{classPathPlanner_a8208e1e8bad3fce2252ae4c4d16f6c53}
+
+\begin{DoxyCompactList}\small\item\em variable holding hash index of goal node \end{DoxyCompactList}\item 
+std\+::size\+\_\+t \hyperlink{classPathPlanner_a20e0d0b12dd6f28021b583ed688fdabf}{current\+Index}\hypertarget{classPathPlanner_a20e0d0b12dd6f28021b583ed688fdabf}{}\label{classPathPlanner_a20e0d0b12dd6f28021b583ed688fdabf}
+
+\begin{DoxyCompactList}\small\item\em variable holding hash index of goal node \end{DoxyCompactList}\item 
+int \hyperlink{classPathPlanner_a65d2728bf7bf5033024e3a35ddd9e7d4}{goal\+Flag} = 0\hypertarget{classPathPlanner_a65d2728bf7bf5033024e3a35ddd9e7d4}{}\label{classPathPlanner_a65d2728bf7bf5033024e3a35ddd9e7d4}
+
+\begin{DoxyCompactList}\small\item\em variable that is set if goal is reached \end{DoxyCompactList}\item 
+std\+::pair$<$ double, double $>$ \hyperlink{classPathPlanner_ad2c946eeef27293e5ba8cb91f0a86553}{local\+Goal}\hypertarget{classPathPlanner_ad2c946eeef27293e5ba8cb91f0a86553}{}\label{classPathPlanner_ad2c946eeef27293e5ba8cb91f0a86553}
+
+\begin{DoxyCompactList}\small\item\em pair holding cartesian coordinates of the node in the goal threshold at which path search terminated \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+\hyperlink{classPathPlanner}{Path\+Planner} class computes the shortest path from start to goal. 
+
+\subsection{Member Function Documentation}
+\index{Path\+Planner@{Path\+Planner}!all\+Actions@{all\+Actions}}
+\index{all\+Actions@{all\+Actions}!Path\+Planner@{Path\+Planner}}
+\subsubsection[{\texorpdfstring{all\+Actions(std\+::size\+\_\+t new\+Index)}{allActions(std::size_t newIndex)}}]{\setlength{\rightskip}{0pt plus 5cm}void Path\+Planner\+::all\+Actions (
+\begin{DoxyParamCaption}
+\item[{std\+::size\+\_\+t}]{new\+Index}
+\end{DoxyParamCaption}
+)}\hypertarget{classPathPlanner_a7058d231726ba515e4b1d2cfa4f88e3c}{}\label{classPathPlanner_a7058d231726ba515e4b1d2cfa4f88e3c}
+
+
+Function to calculate new nodes in all directions from current node. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em hash} & index of the current node \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+none 
+\end{DoxyReturn}
+\index{Path\+Planner@{Path\+Planner}!boundary\+Check@{boundary\+Check}}
+\index{boundary\+Check@{boundary\+Check}!Path\+Planner@{Path\+Planner}}
+\subsubsection[{\texorpdfstring{boundary\+Check(std\+::pair$<$ double, double $>$ node)}{boundaryCheck(std::pair< double, double > node)}}]{\setlength{\rightskip}{0pt plus 5cm}bool Path\+Planner\+::boundary\+Check (
+\begin{DoxyParamCaption}
+\item[{std\+::pair$<$ double, double $>$}]{node}
+\end{DoxyParamCaption}
+)}\hypertarget{classPathPlanner_aa9aed95ef982c4c5fbfae33a5ca6668b}{}\label{classPathPlanner_aa9aed95ef982c4c5fbfae33a5ca6668b}
+
+
+Function to conduct boundary check and free space check. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em Node} & coordinates \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+bool, true if in map and free space, false otherwise 
+\end{DoxyReturn}
+\index{Path\+Planner@{Path\+Planner}!differential@{differential}}
+\index{differential@{differential}!Path\+Planner@{Path\+Planner}}
+\subsubsection[{\texorpdfstring{differential(double left\+Rpm, double right\+Rpm, double heading, double l, double r, double dt, std\+::size\+\_\+t current\+Hash, double d\+Theta)}{differential(double leftRpm, double rightRpm, double heading, double l, double r, double dt, std::size_t currentHash, double dTheta)}}]{\setlength{\rightskip}{0pt plus 5cm}std\+::pair$<$ double, double $>$ Path\+Planner\+::differential (
+\begin{DoxyParamCaption}
+\item[{double}]{left\+Rpm, }
+\item[{double}]{right\+Rpm, }
+\item[{double}]{heading, }
+\item[{double}]{l, }
+\item[{double}]{r, }
+\item[{double}]{dt, }
+\item[{std\+::size\+\_\+t}]{current\+Hash, }
+\item[{double}]{d\+Theta}
+\end{DoxyParamCaption}
+)}\hypertarget{classPathPlanner_a529920e695c8ae9a384a59138c3ae724}{}\label{classPathPlanner_a529920e695c8ae9a384a59138c3ae724}
+
+
+Function to calculate the new node using differential constrains. 
+
+left wheel velocity in rpm  right wheel velocity in rpm  heading angle  Length of wheel base of robot  wheel radius of robot  time interval  current node hash index  change in heading angle \begin{DoxyReturn}{Returns}
+pair containing x and y of new cooordinates 
+\end{DoxyReturn}
+\index{Path\+Planner@{Path\+Planner}!euclidean\+Dist@{euclidean\+Dist}}
+\index{euclidean\+Dist@{euclidean\+Dist}!Path\+Planner@{Path\+Planner}}
+\subsubsection[{\texorpdfstring{euclidean\+Dist(std\+::pair$<$ double, double $>$ point1, std\+::pair$<$ double, double $>$ point2)}{euclideanDist(std::pair< double, double > point1, std::pair< double, double > point2)}}]{\setlength{\rightskip}{0pt plus 5cm}double Path\+Planner\+::euclidean\+Dist (
+\begin{DoxyParamCaption}
+\item[{std\+::pair$<$ double, double $>$}]{point1, }
+\item[{std\+::pair$<$ double, double $>$}]{point2}
+\end{DoxyParamCaption}
+)}\hypertarget{classPathPlanner_af535c5d5ee4efd61ce39e09263bdd91d}{}\label{classPathPlanner_af535c5d5ee4efd61ce39e09263bdd91d}
+
+
+Method to coompute the Euclidean distance between two nodes. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em Two} & node coordinates \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Euclidean distance 
+\end{DoxyReturn}
+\index{Path\+Planner@{Path\+Planner}!get\+Goal@{get\+Goal}}
+\index{get\+Goal@{get\+Goal}!Path\+Planner@{Path\+Planner}}
+\subsubsection[{\texorpdfstring{get\+Goal()}{getGoal()}}]{\setlength{\rightskip}{0pt plus 5cm}std\+::pair$<$ double, double $>$ Path\+Planner\+::get\+Goal (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\hypertarget{classPathPlanner_aaaf398ecfee4b6a3a7d7249b2c033caa}{}\label{classPathPlanner_aaaf398ecfee4b6a3a7d7249b2c033caa}
+
+
+Getter for private member, goal. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em none} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+pair holding x and y coordinates of goal point 
+\end{DoxyReturn}
+\index{Path\+Planner@{Path\+Planner}!get\+Path\+Found@{get\+Path\+Found}}
+\index{get\+Path\+Found@{get\+Path\+Found}!Path\+Planner@{Path\+Planner}}
+\subsubsection[{\texorpdfstring{get\+Path\+Found()}{getPathFound()}}]{\setlength{\rightskip}{0pt plus 5cm}bool Path\+Planner\+::get\+Path\+Found (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\hypertarget{classPathPlanner_a8de53119e913bcc4f0d69a68a5036a57}{}\label{classPathPlanner_a8de53119e913bcc4f0d69a68a5036a57}
+
+
+Getter for private member path\+Found. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em none} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+boolean value, true if path found, false otherwise 
+\end{DoxyReturn}
+\index{Path\+Planner@{Path\+Planner}!get\+Start@{get\+Start}}
+\index{get\+Start@{get\+Start}!Path\+Planner@{Path\+Planner}}
+\subsubsection[{\texorpdfstring{get\+Start()}{getStart()}}]{\setlength{\rightskip}{0pt plus 5cm}std\+::pair$<$ double, double $>$ Path\+Planner\+::get\+Start (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\hypertarget{classPathPlanner_ab803e1ce6ac612be78c8679f10d451b5}{}\label{classPathPlanner_ab803e1ce6ac612be78c8679f10d451b5}
+
+
+Getter for private member, start. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em none} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+pair holding x and y coordinates of start point 
+\end{DoxyReturn}
+\index{Path\+Planner@{Path\+Planner}!goal\+Check@{goal\+Check}}
+\index{goal\+Check@{goal\+Check}!Path\+Planner@{Path\+Planner}}
+\subsubsection[{\texorpdfstring{goal\+Check(std\+::pair$<$ double, double $>$)}{goalCheck(std::pair< double, double >)}}]{\setlength{\rightskip}{0pt plus 5cm}bool Path\+Planner\+::goal\+Check (
+\begin{DoxyParamCaption}
+\item[{std\+::pair$<$ double, double $>$}]{current\+Node}
+\end{DoxyParamCaption}
+)}\hypertarget{classPathPlanner_a77e91065460a5ed65eab0df8c1362e74}{}\label{classPathPlanner_a77e91065460a5ed65eab0df8c1362e74}
+
+
+Function to check if the goal has been reached. 
+
+current node to be checked \begin{DoxyReturn}{Returns}
+True if goal reached, false otherwise 
+\end{DoxyReturn}
+\index{Path\+Planner@{Path\+Planner}!hash\+Coordinates@{hash\+Coordinates}}
+\index{hash\+Coordinates@{hash\+Coordinates}!Path\+Planner@{Path\+Planner}}
+\subsubsection[{\texorpdfstring{hash\+Coordinates(std\+::size\+\_\+t hash\+Ind)}{hashCoordinates(std::size_t hashInd)}}]{\setlength{\rightskip}{0pt plus 5cm}std\+::pair$<$ double, double $>$ Path\+Planner\+::hash\+Coordinates (
+\begin{DoxyParamCaption}
+\item[{std\+::size\+\_\+t}]{hash\+Ind}
+\end{DoxyParamCaption}
+)}\hypertarget{classPathPlanner_a1ac7ef2a9a599c2db3b4670391b919e4}{}\label{classPathPlanner_a1ac7ef2a9a599c2db3b4670391b919e4}
+
+
+Function to convert hash index to cartesian coordinates. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em hash} & index to be converted \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+pair holding x and y coordinates of node 
+\end{DoxyReturn}
+\index{Path\+Planner@{Path\+Planner}!hash\+Index@{hash\+Index}}
+\index{hash\+Index@{hash\+Index}!Path\+Planner@{Path\+Planner}}
+\subsubsection[{\texorpdfstring{hash\+Index(std\+::pair$<$ double, double $>$ node)}{hashIndex(std::pair< double, double > node)}}]{\setlength{\rightskip}{0pt plus 5cm}std\+::size\+\_\+t Path\+Planner\+::hash\+Index (
+\begin{DoxyParamCaption}
+\item[{std\+::pair$<$ double, double $>$}]{node}
+\end{DoxyParamCaption}
+)}\hypertarget{classPathPlanner_ab111391044dcb787797a087ec7e57e4a}{}\label{classPathPlanner_ab111391044dcb787797a087ec7e57e4a}
+
+
+Function to convert cartesian coordinates to hash index. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em pair} & holding x and y coordinates of node \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+hash index 
+\end{DoxyReturn}
+\index{Path\+Planner@{Path\+Planner}!planner\+Main@{planner\+Main}}
+\index{planner\+Main@{planner\+Main}!Path\+Planner@{Path\+Planner}}
+\subsubsection[{\texorpdfstring{planner\+Main()}{plannerMain()}}]{\setlength{\rightskip}{0pt plus 5cm}std\+::vector$<$ std\+::pair$<$ double, double $>$ $>$ Path\+Planner\+::planner\+Main (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\hypertarget{classPathPlanner_a0856952abd30c8afb7d010bc1f12f42c}{}\label{classPathPlanner_a0856952abd30c8afb7d010bc1f12f42c}
+
+
+Main function that calls all the other functions. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em none} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Shortest path from start to goal 
+\end{DoxyReturn}
+\index{Path\+Planner@{Path\+Planner}!set\+Goal@{set\+Goal}}
+\index{set\+Goal@{set\+Goal}!Path\+Planner@{Path\+Planner}}
+\subsubsection[{\texorpdfstring{set\+Goal(std\+::pair$<$ double, double $>$ g)}{setGoal(std::pair< double, double > g)}}]{\setlength{\rightskip}{0pt plus 5cm}void Path\+Planner\+::set\+Goal (
+\begin{DoxyParamCaption}
+\item[{std\+::pair$<$ double, double $>$}]{g}
+\end{DoxyParamCaption}
+)}\hypertarget{classPathPlanner_a7ddf7846499907f012e5a3d24e040c26}{}\label{classPathPlanner_a7ddf7846499907f012e5a3d24e040c26}
+
+
+Setter for private member, goal. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em pair} & holding x and y coordinates of goal point \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+none 
+\end{DoxyReturn}
+\index{Path\+Planner@{Path\+Planner}!set\+Path\+Found@{set\+Path\+Found}}
+\index{set\+Path\+Found@{set\+Path\+Found}!Path\+Planner@{Path\+Planner}}
+\subsubsection[{\texorpdfstring{set\+Path\+Found(bool flag)}{setPathFound(bool flag)}}]{\setlength{\rightskip}{0pt plus 5cm}void Path\+Planner\+::set\+Path\+Found (
+\begin{DoxyParamCaption}
+\item[{bool}]{flag}
+\end{DoxyParamCaption}
+)}\hypertarget{classPathPlanner_add1eafe65f68d6f3aeb636ac4c43df20}{}\label{classPathPlanner_add1eafe65f68d6f3aeb636ac4c43df20}
+
+
+Setter for private member path\+Found. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em boolean} & value, true if path found, false otherwise \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+none 
+\end{DoxyReturn}
+\index{Path\+Planner@{Path\+Planner}!set\+Start@{set\+Start}}
+\index{set\+Start@{set\+Start}!Path\+Planner@{Path\+Planner}}
+\subsubsection[{\texorpdfstring{set\+Start(std\+::pair$<$ double, double $>$ s)}{setStart(std::pair< double, double > s)}}]{\setlength{\rightskip}{0pt plus 5cm}void Path\+Planner\+::set\+Start (
+\begin{DoxyParamCaption}
+\item[{std\+::pair$<$ double, double $>$}]{s}
+\end{DoxyParamCaption}
+)}\hypertarget{classPathPlanner_ae689342fe07926fb9510783e2f07b991}{}\label{classPathPlanner_ae689342fe07926fb9510783e2f07b991}
+
+
+Setter for private member, start. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em pair} & holding x and y coordinates of start point \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+none 
+\end{DoxyReturn}
+\index{Path\+Planner@{Path\+Planner}!shortest\+Path@{shortest\+Path}}
+\index{shortest\+Path@{shortest\+Path}!Path\+Planner@{Path\+Planner}}
+\subsubsection[{\texorpdfstring{shortest\+Path(std\+::size\+\_\+t goal\+Hash)}{shortestPath(std::size_t goalHash)}}]{\setlength{\rightskip}{0pt plus 5cm}std\+::vector$<$ std\+::pair$<$ double, double $>$ $>$ Path\+Planner\+::shortest\+Path (
+\begin{DoxyParamCaption}
+\item[{std\+::size\+\_\+t}]{goal\+Hash}
+\end{DoxyParamCaption}
+)}\hypertarget{classPathPlanner_ac0be211569bcef9d59cb6780fbcef3d8}{}\label{classPathPlanner_ac0be211569bcef9d59cb6780fbcef3d8}
+
+
+Function to find the shortest path once goal is reached. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em hash} & index of node in goal threshold \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+vector of pairs containing x and y coordinates/waypoints 
+\end{DoxyReturn}
+\index{Path\+Planner@{Path\+Planner}!show\+Map@{show\+Map}}
+\index{show\+Map@{show\+Map}!Path\+Planner@{Path\+Planner}}
+\subsubsection[{\texorpdfstring{show\+Map()}{showMap()}}]{\setlength{\rightskip}{0pt plus 5cm}std\+::vector$<$ std\+::vector$<$ int $>$ $>$ Path\+Planner\+::show\+Map (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\hypertarget{classPathPlanner_a485d7197e9c2bcfe4a99cafff8baeff7}{}\label{classPathPlanner_a485d7197e9c2bcfe4a99cafff8baeff7}
+
+
+Function to display the map. 
+
+none \begin{DoxyReturn}{Returns}
+2D vector holding the map as an occupancy grid 
+\end{DoxyReturn}
+\index{Path\+Planner@{Path\+Planner}!update\+Cost@{update\+Cost}}
+\index{update\+Cost@{update\+Cost}!Path\+Planner@{Path\+Planner}}
+\subsubsection[{\texorpdfstring{update\+Cost(std\+::size\+\_\+t current\+Hash, std\+::size\+\_\+t parent\+Hash, double cost)}{updateCost(std::size_t currentHash, std::size_t parentHash, double cost)}}]{\setlength{\rightskip}{0pt plus 5cm}bool Path\+Planner\+::update\+Cost (
+\begin{DoxyParamCaption}
+\item[{std\+::size\+\_\+t}]{current\+Hash, }
+\item[{std\+::size\+\_\+t}]{parent\+Hash, }
+\item[{double}]{cost}
+\end{DoxyParamCaption}
+)}\hypertarget{classPathPlanner_afd383f2dd9d6b7bc45b8a1977597e953}{}\label{classPathPlanner_afd383f2dd9d6b7bc45b8a1977597e953}
+
+
+Function to update the cost of node and parent of node. 
+
+hash index of the current node  hash index of the parent node  cost of the node \begin{DoxyReturn}{Returns}
+bool, true if cost was updated, false otherwise 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+include/warehouse\+\_\+robot/\hyperlink{PathPlanner_8hpp}{Path\+Planner.\+hpp}\item 
+src/\hyperlink{PathPlanner_8cpp}{Path\+Planner.\+cpp}\end{DoxyCompactItemize}
