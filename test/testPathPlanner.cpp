@@ -74,21 +74,21 @@ TEST(TestPathPlanner, testSetterGetterStart) {
   std::pair<double, double> startTest = path.getStart();
   ASSERT_EQ(startTest, start);
 }
-//
-///**
-// * @brief This tests the setter and getter of private member PathFound of class
-// * PathPlanner
-// */
+
+/**
+ * @brief This tests the setter and getter of private member PathFound of class
+ * PathPlanner
+ */
 TEST(TestPathPlanner, testSetterGetterPathFound) {
   PathPlanner path;
   path.setPathFound(true);
   bool testPathFound = path.getPathFound();
   ASSERT_EQ(testPathFound, true);
 }
-//
-///**
-// * @brief This tests the function hashCoordinates of the class PathPlanner
-// */
+
+/**
+ * @brief This tests the function hashCoordinates of the class PathPlanner
+ */
 TEST(TestPathPlanner, testHashToCoordinates) {
   PathPlanner path;
   std::size_t rows = path.mapSize.first;   // y coordinates
@@ -173,7 +173,7 @@ TEST(TestPathPlanner, testUpdateCost) {
   // Checking if parent node is updated
   EXPECT_EQ(path.parentNode.at(testIndex), testIndex + 10);
 }
-//
+
 /**
  * @brief This tests the function differential of the class PathPlanner
  */
@@ -198,10 +198,10 @@ TEST(TestPathPlanner, testDifferential) {
   // Checking the new y coordinates from the movement
   EXPECT_NEAR(coordTest.second, 50.78, 1);
 }
-//
-///**
-// * @brief  This tests the function allActions of the class PathPlanner
-// */
+
+/**
+ * @brief  This tests the function allActions of the class PathPlanner
+ */
 TEST(TestPathPlanner, testAllActions) {
   PathPlanner p;
   std::pair<double, double> start = std::make_pair(60, 130);
@@ -214,7 +214,7 @@ TEST(TestPathPlanner, testAllActions) {
   // after exploring all possible movement options
   EXPECT_GT(finalSize, initialSize);
 }
-//
+
 /**
  * @brief This tests the function showMap of the class PathPlanner
  */

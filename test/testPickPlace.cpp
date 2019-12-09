@@ -91,7 +91,6 @@ TEST(TestPickPlace, testExecutePick) {
   EXPECT_EQ(typeid(testPick), typeid(bool));
  }
 
-
  /**
   * @brief Test to check the member function executePlace of class
   * PickPlace

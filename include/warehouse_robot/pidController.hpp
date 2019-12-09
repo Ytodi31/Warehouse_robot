@@ -69,19 +69,31 @@ class PidController {
   ros::NodeHandle controllerNode;
   // Subscriber Object for Pose
   ros::Subscriber poseSub;
+  // Robot pose object
   tf::Pose pose;
+  // Linear velocity of the robot
   double linearVel;
+  // Controller propotional gains
   std::vector<double> kP;
+  // Controller integral gains
   std::vector<double> kI;
+  // Controller differential gains
   std::vector<double> kD;
+  // Linear error recently calculated
   double lastLinearError = 0;
+  // Sum of all linear errors
   double sumLinearError = 0;
+  // Linear velocity threshold for the robot
   double linearVelThreshold = 0.8;
+  // Angular velocity threshold for the robot
   double angularVelThreshold = 0.1;
 
  public:
+  // Angular velocity of the robot
   double angularVel;
+  // Sum of all angular errors
   double sumAngularError = 0;
+  // Angular error recently calculated
   double lastAngularError = 0;
   // ROS publisher object for velocity publishing
   ros::Publisher velocityPub;
@@ -97,7 +109,6 @@ class PidController {
    * @return The current velocity publisher
    */
   void setVelocityPub();
-
   /**
    * @brief Setter method for the pose subscriber
    * @param New pose subscriber to be set
@@ -116,7 +127,6 @@ class PidController {
    * @return The current linear velocity of the turtlebot
    */
   double getLinearVel();
-
   /**
    * @brief Getter method for the angular velocity
    * @param none

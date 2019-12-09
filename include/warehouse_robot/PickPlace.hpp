@@ -63,7 +63,13 @@
  */
 class PickPlace {
  public:
+  /**
+   * @brief Class constructor
+   */
   PickPlace();
+  /**
+   * @brief Class Destructor
+   */
   ~PickPlace();
   /**
    * @brief Function that executes the pick up operation of manipulator
@@ -71,14 +77,12 @@ class PickPlace {
    * @return true if succesful
    */
   bool executePick(ros::NodeHandle);
-
   /**
    * @brief Function that executes the place operation of manipulator
    * @param ros node handle
    * @return true if succesful
    */
   bool executePlace(ros::NodeHandle);
-
   /**
    * @brief Function that sets the kinematic pose for pick up and calls service
    * @param geometry_msg of type pose, holding the kinematic pose of the end
@@ -86,26 +90,22 @@ class PickPlace {
    * @return true if successful
    */
   bool setPose(geometry_msgs::Pose);
-
   /**
    * @brief Function that controls the gripper
    * @param vector of type double, holding value of joint position of gripper
    * @return true if successful
    */
   bool setGripper(std::vector<double>);
-
   /**
    * @brief Service to set the kinematics pose of manipulator,
    * service name - /arm/moveit/set_kinematics_pose
    */
   ros::ServiceClient setArmPose;
-
   /**
    * @brief Service to set the gripper state
    * service name -/om_with_tb3/gripper
    */
   ros::ServiceClient setGripperState;
-
   /**
    * @brief Pose variable, holding the kinematic pose to pick object
    */
@@ -121,12 +121,10 @@ class PickPlace {
    * the manipulator
    */
   geometry_msgs::Pose homePose;
-
   /**
    * @brief robot state, 0 if robot is stationary, 1 if it is moving
    */
   bool robotState;
-
   /**
    * @brief Local node handle
    */

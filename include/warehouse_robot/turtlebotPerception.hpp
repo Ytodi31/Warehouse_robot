@@ -62,50 +62,81 @@
 #include <aruco/exports.h>
 #include <pidController.hpp>
 
-
 class TurtlebotPerception : public PidController {
  private:
+  // Ros perception node
   ros::NodeHandle perceptionNode;
+  // Distance publisher for ROS
   ros::Publisher distPub;
+  // Image subscriber
   ros::Subscriber imageSub;
+  // Image variable
   cv::Mat img;
+  // Flag set when the Aruco marker is detected
   bool markerDetected = false;
+  // Marker x location
   double marker_x = 0;
+  // Marker Y location
   double marker_y = 0;
+  // Marker Area
   double marker_area = 0;
+  // Controller Propotional gain
   double kp;
+  // Controller Integral gain
   double ki;
+  // Controller differential gain
   double kd;
 
  public:
+  // Image translation matrix
+  cv::Mat translation;
+  // Image rotation matrix
+  cv::Mat rotMat;
+  // velocity function derived from PID controller module
+  using PidController::calcVel;
+  // Propotional gain setter derived from PID controller module
+  using PidController::setKP;
+  // Integral gain setter derived from PID controller module
+  using PidController::setKI;
+  // Derivative gain setter derived from PID controller module
+  using PidController::setKD;
+
+  /**
+   * @brief Setter method for the derivative gain
+   * @param  Derivative gain
+   * @return none
+   */
+  void setKD(double kD);
+  /**
+   * @brief Setter method for the propotional gain
+   * @param  Propotional gain
+   * @return none
+   */
+  void setKP(double kP);
+  /**
+   * @brief Setter method for the integral gain
+   * @param  Integral gain
+   * @return none
+   */
+  void setKI(double kI);
+  /**
+   * @brief Angular velocity function
+   * @param none
+   * @return Gives the angular velocity that is required to track the marker
+   */
+  geometry_msgs::Twist calcVel();
   /**
    * @brief Setter method for the Ros Node
    * @param  New Node to be set
    * @return none
    */
-  cv::Mat translation;
-  cv::Mat rotMat;
-  using PidController::calcVel;
-  using PidController::setKP;
-  using PidController::setKI;
-  using PidController::setKD;
-
-  void setKD(double kD);
-
-  void setKP(double kP);
-
-  void setKI(double kI);
-
-  geometry_msgs::Twist calcVel();
-
   void setPerceptionNode(ros::NodeHandle n);
   /**
-   * @brief Setter method for the Ros Node
-   * @param  New Node to be set
+   * @brief Setter method for the Ros Subscribers
+   * @param none
    * @return none
    */
   void setSubscribers();
-
   /**
    * @brief Callback function to get the images from the Turtlebot kinect
    * @param RGB image ddata
@@ -119,7 +150,11 @@ class TurtlebotPerception : public PidController {
    * @return True if the marker detected matches the package required
    */
   bool detectArucoMarker(cv::Mat imageFrame, double markerId);
-
+  /**
+     * @brief Function to calculate the marker area
+     * @param none
+     * @return Area of the marker detected
+     */
   double getMarkerArea();
 };
 

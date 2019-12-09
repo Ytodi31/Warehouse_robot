@@ -29,21 +29,20 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
- *  @file localisation.cpp
+ *  @file localisation.hpp
  *  @date Nov 28, 2019
  *  @author Suyash Yeotikar (test-driver)
  *  @brief Localisation module header file
  *  Copyright 2019 Suyash Yeotikar, Yashaarth Todi, Gautam Balachandran  [legal/copyright]
  */
-#ifndef INCLUDE_WAREHOUSE_ROBOT_LOCALISATION_HPP_
-#define INCLUDE_WAREHOUSE_ROBOT_LOCALISATION_HPP_
 
-#include  <cstdlib>
-#include <tf/transform_datatypes.h>
 #include <ros/ros.h>
 #include <geometry_msgs/Pose.h>
 #include <std_msgs/Float64.h>
 #include <tf/transform_listener.h>
+
+#ifndef INCLUDE_WAREHOUSE_ROBOT_LOCALISATION_HPP_
+#define INCLUDE_WAREHOUSE_ROBOT_LOCALISATION_HPP_
 
 /**
  * @class Localisation
@@ -53,13 +52,44 @@
 
 class Localisation {
  private:
+   /**
+    * @brief ros Node handle for local operations
+    */
     ros::NodeHandle localizationNode;
+
+    /**
+     * @brief Robot pose holding the robot pose received from SLAM
+     */
     geometry_msgs::Pose localisationPose;
+
+    /**
+     * @brief double value holding uncertainity of pose received from SLAM
+     */
     double entropy;
+
+    /**
+     * @brief entropy limit above which pose values will be discarded
+     */
     double entropyThreshold = 0;
+
+    /**
+     * @brief publisher to publish the pose of the robot in image coordinates
+     */
     ros::Publisher mapPosePublisher;
+
+    /**
+     * @brief publisher to publish the pose of the robot in world coordinates
+     */
     ros::Publisher rawPosePublisher;
+
+    /**
+     * @brief subscriber to receive the entropy from slam module
+     */
     ros::Subscriber entropySubscriber;
+
+    /**
+     * @brief Transform listener, for frame transform between map and robot base
+     */
     tf::TransformListener mapToBaseTfListen;
 
  private:
@@ -69,6 +99,7 @@ class Localisation {
      * @return none
      */
     void EntropyCallback(const std_msgs::Float64::ConstPtr& msg);
+
     /*
      * @brief function to publish the pose that was obtained in
      * map coordinates (class variable)(extracted from tf listener)
@@ -76,6 +107,7 @@ class Localisation {
      * @return none
      */
     void PublishMapPose();
+
     /*
      * @brief function to publish the raw pose
      * (actual pose of the robot in the map)
@@ -83,6 +115,7 @@ class Localisation {
      * @return none
      */
     void PublishRawPose();
+
     /*
      * @brief function to obtain the position of Robot by passing
      * the transform between frames
