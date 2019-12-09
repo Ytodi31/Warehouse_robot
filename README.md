@@ -103,6 +103,8 @@ Left image shows the robot in the Gazebo and Rviz environment.
 Right image shows the robot using Gmapping to get robot localisation in Rviz environment.
 
 
+A video of the robot at work can be found [here](https://drive.google.com/file/d/1FUNPBxU_4WUri4vttHXVxIPHSgaNAUZ-/view?usp=sharing).
+
 
 ### Expectation
 
