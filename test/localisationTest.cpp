@@ -100,28 +100,29 @@ TEST(LocalisationTest, ExecuteLocalisationPositive) {
             break;
         }
         ros::spinOnce();
-    }
-    EXPECT_TRUE(testObj1.receivedPose);
-    EXPECT_NEAR(testObj1.robotPose.position.x, 2.5, 0.1);
-    EXPECT_NEAR(testObj1.robotPose.position.y, 9.7, 0.1);
-    EXPECT_NEAR(testObj1.robotPose.position.z, 0, 0.1);
-    EXPECT_NEAR(testObj1.robotPose.orientation.x, -0.011, 0.1);
-    EXPECT_NEAR(testObj1.robotPose.orientation.y, 0.066, 0.1);
-    EXPECT_NEAR(testObj1.robotPose.orientation.z, 0.144, 0.1);
-    EXPECT_NEAR(testObj1.robotPose.orientation.w, 0.987, 0.1);
-    EXPECT_TRUE(testObj2.receivedPose);
-    EXPECT_NEAR(testObj2.robotPose.position.x, 50, 0.1);
-    EXPECT_NEAR(testObj2.robotPose.position.y, 194, 0.1);
-    EXPECT_NEAR(testObj2.robotPose.position.z, 0, 0.1);
-    EXPECT_NEAR(testObj2.robotPose.orientation.x, -0.011, 0.1);
-    EXPECT_NEAR(testObj2.robotPose.orientation.y, 0.066, 0.1);
-    EXPECT_NEAR(testObj2.robotPose.orientation.z, 0.144, 0.1);
-    EXPECT_NEAR(testObj2.robotPose.orientation.w, 0.987, 0.1);
+      }
+      EXPECT_TRUE(testObj1.receivedPose);
+      EXPECT_NEAR(testObj1.robotPose.position.x, 2.5, 0.1);
+      EXPECT_NEAR(testObj1.robotPose.position.y, 9.7, 0.1);
+      EXPECT_NEAR(testObj1.robotPose.position.z, 0, 0.1);
+      EXPECT_NEAR(testObj1.robotPose.orientation.x, -0.011, 0.1);
+      EXPECT_NEAR(testObj1.robotPose.orientation.y, 0.066, 0.1);
+      EXPECT_NEAR(testObj1.robotPose.orientation.z, 0.144, 0.1);
+      EXPECT_NEAR(testObj1.robotPose.orientation.w, 0.987, 0.1);
+      EXPECT_TRUE(testObj2.receivedPose);
+      EXPECT_NEAR(testObj2.robotPose.position.x, 50, 0.1);
+      EXPECT_NEAR(testObj2.robotPose.position.y, 194, 0.1);
+      EXPECT_NEAR(testObj2.robotPose.position.z, 0, 0.1);
+      EXPECT_NEAR(testObj2.robotPose.orientation.x, -0.011, 0.1);
+      EXPECT_NEAR(testObj2.robotPose.orientation.y, 0.066, 0.1);
+      EXPECT_NEAR(testObj2.robotPose.orientation.z, 0.144, 0.1);
+      EXPECT_NEAR(testObj2.robotPose.orientation.w, 0.987, 0.1);
 }
 
 /**
  * @brief test to check if the Robot Coordinate sets appropriate
- * values or not when localisation is executed but Robot is fallen (incorrectPose)
+ * values or not when localisation is executed but Robot is fallen
+ * (incorrectPose)
  */
 TEST(LocalisationTest, ExecuteLocalisationFallenRobotYaxis) {
     LocalisationTest testObj1;
@@ -175,7 +176,8 @@ TEST(LocalisationTest, ExecuteLocalisationFallenRobotYaxis) {
 
 /**
  * @brief test to check if the Robot Coordinate sets appropriate
- * values or not when localisation is executed but Robot is fallen (incorrectPose)
+ * values or not when localisation is executed but Robot is fallen
+ * (incorrectPose)
  */
 TEST(LocalisationTest, ExecuteLocalisationFallenRobotYaxisNeg) {
     LocalisationTest testObj1;
@@ -229,7 +231,8 @@ TEST(LocalisationTest, ExecuteLocalisationFallenRobotYaxisNeg) {
 
 /**
  * @brief test to check if the Robot Coordinate sets appropriate
- * values or not when localisation is executed but Robot is fallen (incorrectPose)
+ * values or not when localisation is executed but Robot is fallen
+ * (incorrectPose)
  */
 TEST(LocalisationTest, ExecuteLocalisationFallenRobotXaxis) {
     LocalisationTest testObj1, testObj2;
@@ -282,7 +285,8 @@ TEST(LocalisationTest, ExecuteLocalisationFallenRobotXaxis) {
 
 /**
  * @brief test to check if the Robot Coordinate sets appropriate
- * values or not when localisation is executed but Robot is fallen (incorrectPose)
+ * values or not when localisation is executed but Robot is fallen
+ * (incorrectPose)
  */
 TEST(LocalisationTest, ExecuteLocalisationFallenRobotXaxisNeg) {
     LocalisationTest testObj1, testObj2;
@@ -336,7 +340,8 @@ TEST(LocalisationTest, ExecuteLocalisationFallenRobotXaxisNeg) {
 
 /**
  * @brief test to check if the Robot Coordinate sets appropriate
- * values or not when localisation is executed but Robot is out of map bounds (incorrectPose)
+ * values or not when localisation is executed but Robot is out of map bounds
+ * (incorrectPose)
  */
 TEST(LocalisationTest, ExecuteLocalisationRobotOutOfMapCorner1) {
     LocalisationTest testObj1, testObj2;
@@ -391,7 +396,8 @@ TEST(LocalisationTest, ExecuteLocalisationRobotOutOfMapCorner1) {
 
 /**
  * @brief test to check if the Robot Coordinate sets appropriate
- * values or not when localisation is executed but Robot is out of map bounds (incorrectPose)
+ * values or not when localisation is executed but Robot is out of map bounds
+ * (incorrectPose)
  */
 TEST(LocalisationTest, ExecuteLocalisationRobotOutOfMapCorner2) {
     LocalisationTest testObj1, testObj2;
@@ -445,7 +451,8 @@ TEST(LocalisationTest, ExecuteLocalisationRobotOutOfMapCorner2) {
 
 /**
  * @brief test to check if the Robot Coordinate sets appropriate
- * values or not when localisation is executed but Robot is out of map bounds (incorrectPose)
+ * values or not when localisation is executed but Robot is out of map bounds
+ * (incorrectPose)
  */
 TEST(LocalisationTest, ExecuteLocalisationRobotZPos) {
     LocalisationTest testObj1, testObj2;
@@ -499,7 +506,8 @@ TEST(LocalisationTest, ExecuteLocalisationRobotZPos) {
 
 /**
  * @brief test to check if the Robot Coordinate sets appropriate
- * values or not when localisation is executed but Robot is out of map bounds (incorrectPose)
+ * values or not when localisation is executed but Robot is out of map bounds
+ * (incorrectPose)
  */
 TEST(LocalisationTest, ExecuteLocalisationRobotZPosNeg) {
     LocalisationTest testObj1, testObj2;

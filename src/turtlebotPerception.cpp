@@ -45,18 +45,17 @@
  *
  * @date 11-28-2019
  */
-
-#include <iostream>
-#include "ros/ros.h"
 #include <sensor_msgs/Image.h>
 #include <cv_bridge/cv_bridge.h>
-#include <opencv2/opencv.hpp>
-#include <opencv2/core/core.hpp>
 #include <aruco/aruco.h>
 #include <aruco/markerdetector.h>
 #include <aruco/arucofidmarkers.h>
 #include <aruco/cvdrawingutils.h>
 #include <aruco/exports.h>
+#include <iostream>
+#include <opencv2/opencv.hpp>
+#include <opencv2/core/core.hpp>
+#include "ros/ros.h"
 #include <pidController.hpp>
 #include <turtlebotPerception.hpp>
 
@@ -159,4 +158,3 @@ geometry_msgs::Twist TurtlebotPerception::calcVel() {
   }
   return vel;
 }
-

@@ -46,8 +46,8 @@
  * @date 11-20-2019
  */
 
-#ifndef TEST_LOCALISATIONTESTCLASS_HPP_
-#define TEST_LOCALISATIONTESTCLASS_HPP_
+#ifndef WAREHOUSE_ROBOT_SRC_WAREHOUSE_ROBOT_TEST_LOCALISATIONTESTCLASS_HPP_
+#define WAREHOUSE_ROBOT_SRC_WAREHOUSE_ROBOT_TEST_LOCALISATIONTESTCLASS_HPP_
 
 #include <gtest/gtest.h>
 #include <tf/transform_listener.h>
@@ -80,4 +80,4 @@ class LocalisationTest {
   void PoseCallback(const geometry_msgs::Pose::ConstPtr msg);
 };
 
-#endif  // TEST_LOCALISATIONTESTCLASS_HPP_
+#endif  // WAREHOUSE_ROBOT_SRC_WAREHOUSE_ROBOT_TEST_LOCALISATIONTESTCLASS_HPP_

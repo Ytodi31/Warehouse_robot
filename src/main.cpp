@@ -45,7 +45,7 @@
  *
  * @date 11-20-2019
  */
- #include "ros/ros.h"
+  #include "ros/ros.h"
 
  /**
   * @brief Main file to call classes
@@ -53,8 +53,6 @@
   * @param Parameter 2, Input
   * @return int, 0 if executed successfully
   */
- int main(int argc, char **argv) {
-
-
-   return 0;
- }
+  int main(int argc, char **argv) {
+  return 0;
+  }

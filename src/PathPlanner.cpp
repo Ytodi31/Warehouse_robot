@@ -302,7 +302,7 @@ bool PathPlanner::updateCost(std::size_t newIndex, std::size_t parentIndex,
         + costGo.at(currentIndex);
 
   } else if (cost < costCome.at(newIndex)) {
-    ROS_INFO_STREAM("COST UPDATED. COST : %f!", cost);
+    ROS_INFO_STREAM("COST UPDATED. COST : " << cost);
     costCome.at(newIndex) = cost;
     currentIndex = newIndex;
     indexes.first = parentIndex;

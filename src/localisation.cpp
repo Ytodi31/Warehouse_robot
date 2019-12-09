@@ -38,12 +38,12 @@
  *  Please refer the listener.cpp file in file section
  *  and function members sections for detailed documentation
  */
-#include  <cstdlib>
 #include <tf/transform_datatypes.h>
 #include <ros/ros.h>
 #include <geometry_msgs/Pose.h>
 #include <std_msgs/Float64.h>
 #include <tf/transform_listener.h>
+#include  <cstdlib>
 #include "localisation.hpp"
 
 void Localisation::EntropyCallback(const std_msgs::Float64::ConstPtr &msg) {
@@ -67,7 +67,7 @@ void Localisation::GetRobotCoordinate(tf::StampedTransform mapToRobot) {
     mapToBaseTfListen.lookupTransform("/map", "/om_with_tb3/base_footprint",
                                       ros::Time(0), mapToRobot);
   } catch (tf::TransformException ex) {
-    ROS_ERROR_STREAM("%s", ex.what());
+    ROS_ERROR_STREAM("Exception : " << ex.what());
     ros::Duration(1.0).sleep();
   }
   // Getting pose of robot
@@ -93,7 +93,8 @@ void Localisation::GetRobotCoordinate(tf::StampedTransform mapToRobot) {
   // Checking if the robot has toppled
   if (abs(roll) || abs(pitch) >= 0.1745) {
     ROS_WARN_STREAM(
-        "Robot localisation unsuccessful- pose is not correct, seems to have fallen");
+        "Robot localisation unsuccessful- pose is not correct, seems to" <<
+        " have fallen");
     poseCheck = false;
   }
   // Checking if the received position is out of the map
@@ -102,13 +103,15 @@ void Localisation::GetRobotCoordinate(tf::StampedTransform mapToRobot) {
       || localisationPose.position.z > 0.15
       || localisationPose.position.z < 0) {
     ROS_WARN_STREAM(
-        "Robot  localisation unsuccessful- pose is not correct,seems out of bounds of map");
+        "Robot  localisation unsuccessful- pose is not correct,seems out of" <<
+        ", bounds of map");
     poseCheck = false;
   }
   // Checking if the reliability of the pose recieved is lower than threshold
   if (entropy > entropyThreshold) {
     ROS_WARN_STREAM(
-        "Robot localisation unsuccessful- pose is not correct, high uncertainity of Robot pose");
+        "Robot localisation unsuccessful- pose is not correct, high " <<
+        "uncertainity of Robot pose");
     poseCheck = false;
   }
   if (poseCheck == false) {
@@ -147,7 +150,8 @@ void Localisation::initSubscribers(ros::NodeHandle n) {
   localizationNode = n;
   entropySubscriber =
       localizationNode.subscribe < std_msgs::Float64
-          > ("/turtlebot3_slam_gmapping/entropy", 1000, &Localisation::EntropyCallback, this);
+          > ("/turtlebot3_slam_gmapping/entropy", 1000,
+          &Localisation::EntropyCallback, this);
 
   // Defining publisher for mapPose topic
   mapPosePublisher = localizationNode.advertise < geometry_msgs::Pose

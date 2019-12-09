@@ -45,10 +45,10 @@
  *
  * @date 11-30-2019
  */
- #include "ros/ros.h"
- #include "gtest/gtest.h"
- #include <open_manipulator_msgs/GetKinematicsPose.h>
- #include "PickPlace.hpp"
+  #include <open_manipulator_msgs/GetKinematicsPose.h>
+  #include "ros/ros.h"
+  #include "gtest/gtest.h"
+  #include "PickPlace.hpp"
 
  /**
   * @brief Test to check the member function setPose of class
@@ -84,20 +84,20 @@ TEST(TestPickPlace, testSetGripper) {
  * @brief Test to check the member function executePick of class
  * PickPlace
  */
-TEST(TestPickPlace, testExecutePick) {
+  TEST(TestPickPlace, testExecutePick) {
   PickPlace manipulator;
   ros::NodeHandle t;
   bool testPick = manipulator.executePick(t);
   EXPECT_EQ(typeid(testPick), typeid(bool));
- }
+  }
 
  /**
   * @brief Test to check the member function executePlace of class
   * PickPlace
   */
- TEST(TestPickPlace, testExecutePlace) {
-   PickPlace manipulator;
-   ros::NodeHandle t;
-   bool testPlace = manipulator.executePlace(t);
-   EXPECT_EQ(typeid(testPlace), typeid(bool));
+  TEST(TestPickPlace, testExecutePlace) {
+    PickPlace manipulator;
+    ros::NodeHandle t;
+    bool testPlace = manipulator.executePlace(t);
+    EXPECT_EQ(typeid(testPlace), typeid(bool));
   }

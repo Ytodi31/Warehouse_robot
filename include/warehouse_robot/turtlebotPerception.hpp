@@ -46,21 +46,22 @@
  * @date 11-27-2019
  */
 
-#ifndef INCLUDE_WAREHOUSE_ROBOT_TURTLEBOTPERCEPTION_HPP_
-#define INCLUDE_WAREHOUSE_ROBOT_TURTLEBOTPERCEPTION_HPP_
+#ifndef WAREHOUSE_ROBOT_SRC_WAREHOUSE_ROBOT_INCLUDE_WAREHOUSE_ROBOT_TURTLEBOTPERCEPTION_HPP_
+#define WAREHOUSE_ROBOT_SRC_WAREHOUSE_ROBOT_INCLUDE_WAREHOUSE_ROBOT_TURTLEBOTPERCEPTION_HPP_
 
-#include <iostream>
-#include "ros/ros.h"
 #include <sensor_msgs/Image.h>
 #include <cv_bridge/cv_bridge.h>
-#include <opencv2/opencv.hpp>
-#include <opencv2/core/core.hpp>
 #include <aruco/aruco.h>
 #include <aruco/markerdetector.h>
 #include <aruco/arucofidmarkers.h>
 #include <aruco/cvdrawingutils.h>
 #include <aruco/exports.h>
+#include <iostream>
+#include <opencv2/opencv.hpp>
+#include <opencv2/core/core.hpp>
+#include "ros/ros.h"
 #include <pidController.hpp>
+
 
 class TurtlebotPerception : public PidController {
  private:
@@ -158,4 +159,4 @@ class TurtlebotPerception : public PidController {
   double getMarkerArea();
 };
 
-#endif  // INCLUDE_WAREHOUSE_ROBOT_TURTLEBOTPERCEPTION_HPP_ */
+#endif  // WAREHOUSE_ROBOT_SRC_WAREHOUSE_ROBOT_INCLUDE_WAREHOUSE_ROBOT_TURTLEBOTPERCEPTION_HPP_
