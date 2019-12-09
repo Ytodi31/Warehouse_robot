@@ -250,5 +250,4 @@ if(CATKIN_ENABLE_TESTING)
     test/main.cpp)
     target_link_libraries(allTestWarehouseRobot ${catkin_LIBRARIES} ${OpenCV_LIBRARIES})
 
-
 endif()
