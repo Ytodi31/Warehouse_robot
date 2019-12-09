@@ -19,7 +19,6 @@ find_package(catkin REQUIRED COMPONENTS
   message_generation
   cv_bridge
   aruco
-  OpenCV
   open_manipulator_msgs
 )
 
@@ -84,10 +83,11 @@ include_directories(${OpenCV_INCLUDE_DIRS})
 # )
 
 ## Generate added messages and services with any dependencies listed here
-# generate_messages(
-#   DEPENDENCIES
-#   std_msgs
-# )
+ generate_messages(
+   DEPENDENCIES
+   std_msgs
+   geometry_msgs
+ )
 
 ################################################
 ## Declare ROS dynamic reconfigure parameters ##
@@ -163,19 +163,21 @@ include_directories(
 ## same as for the library above
 # add_dependencies(${PROJECT_NAME}_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
-add_executable(pathPlanner src/main.cpp src/PathPlanner.cpp src/PickPlace.cpp)
-add_executable(pickPlace src/main.cpp  src/PickPlace.cpp)
-add_executable(localisation src/localisation.cpp src/main.cpp)
-add_executable(pidController src/pidController.cpp src/main.cpp)
-add_executable(turtlebotPerception src/turtlebotPerception.cpp src/main.cpp)
 
 ## Specify libraries to link a library or executable target against
-target_link_libraries(pathPlanner ${catkin_LIBRARIES})
-target_link_libraries(pickPlace ${catkin_LIBRARIES})
-target_link_libraries(localisation ${catkin_LIBRARIES})
-target_link_libraries(pidController ${catkin_LIBRARIES})
-target_link_libraries(turtlebotPerception ${catkin_LIBRARIES})
-
+add_executable(warehouseRobot 
+    include/warehouse_robot/localisation.hpp
+    src/localisation.cpp
+    include/warehouse_robot/PathPlanner.hpp
+    src/PathPlanner.cpp
+    include/warehouse_robot/PickPlace.hpp
+    src/PickPlace.cpp
+    include/warehouse_robot/pidController.hpp
+    include/warehouse_robot/turtlebotPerception.hpp
+    src/pidController.cpp
+    src/turtlebotPerception.cpp
+    src/main.cpp)
+target_link_libraries(warehouseRobot ${catkin_LIBRARIES} ${OpenCV_LIBRARIES})
 #############
 ## Install ##
 #############

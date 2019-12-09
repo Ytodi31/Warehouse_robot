@@ -1,31 +1,31 @@
 /**
-*BSD 3-Clause License
-*
-*Copyright (c) 2019, Yashaarth Todi
-*All rights reserved.
-*
-*Redistribution and use in source and binary forms, with or without
-*modification, are permitted provided that the following conditions are met:
-*1. Redistributions of source code must retain the above copyright notice, this
-*   list of conditions and the following disclaimer.
-*2. Redistributions in binary form must reproduce the above copyright notice,
-*   this list of conditions and the following disclaimer in the documentation
-*   and/or other materials provided with the distribution.
-*3. Neither the name of the copyright holder nor the names of its
-*   contributors may be used to endorse or promote products derived from
-*   this software without specific prior written permission.
-*
-*THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-*AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-*IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-*DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
-*FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-*DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
-*SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
-*CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
-*OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-*OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/
+ *BSD 3-Clause License
+ *
+ *Copyright (c) 2019, Yashaarth Todi
+ *All rights reserved.
+ *
+ *Redistribution and use in source and binary forms, with or without
+ *modification, are permitted provided that the following conditions are met:
+ *1. Redistributions of source code must retain the above copyright notice, this
+ *   list of conditions and the following disclaimer.
+ *2. Redistributions in binary form must reproduce the above copyright notice,
+ *   this list of conditions and the following disclaimer in the documentation
+ *   and/or other materials provided with the distribution.
+ *3. Neither the name of the copyright holder nor the names of its
+ *   contributors may be used to endorse or promote products derived from
+ *   this software without specific prior written permission.
+ *
+ *THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ *AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ *IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ *DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+ *FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ *DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ *SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ *CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+ *OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ *OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
 
 /**
  * @file testPathPlanner.cpp
@@ -45,11 +45,11 @@
  *
  * @date 11-27-2019
  */
+#include <vector>
+#include <utility>
+#include "../include/warehouse_robot/PathPlanner.hpp"
 #include "ros/ros.h"
 #include "gtest/gtest.h"
-#include <utility>
-#include <vector>
-#include "PathPlanner.hpp"
 
 /**
  * @brief Test to checl the setter and getter of private member goal of class
@@ -57,7 +57,7 @@
  */
 TEST(TestPathPlanner, testSetterGetterGoal) {
   PathPlanner path;
-  std::pair<double, double> goal = std::make_pair(10,10);
+  std::pair<double, double> goal = std::make_pair(10, 10);
   path.setGoal(goal);
   std::pair<double, double> goalTest = path.getGoal();
   ASSERT_EQ(goalTest, goal);
@@ -91,12 +91,12 @@ TEST(TestPathPlanner, testSetterGetterPathFound) {
  */
 TEST(TestPathPlanner, testHashToCoordinates) {
   PathPlanner path;
-  std::size_t rows = path.mapSize.second;   // y coordinates
-  std::size_t cols = path.mapSize.first;    // x cooordinates
+  std::size_t rows = path.mapSize.first;   // y coordinates
+  std::size_t cols = path.mapSize.second;    // x cooordinates
   std::pair<double, double> coordinates;
-  coordinates.second = rows -1;
-  coordinates.first = cols - 1;
-  std::size_t testIndex = rows*coordinates.first + coordinates.second;
+  coordinates.second = (rows - 1);
+  coordinates.first = (cols - 1);
+  std::size_t testIndex = (rows * coordinates.first + coordinates.second);
   std::pair<double, double> coordinatesTest = path.hashCoordinates(testIndex);
   EXPECT_EQ(coordinatesTest, coordinates);
 }
@@ -106,12 +106,15 @@ TEST(TestPathPlanner, testHashToCoordinates) {
  */
 TEST(TestPathPlanner, testCoordinatesToHash) {
   PathPlanner path;
-  std::size_t rows = path.mapSize.second;   // y coordinates
-  std::size_t cols = path.mapSize.first;    // x coordinates
+  std::size_t rows = path.mapSize.first;   // y coordinates
+  std::size_t cols = path.mapSize.second;    // x coordinates
   std::pair<double, double> testCoordinates = std::make_pair(1, rows);
   std::size_t indexTest = path.hashIndex(testCoordinates);
-  std::size_t index = testCoordinates.first*rows + testCoordinates.second;
-  EXPECT_EQ(indexTest,index);
+  testCoordinates.first = testCoordinates.first * 0.05;
+  testCoordinates.second = testCoordinates.second * 0.05;
+  std::size_t index = (testCoordinates.first * rows + testCoordinates.second)
+      / 0.05;
+  EXPECT_EQ(indexTest, index);
 }
 
 /**
@@ -119,12 +122,9 @@ TEST(TestPathPlanner, testCoordinatesToHash) {
  */
 TEST(TestPathPlanner, testBoundaryCheck) {
   PathPlanner path;
-  std::size_t rows = path.mapSize.second;
-  // Creating a coordinate outside of map
-  std::size_t cols = path.mapSize.first + 1;
-  std::size_t index = path.mapSize.second*cols + rows;
-  bool testBoundary = path.boundaryCheck(index);
-  ASSERT_EQ(testBoundary, true);
+  std::pair<double, double> node = std::make_pair(90, 90);
+  bool testBoundary = path.boundaryCheck(node);
+  ASSERT_FALSE(testBoundary);
 }
 
 /**
@@ -132,18 +132,18 @@ TEST(TestPathPlanner, testBoundaryCheck) {
  */
 TEST(TestPathPlanner, testShortestPath) {
   PathPlanner path;
-  std::vector<std::pair<double, double>> shortestPath;
-  std::size_t localGoalIndex = path.localGoal.first*path.mapSize.second +
-                               path.localGoal.second;
-  shortestPath = path.shortestPath(localGoalIndex);
+  std::pair<double, double> start = std::make_pair(60, 130);
+  std::pair<double, double> goal = std::make_pair(269, 297);
+  path.setStart(start);
+  path.setGoal(goal);
+  path.plannerMain();  // Calling main function to generate all nodes
+  std::size_t localGoalIndex = path.hashIndex(path.localGoal);
+  std::vector<std::pair<double, double>> shortestPath = path.shortestPath(
+      localGoalIndex);
   int length = shortestPath.size();
-  double testCost = path.totalCost.at(localGoalIndex);
-  auto lowestCost = std::min_element(std::begin(path.totalCost),
-                    std::end(path.totalCost));
-  // Checking the lowest cost in stack versus cost of goal reached
-  EXPECT_EQ(testCost, *lowestCost);
-  // Checking coordinates of goal and the end/last waypoint
-  EXPECT_EQ(path.localGoal, shortestPath.at(length-1));
+  std::pair<double, double> expectedGoal = shortestPath[length - 1];
+  double diff = path.euclideanDist(expectedGoal, goal);
+  EXPECT_LE(diff, path.goalThreshold);
 }
 
 /**
@@ -154,16 +154,24 @@ TEST(TestPathPlanner, testUpdateCost) {
   std::size_t testIndex = 0;
   path.totalCost.push_back(1000);
   path.parentNode.push_back(5);
-  double current_cost1 = 10000;
-  bool test1 = path.updateCost(testIndex, testIndex+10, current_cost1);
-  // Checking the case when current cost is more than total cost at node
-  EXPECT_EQ(test1, false);
-  double current_cost2 = 900;
-  bool test2 = path.updateCost(testIndex, testIndex+10, current_cost2);
-  // Checking the case when current cost is less than total cost at node
-  EXPECT_EQ(test2, true);
+  double current_cost1 = 900;
+  bool test1 = path.updateCost(testIndex, testIndex + 10, current_cost1);
+  // Checking the case when current cost is less than total cost at node and
+  // the node has not been visited
+  EXPECT_EQ(test1, true);
+  path.costCome[testIndex] = 900;
+  double current_cost2 = 10000;
+  bool test2 = path.updateCost(testIndex, testIndex + 10, current_cost2);
+  // Checking the case when current cost is more than total cost at node when
+  // the node has been visited
+  EXPECT_EQ(test2, false);
+  double current_cost3 = 800;
+  bool test3 = path.updateCost(testIndex, testIndex + 10, current_cost3);
+  // Checking the case when current cost is less than total cost at node when
+  //  the node has been visited
+  EXPECT_EQ(test3, true);
   // Checking if parent node is updated
-  EXPECT_EQ(path.parentNode.at(0), testIndex+10);
+  EXPECT_EQ(path.parentNode.at(testIndex), testIndex + 10);
 }
 
 /**
@@ -173,18 +181,22 @@ TEST(TestPathPlanner, testDifferential) {
   PathPlanner p;
   double ul = 2;
   double ur = 3;
-  double r = 0.2;
-  double length = 25;
+  double r = 0.033;
+  double length = 0.16;
   double dt = 1;
   std::size_t currentNode = 50;
   double theta = 0;
-  double dtheta = (r/length)*(ur - ul)*dt;
-  std::pair<double, double> coordTest = p.differential(ul, ur, theta, length,
-    r,dt, currentNode, dtheta);
+  double dtheta = (r / length) * (ur - ul) * dt;
+  std::pair<double, double> coordTest = p.differential(ul, ur, theta, length, r,
+                                                       dt, currentNode, dtheta);
+  coordTest.first = static_cast<int>(coordTest.first * 100);
+  coordTest.second = static_cast<int>(coordTest.second * 100);
+  coordTest.first /= 100;
+  coordTest.second /= 100;
   // Checking the new x coordinates from the movement
-  EXPECT_EQ(coordTest.first, 0.5);
+  EXPECT_NEAR(coordTest.first, -0.06, 1);
   // Checking the new y coordinates from the movement
-  EXPECT_EQ(coordTest.second, 50);
+  EXPECT_NEAR(coordTest.second, 50.78, 1);
 }
 
 /**
@@ -192,6 +204,9 @@ TEST(TestPathPlanner, testDifferential) {
  */
 TEST(TestPathPlanner, testAllActions) {
   PathPlanner p;
+  std::pair<double, double> start = std::make_pair(60, 130);
+  std::pair<double, double> goal = std::make_pair(269, 297);
+  p.setStart(start);
   std::size_t initialSize = p.stack.size();
   p.allActions(p.startIndex);
   std::size_t finalSize = p.stack.size();
@@ -205,10 +220,10 @@ TEST(TestPathPlanner, testAllActions) {
  */
 TEST(TestPathPlanner, testShowMap) {
   PathPlanner p;
-  std::vector<std::vector<std::size_t>> testMap = p.showMap();
+  std::vector<std::vector<int>> testMap = p.showMap();
   std::size_t rows = p.mapSize.first;
   std::size_t cols = p.mapSize.second;
   std::size_t testSize = rows * cols;
   // Checking the size of returned vector to be equal to map size
-  ASSERT_EQ(testMap.size(), testSize);
+  ASSERT_EQ(testMap.size() * testMap[0].size(), testSize);
 }

@@ -48,8 +48,11 @@
  */
 
 #include <gtest/gtest.h>
+#include <unistd.h>
+#include <ros/package.h>
 #include <tf/transform_broadcaster.h>
 #include <opencv2/aruco.hpp>
+#include <opencv2/highgui.hpp>
 #include "../include/warehouse_robot/pidController.hpp"
 #include "../include/warehouse_robot/turtlebotPerception.hpp"
 
@@ -85,13 +88,16 @@ TEST(PIDControllerTest, AngularVelTypeTest) {
  */
 TEST(PIDControllerTest, ControlParametersTypeTest) {
   PidController pidController;
-  double kP,kD,kI;
+  pidController.setKP(10, 10);
+  pidController.setKI(3.4, 4.5);
+  pidController.setKD(4.5, 3);
+  std::vector<double> kP, kD, kI;
   kP = pidController.getKP();
   kD = pidController.getKD();
   kI = pidController.getKI();
-  EXPECT_EQ(typeid(kP), typeid(double));  // Should Pass
-  EXPECT_EQ(typeid(kD), typeid(double));// Should Pass
-  EXPECT_EQ(typeid(kI), typeid(double));// Should Pass
+  EXPECT_EQ(typeid(kP), typeid(std::vector<double>));
+  EXPECT_EQ(typeid(kD), typeid(std::vector<double>));
+  EXPECT_EQ(typeid(kI), typeid(std::vector<double>));
 }
 /**
  * @brief Test case that checks if the calculated Euclidean Distance is correct
@@ -102,14 +108,14 @@ TEST(PIDControllerTest, EuclideanDistancePass) {
   currentPose.getOrigin().setX(10);
   currentPose.getOrigin().setY(10);
   currentPose.getOrigin().setZ(0);
-  currentPose.getRotation().setEulerZYX(0,0,0);
+  currentPose.getRotation().setRPY(0, 0, 0);
   desiredPose.getOrigin().setX(14);
   desiredPose.getOrigin().setY(13);
   desiredPose.getOrigin().setZ(0);
-  desiredPose.getRotation().setEulerZYX(0,0,0);
+  desiredPose.getRotation().setRPY(0, 0, 0);
   double expectPass = 5;
   double dist = pidController.euclideanDist(currentPose, desiredPose);
-  EXPECT_NEAR(expectPass,dist,0.01);  // Should Pass
+  EXPECT_NEAR(expectPass, dist, 0.01);  // Should Pass
 }
 /**
  * @brief Test case that checks if the calculated Euclidean Distance is of 
@@ -121,36 +127,61 @@ TEST(PIDControllerTest, EuclideanDistanceTypePass) {
   currentPose.getOrigin().setX(10);
   currentPose.getOrigin().setY(10);
   currentPose.getOrigin().setZ(0);
-  currentPose.getRotation().setEulerZYX(0,0,0);
+  currentPose.getRotation().setRPY(0, 0, 0);
   desiredPose.getOrigin().setX(14);
   desiredPose.getOrigin().setY(13);
   desiredPose.getOrigin().setZ(0);
-  desiredPose.getRotation().setEulerZYX(0,0,0);
+  desiredPose.getRotation().setRPY(0, 0, 0);
   double dist = pidController.euclideanDist(currentPose, desiredPose);
   EXPECT_EQ(typeid(dist), typeid(double));  // Should Pass
 }
 /**
  * @brief Test case that checks if the calculated velocities is correct
  */
-TEST(PIDControllerTest, VelocityPass) {
+TEST(PIDControllerTest, VelocityPassNeg) {
   PidController pidController;
+  ros::NodeHandle n;
   tf::Pose currentPose, desiredPose;
-  double linearVel, angVel, expectPassLin = 0.3, expectPassAng = 5;
-  currentPose.getOrigin().setX(10);
-  currentPose.getOrigin().setY(10);
-  currentPose.getRotation().setEulerZYX(0,0,0);
-  desiredPose.getOrigin().setX(14);
-  desiredPose.getOrigin().setY(13);
-  desiredPose.getOrigin().setZ(0);
-  desiredPose.getRotation().setEulerZYX(30,0,0);
-  pidController.setKP(80);
-  pidController.setKD(3);
-  pidController.setKI(4);
+  double linearVel, angVel, expectPassLin = 0.8, expectPassAng = -0.1;
+  currentPose.setOrigin(tf::Vector3(10, 10, 0));
+  currentPose.setRotation(tf::createQuaternionFromRPY(0, 0, 0));
+  currentPose.setOrigin(tf::Vector3(14, 13, 0));
+  desiredPose.setRotation(tf::createQuaternionFromRPY(0, 0, M_PI / 3));
+  pidController.setKP(80, 80);
+  pidController.setKD(3, 3);
+  pidController.setKI(4, 4);
+  pidController.setControllerNode(n);
+  pidController.setVelocityPub();
   pidController.calcVel(currentPose, desiredPose);
   linearVel = pidController.getLinearVel();
   angVel = pidController.getAngularVel();
-  EXPECT_NEAR(expectPassLin,linearVel,0.1);  // Should Pass
-  EXPECT_NEAR(expectPassAng,angVel,0.1);// Should Pass
+  EXPECT_NEAR(expectPassLin, linearVel, 0.1);
+  EXPECT_NEAR(expectPassAng, angVel, 0.1);
+}
+
+/**
+ * @brief Test case that checks if the calculated velocities is correct
+ * for an actual value of PID controller
+ */
+TEST(PIDControllerTest, VelocityPassPos) {
+  PidController pidController;
+  ros::NodeHandle n;
+  tf::Pose currentPose, desiredPose;
+  double linearVel, angVel, expectPassLin = 0.8, expectPassAng = -0.1;
+  currentPose.setOrigin(tf::Vector3(10, 10, 0));
+  currentPose.setRotation(tf::createQuaternionFromRPY(0, 0, 0));
+  currentPose.setOrigin(tf::Vector3(14, 13, 0));
+  desiredPose.setRotation(tf::createQuaternionFromRPY(0, 0, M_PI / 3));
+  pidController.setKP(0.02, 0.03);
+  pidController.setKD(0.03, 0.05);
+  pidController.setKI(0.04, 0.04);
+  pidController.setControllerNode(n);
+  pidController.setVelocityPub();
+  pidController.calcVel(currentPose, desiredPose);
+  linearVel = pidController.getLinearVel();
+  angVel = pidController.getAngularVel();
+  EXPECT_NEAR(expectPassLin, linearVel, 0.1);
+  EXPECT_NEAR(expectPassAng, angVel, 0.01);
 }
 /**
  * @brief Test case that checks if the calculated velocities are of type
@@ -163,48 +194,24 @@ TEST(PIDControllerTest, VelocityTypePass) {
   currentPose.getOrigin().setX(10);
   currentPose.getOrigin().setY(10);
   currentPose.getOrigin().setZ(0);
-  currentPose.getRotation().setEulerZYX(0,0,0);
+  currentPose.getRotation().setRPY(0, 0, 0);
   desiredPose.getOrigin().setX(14);
   desiredPose.getOrigin().setY(13);
   desiredPose.getOrigin().setZ(0);
-  desiredPose.getRotation().setEulerZYX(30,0,0);
-  pidController.setKP(80);
-  pidController.setKD(3);
-  pidController.setKI(4);
+  desiredPose.getRotation().setRPY(0.1, 0, 0);
+  pidController.setKP(80, 80);
+  pidController.setKD(3, 3);
+  pidController.setKI(4, 4);
+  ros::NodeHandle n;
+  pidController.setControllerNode(n);
+  pidController.setVelocityPub();
   pidController.calcVel(currentPose, desiredPose);
   linearVel = pidController.getLinearVel();
   angVel = pidController.getAngularVel();
-  EXPECT_EQ(typeid(linearVel), typeid(double));  // Should Pass
-  EXPECT_EQ(typeid(angVel), typeid(double));// Should Pass
+  EXPECT_EQ(typeid(linearVel), typeid(double));
+  EXPECT_EQ(typeid(angVel), typeid(double));
 }
-/**
- * @brief Test case that checks if the getter method of the collision variable
- */
-TEST(TurtlebotPerceptionTest, CollisionTypePass) {
-  TurtlebotPerception turtlebotPerception;
-  bool coll;
-  coll = turtlebotPerception.getCollide();
-  EXPECT_EQ(typeid(coll), typeid(bool));  // Should Pass
-}
-/**
- * @brief Test case that checks if the collision is detected
- */
-TEST(TurtlebotPerceptionTest, DetectCollisionPass) {
-  TurtlebotPerception turtlebotPerception;
-  bool coll;
-  coll = turtlebotPerception.detectCollision();
-  EXPECT_TRUE(coll);  // Should Pass
-}
-/**
- * @brief Test case that checks if the collision detector return value is 
- * boolean
- */
-TEST(TurtlebotPerceptionTest, DetectCollisionTypePass) {
-  TurtlebotPerception turtlebotPerception;
-  bool coll;
-  coll = turtlebotPerception.detectCollision();
-  EXPECT_EQ(typeid(coll), typeid(bool));  // Should Pass
-}
+
 /**
  * @brief Test case that checks if the marker is detected properly
  */
@@ -212,10 +219,22 @@ TEST(TurtlebotPerceptionTest, MarkerDetectionPass) {
   TurtlebotPerception turtlebotPerception;
   bool detectMarker;
   cv::Mat markerImage;
-  cv::Ptr<cv::aruco::Dictionary> dictionary = cv::aruco::getPredefinedDictionary(cv::aruco::DICT_6X6_250);
-  cv::aruco::drawMarker(dictionary, 23, 170, markerImage, 1);
+  std::string imagePath = ros::package::getPath("warehouse_robot");
+  imagePath.append("/data/models/marker0/materials/textures/marker_test6.png");
+  markerImage = cv::imread(imagePath);
   detectMarker = turtlebotPerception.detectArucoMarker(markerImage, 23);
   EXPECT_TRUE(detectMarker);  // Should Pass
+}
+
+/**
+ * @brief Test case that checks if the marker is not detected for image with zeros
+ */
+TEST(TurtlebotPerceptionTest, MarkerDetectionPassNeg) {
+  TurtlebotPerception turtlebotPerception;
+  bool detectMarker;
+  cv::Mat markerImage = cv::Mat::zeros(170, 170, CV_8UC1);
+  detectMarker = turtlebotPerception.detectArucoMarker(markerImage, 23);
+  EXPECT_FALSE(detectMarker);  // Should Pass
 }
 /**
  * @brief Test case that checks if the marker detector function returns boolean value
@@ -224,9 +243,38 @@ TEST(TurtlebotPerceptionTest, MarkerDetectionTypePass) {
   TurtlebotPerception turtlebotPerception;
   bool detectMarker;
   cv::Mat markerImage;
-  cv::Ptr<cv:aruco::Dictionary> dictionary = cv::aruco::getPredefinedDictionary(cv::aruco::DICT_6X6_250);
-  cv::aruco::drawMarker(dictionary, 23, 170, markerImage, 1);
+  std::string imagePath = ros::package::getPath("warehouse_robot");
+  imagePath.append("/data/models/marker0/materials/textures/marker_test6.png");
+  markerImage = cv::imread(imagePath);
   detectMarker = turtlebotPerception.detectArucoMarker(markerImage, 23);
   EXPECT_EQ(typeid(detectMarker), typeid(bool));  // Should Pass
+}
+
+/**
+ * @brief Test case that checks if the marker detector function returns boolean value
+ */
+TEST(TurtlebotPerceptionTest, calcVelPass) {
+  TurtlebotPerception turtlebotPerception;
+  bool detectMarker;
+  cv::Mat markerImage;
+  ros::NodeHandle n;
+  turtlebotPerception.setControllerNode(n);
+  turtlebotPerception.setPerceptionNode(n);
+  turtlebotPerception.setKD(0.5);
+  turtlebotPerception.setKP(0.1);
+  turtlebotPerception.setKI(0.01);
+  turtlebotPerception.setSubscribers();
+  std::string imagePath = ros::package::getPath("warehouse_robot");
+  imagePath.append("/data/models/marker0/materials/textures/marker_test6.png");
+  markerImage = cv::imread(imagePath);
+  detectMarker = turtlebotPerception.detectArucoMarker(markerImage, 23);
+  geometry_msgs::Twist vel;
+  vel = turtlebotPerception.calcVel();
+  EXPECT_EQ(vel.linear.x, 0);
+  EXPECT_EQ(vel.linear.y, 0);
+  EXPECT_EQ(vel.linear.z, 0);
+  EXPECT_EQ(vel.angular.x, 0);
+  EXPECT_EQ(vel.angular.y, 0);
+  EXPECT_EQ(vel.angular.z, -201.9);
 }
 

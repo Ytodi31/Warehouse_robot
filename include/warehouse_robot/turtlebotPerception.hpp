@@ -46,32 +46,139 @@
  * @date 11-27-2019
  */
 
-#ifndef INCLUDE_TURTLEBOTPERCEPTION_HPP_
-#define INCLUDE_TURTLEBOTPERCEPTION_HPP_
+#ifndef WAREHOUSE_ROBOT_SRC_WAREHOUSE_ROBOT_INCLUDE_WAREHOUSE_ROBOT_TURTLEBOTPERCEPTION_HPP_
+#define WAREHOUSE_ROBOT_SRC_WAREHOUSE_ROBOT_INCLUDE_WAREHOUSE_ROBOT_TURTLEBOTPERCEPTION_HPP_
 
+#include <sensor_msgs/Image.h>
+#include <cv_bridge/cv_bridge.h>
+#include <aruco/aruco.h>
+#include <aruco/markerdetector.h>
+#include <aruco/arucofidmarkers.h>
+#include <aruco/cvdrawingutils.h>
+#include <aruco/exports.h>
 #include <iostream>
-#include "ros/ros.h"
-#include <sensor_msgs/LaserScan.h>
+#include <opencv2/opencv.hpp>
 #include <opencv2/core/core.hpp>
+#include "ros/ros.h"
+#include <pidController.hpp>
 
-class TurtlebotPerception {
+/**
+ * @class TurtlebotPerception
+ * @ingroup warehouse_robot
+ * @brief To detect markers and provide pose to robot
+ */
+class TurtlebotPerception : public PidController {
  private:
-  //ROS Node handle object for perception
+   /**
+    * @brief Ros perception node
+    */
   ros::NodeHandle perceptionNode;
-  //ROS publisher object for perception
+
+  /**
+   * @brief Distance publisher for ROS
+   */
   ros::Publisher distPub;
-  //ROS subscriber object for perception
-  ros::Subscriber distSub;
-  //Boolean object to detect collision
-  bool collide;
+
+  /**
+   * @brief Image subscriber
+   */
+  ros::Subscriber imageSub;
+
+  /**
+   * @brief Marker x location
+   */
+  double marker_x = 0;
+
+  /**
+   * @brief Marker Y location
+   */
+  double marker_y = 0;
+
+  /**
+   * @brief  Controller Propotional gain
+   */
+  double kp;
+
+  /**
+   * @brief Controller Integral gain
+   */
+  double ki;
+
+  /**
+   * @brief Controller differential gain
+   */
+  double kd;
 
  public:
+   /**
+    * @brief Image translation matrix
+    */
+  cv::Mat translation;
+
   /**
-   * @brief Getter method for the Ros Node
-   * @param  none
-   * @return The current node handle for the perception
+   * @brief Image rotation matrix
    */
-  ros::NodeHandle getPerceptionNode();
+  cv::Mat rotMat;
+
+  /**
+   * @brief velocity function derived from PID controller module
+   */
+  using PidController::calcVel;
+
+  /**
+   * @brief Propotional gain setter derived from PID controller module
+   */
+  using PidController::setKP;
+
+  /**
+   * @brief Integral gain setter derived from PID controller module
+   */
+  using PidController::setKI;
+
+  /**
+   * @brief Derivative gain setter derived from PID controller module
+   */
+  using PidController::setKD;
+
+  /**
+   * @brief Image variable
+   */
+  cv::Mat img;
+
+  /**
+   * @brief Marker Area
+   */
+  double marker_area = 0;
+
+  /**
+   * @brief Flag set when the Aruco marker is detected
+   */
+  bool markerDetected = false;
+
+  /**
+   * @brief Setter method for the derivative gain
+   * @param  Derivative gain
+   * @return none
+   */
+  void setKD(double kD);
+  /**
+   * @brief Setter method for the propotional gain
+   * @param  Propotional gain
+   * @return none
+   */
+  void setKP(double kP);
+  /**
+   * @brief Setter method for the integral gain
+   * @param  Integral gain
+   * @return none
+   */
+  void setKI(double kI);
+  /**
+   * @brief Angular velocity function
+   * @param none
+   * @return Gives the angular velocity that is required to track the marker
+   */
+  geometry_msgs::Twist calcVel();
   /**
    * @brief Setter method for the Ros Node
    * @param  New Node to be set
@@ -79,53 +186,17 @@ class TurtlebotPerception {
    */
   void setPerceptionNode(ros::NodeHandle n);
   /**
-   * @brief Getter method for the distance publisher
-   * @param  none
-   * @return The current distance publisher
-   */
-  ros::Publisher getDistPub();
-  /**
-   * @brief Setter method for the distance publisher
-   * @param  New distance publisher to be set
-   * @return none
-   */
-  void setDistPub(ros::Publisher pub);
-  /**
-   * @brief Getter method for the distance subscriber
-   * @param  none
-   * @return The current distance subscriber
-   */
-  ros::Subscriber getDistSub();
-  /**
-   * @brief Setter method for the distance subscriber
-   * @param  New distance subscriber to be set
-   * @return none
-   */
-  void setDistSub(ros::Subscriber sub);
-  /**
-   * @brief Getter method for the collision parameter
-   * @param  none
-   * @return The boolean value for collision
-   */
-  bool getCollide();
-  /**
-   * @brief Setter method for the collision parameter
-   * @param boolean value for collision
-   * @return none
-   */
-  void setCollide(bool collision);
-  /**
-   * @brief Callback function to get the Laser scan data from the Turtlebot
-   * @param Planar laser range-finder data
-   * @return none
-   */
-  void sensorData(const sensor_msgs::LaserScan::ConstPtr &msg);
-  /**
-   * @brief Function to detect collision
+   * @brief Setter method for the Ros Subscribers
    * @param none
-   * @return true if obstacle detected
+   * @return none
    */
-  bool detectCollision();
+  void setSubscribers();
+  /**
+   * @brief Callback function to get the images from the Turtlebot kinect
+   * @param RGB image ddata
+   * @return none
+   */
+  void sensorImageData(const sensor_msgs::Image::ConstPtr msg);
   /**
    * @brief Function to detect the Aruco Marker
    * @param Frame containing the image to be processed and the markerId
@@ -134,11 +205,11 @@ class TurtlebotPerception {
    */
   bool detectArucoMarker(cv::Mat imageFrame, double markerId);
   /**
-   * @brief Function to detect the depth of the package for grasping
-   * @param Frame containing the image to be processed
-   * @return The calculated depth of the package
-   */
-  double packageDepth(cv::Mat packageImage);
+     * @brief Function to calculate the marker area
+     * @param none
+     * @return Area of the marker detected
+     */
+  double getMarkerArea();
 };
 
-#endif /* INCLUDE_TURTLEBOTPERCEPTION_HPP_ */
+#endif  // WAREHOUSE_ROBOT_SRC_WAREHOUSE_ROBOT_INCLUDE_WAREHOUSE_ROBOT_TURTLEBOTPERCEPTION_HPP_

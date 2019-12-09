@@ -29,7 +29,7 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
- *  @file localisation.cpp
+ *  @file localisation.hpp
  *  @date Nov 28, 2019
  *  @author Suyash Yeotikar (test-driver)
  *  @brief Localisation module header file
@@ -41,33 +41,58 @@
 #include <std_msgs/Float64.h>
 #include <tf/transform_listener.h>
 
-#ifndef INCLUDE_WAREHOUSE_ROBOT_LOCALISATION_HPP_
-#define INCLUDE_WAREHOUSE_ROBOT_LOCALISATION_HPP_
+#ifndef WAREHOUSE_ROBOT_SRC_WAREHOUSE_ROBOT_INCLUDE_WAREHOUSE_ROBOT_LOCALISATION_HPP_
+#define WAREHOUSE_ROBOT_SRC_WAREHOUSE_ROBOT_INCLUDE_WAREHOUSE_ROBOT_LOCALISATION_HPP_
 
 /**
  * @class Localisation
  * @ingroup warehouse_robot
  * @brief Class declaration for Localisation module
  */
-
 class Localisation {
  private:
+   /**
+    * @brief ros Node handle for local operations
+    */
     ros::NodeHandle localizationNode;
-    geometry_msgs::Pose localisationPose;
+
+    /**
+     * @brief double value holding uncertainity of pose received from SLAM
+     */
     double entropy;
+
+    /**
+     * @brief entropy limit above which pose values will be discarded
+     */
     double entropyThreshold = 0;
+
+    /**
+     * @brief publisher to publish the pose of the robot in image coordinates
+     */
     ros::Publisher mapPosePublisher;
+
+    /**
+     * @brief publisher to publish the pose of the robot in world coordinates
+     */
     ros::Publisher rawPosePublisher;
+
+    /**
+     * @brief subscriber to receive the entropy from slam module
+     */
     ros::Subscriber entropySubscriber;
+
+    /**
+     * @brief Transform listener, for frame transform between map and robot base
+     */
     tf::TransformListener mapToBaseTfListen;
 
- private:
     /*
      * @brief Callback function when subscribed to the topic which provides entropy (measure of accuracy) of the SLAM algorithm
      * @param msg entropy message holding the entropy value
      * @return none
      */
-    void EntropyCallback(const std_msgs::Float64::ConstPtr msg);
+    void EntropyCallback(const std_msgs::Float64::ConstPtr& msg);
+
     /*
      * @brief function to publish the pose that was obtained in
      * map coordinates (class variable)(extracted from tf listener)
@@ -75,6 +100,7 @@ class Localisation {
      * @return none
      */
     void PublishMapPose();
+
     /*
      * @brief function to publish the raw pose
      * (actual pose of the robot in the map)
@@ -82,6 +108,7 @@ class Localisation {
      * @return none
      */
     void PublishRawPose();
+
     /*
      * @brief function to obtain the position of Robot by passing
      * the transform between frames
@@ -92,21 +119,32 @@ class Localisation {
     void GetRobotCoordinate(tf::StampedTransform mapToRobot);
 
  public:
+   /**
+    * @brief Robot pose holding the robot pose received from SLAM
+    */
+    geometry_msgs::Pose localisationPose;
+
+   /*
+    * @brief Function to initialise members
+    * @param ros node handle
+    * @return none
+    */
+    void initSubscribers(ros::NodeHandle n);
+
     /*
      * @brief function to set the threshold of entropy
      * @param thresholdValue threshold value to be set
      * @return bool Boolean value specifying if the threshold was set or not
      */
     bool SetEntropyThreshold(double thresholdValue);
+
     /*
      * @brief function to execute the localisation functionality
      * assuming that the slam nodes of the robot have been launched
      * @param none
      * @return none
      */
-    void ExecuteLocalisation(ros::NodeHandle nh);
+    void ExecuteLocalisation();
 };
 
-#endif  // INCLUDE_WAREHOUSE_ROBOT_LOCALISATION_HPP_
-
-
+#endif  // WAREHOUSE_ROBOT_SRC_WAREHOUSE_ROBOT_INCLUDE_WAREHOUSE_ROBOT_LOCALISATION_HPP_

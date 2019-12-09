@@ -1,0 +1,83 @@
+\hypertarget{localisationTest_8cpp}{}\section{test/localisation\+Test.cpp File Reference}
+\label{localisationTest_8cpp}\index{test/localisation\+Test.\+cpp@{test/localisation\+Test.\+cpp}}
+
+
+\hyperlink{classLocalisation}{Localisation} module test file.  
+
+
+{\ttfamily \#include $<$gtest/gtest.\+h$>$}\\*
+{\ttfamily \#include $<$tf/transform\+\_\+listener.\+h$>$}\\*
+{\ttfamily \#include $<$tf/transform\+\_\+broadcaster.\+h$>$}\\*
+{\ttfamily \#include $<$ros/ros.\+h$>$}\\*
+{\ttfamily \#include $<$geometry\+\_\+msgs/\+Pose.\+h$>$}\\*
+{\ttfamily \#include \char`\"{}localisation\+Test\+Class.\+hpp\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}localisation.\+hpp\char`\"{}}\\*
+Include dependency graph for localisation\+Test.\+cpp\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{localisationTest_8cpp__incl}
+\end{center}
+\end{figure}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{localisationTest_8cpp_ae646e1a0c2edaed587c321e9aeaa3714}{T\+E\+ST} (\hyperlink{classLocalisationTest}{Localisation\+Test}, Entopy\+Test\+Positive)\hypertarget{localisationTest_8cpp_ae646e1a0c2edaed587c321e9aeaa3714}{}\label{localisationTest_8cpp_ae646e1a0c2edaed587c321e9aeaa3714}
+
+\begin{DoxyCompactList}\small\item\em test to check if the entropy threshold variable is set properly or not in case if appriopriate value is passed \end{DoxyCompactList}\item 
+\hyperlink{localisationTest_8cpp_a851f2da36a99b69832aaaa667f94b01d}{T\+E\+ST} (\hyperlink{classLocalisationTest}{Localisation\+Test}, Entropy\+Test\+Negative)\hypertarget{localisationTest_8cpp_a851f2da36a99b69832aaaa667f94b01d}{}\label{localisationTest_8cpp_a851f2da36a99b69832aaaa667f94b01d}
+
+\begin{DoxyCompactList}\small\item\em test to check the if the entropy thresold is set appropriately in case an an inappropriate value is passed. \end{DoxyCompactList}\item 
+\hyperlink{localisationTest_8cpp_ab654a3165ec74b9bd70505551a528951}{T\+E\+ST} (\hyperlink{classLocalisationTest}{Localisation\+Test}, Execute\+Localisation\+Positive)\hypertarget{localisationTest_8cpp_ab654a3165ec74b9bd70505551a528951}{}\label{localisationTest_8cpp_ab654a3165ec74b9bd70505551a528951}
+
+\begin{DoxyCompactList}\small\item\em test to check if the Robot Coordinate sets appropriate values or not when localisation is executed (positive test case where localisation is correct) \end{DoxyCompactList}\item 
+\hyperlink{localisationTest_8cpp_ac924bfdbc3a7dde82fef4491b9ace2a2}{T\+E\+ST} (\hyperlink{classLocalisationTest}{Localisation\+Test}, Execute\+Localisation\+Fallen\+Robot\+Yaxis)\hypertarget{localisationTest_8cpp_ac924bfdbc3a7dde82fef4491b9ace2a2}{}\label{localisationTest_8cpp_ac924bfdbc3a7dde82fef4491b9ace2a2}
+
+\begin{DoxyCompactList}\small\item\em test to check if the Robot Coordinate sets appropriate values or not when localisation is executed but Robot is fallen (incorrect\+Pose) \end{DoxyCompactList}\item 
+\hyperlink{localisationTest_8cpp_a2fea05bb65f20200a5f3386eeefa022e}{T\+E\+ST} (\hyperlink{classLocalisationTest}{Localisation\+Test}, Execute\+Localisation\+Fallen\+Robot\+Yaxis\+Neg)\hypertarget{localisationTest_8cpp_a2fea05bb65f20200a5f3386eeefa022e}{}\label{localisationTest_8cpp_a2fea05bb65f20200a5f3386eeefa022e}
+
+\begin{DoxyCompactList}\small\item\em test to check if the Robot Coordinate sets appropriate values or not when localisation is executed but Robot is fallen (incorrect\+Pose) \end{DoxyCompactList}\item 
+\hyperlink{localisationTest_8cpp_ac98f35c2a3a43241b1e87c38c81415ab}{T\+E\+ST} (\hyperlink{classLocalisationTest}{Localisation\+Test}, Execute\+Localisation\+Fallen\+Robot\+Xaxis)\hypertarget{localisationTest_8cpp_ac98f35c2a3a43241b1e87c38c81415ab}{}\label{localisationTest_8cpp_ac98f35c2a3a43241b1e87c38c81415ab}
+
+\begin{DoxyCompactList}\small\item\em test to check if the Robot Coordinate sets appropriate values or not when localisation is executed but Robot is fallen (incorrect\+Pose) \end{DoxyCompactList}\item 
+\hyperlink{localisationTest_8cpp_a8c3f2cdc08304f9c18739639d54dd38a}{T\+E\+ST} (\hyperlink{classLocalisationTest}{Localisation\+Test}, Execute\+Localisation\+Fallen\+Robot\+Xaxis\+Neg)\hypertarget{localisationTest_8cpp_a8c3f2cdc08304f9c18739639d54dd38a}{}\label{localisationTest_8cpp_a8c3f2cdc08304f9c18739639d54dd38a}
+
+\begin{DoxyCompactList}\small\item\em test to check if the Robot Coordinate sets appropriate values or not when localisation is executed but Robot is fallen (incorrect\+Pose) \end{DoxyCompactList}\item 
+\hyperlink{localisationTest_8cpp_aed7ba38c2e83c89a0c506fd52645087a}{T\+E\+ST} (\hyperlink{classLocalisationTest}{Localisation\+Test}, Execute\+Localisation\+Robot\+Out\+Of\+Map\+Corner1)\hypertarget{localisationTest_8cpp_aed7ba38c2e83c89a0c506fd52645087a}{}\label{localisationTest_8cpp_aed7ba38c2e83c89a0c506fd52645087a}
+
+\begin{DoxyCompactList}\small\item\em test to check if the Robot Coordinate sets appropriate values or not when localisation is executed but Robot is out of map bounds (incorrect\+Pose) \end{DoxyCompactList}\item 
+\hyperlink{localisationTest_8cpp_a3ef70cfcef9fe496649ebdfd3f141924}{T\+E\+ST} (\hyperlink{classLocalisationTest}{Localisation\+Test}, Execute\+Localisation\+Robot\+Out\+Of\+Map\+Corner2)\hypertarget{localisationTest_8cpp_a3ef70cfcef9fe496649ebdfd3f141924}{}\label{localisationTest_8cpp_a3ef70cfcef9fe496649ebdfd3f141924}
+
+\begin{DoxyCompactList}\small\item\em test to check if the Robot Coordinate sets appropriate values or not when localisation is executed but Robot is out of map bounds (incorrect\+Pose) \end{DoxyCompactList}\item 
+\hyperlink{localisationTest_8cpp_a6456e016378ae6c920daad7efe41d825}{T\+E\+ST} (\hyperlink{classLocalisationTest}{Localisation\+Test}, Execute\+Localisation\+Robot\+Z\+Pos)\hypertarget{localisationTest_8cpp_a6456e016378ae6c920daad7efe41d825}{}\label{localisationTest_8cpp_a6456e016378ae6c920daad7efe41d825}
+
+\begin{DoxyCompactList}\small\item\em test to check if the Robot Coordinate sets appropriate values or not when localisation is executed but Robot is out of map bounds (incorrect\+Pose) \end{DoxyCompactList}\item 
+\hyperlink{localisationTest_8cpp_ab7f351a93ab0e83e03ae42c65c8690dd}{T\+E\+ST} (\hyperlink{classLocalisationTest}{Localisation\+Test}, Execute\+Localisation\+Robot\+Z\+Pos\+Neg)\hypertarget{localisationTest_8cpp_ab7f351a93ab0e83e03ae42c65c8690dd}{}\label{localisationTest_8cpp_ab7f351a93ab0e83e03ae42c65c8690dd}
+
+\begin{DoxyCompactList}\small\item\em test to check if the Robot Coordinate sets appropriate values or not when localisation is executed but Robot is out of map bounds (incorrect\+Pose) \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+\hyperlink{classLocalisation}{Localisation} module test file. 
+
+B\+SD 3-\/\+Clause License
+
+Copyright (c) 2019 Suyash Yeotikar, Yashaarth Todi, Gautam Balachandran All rights reserved.
+
+Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met\+:
+
+
+\begin{DoxyEnumerate}
+\item Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
+\item Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
+\item Neither the name of the copyright holder nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
+\end{DoxyEnumerate}
+
+T\+H\+IS S\+O\+F\+T\+W\+A\+RE IS P\+R\+O\+V\+I\+D\+ED BY T\+HE C\+O\+P\+Y\+R\+I\+G\+HT H\+O\+L\+D\+E\+RS A\+ND C\+O\+N\+T\+R\+I\+B\+U\+T\+O\+RS \char`\"{}\+A\+S I\+S\char`\"{} A\+ND A\+NY E\+X\+P\+R\+E\+SS OR I\+M\+P\+L\+I\+ED W\+A\+R\+R\+A\+N\+T\+I\+ES, I\+N\+C\+L\+U\+D\+I\+NG, B\+UT N\+OT L\+I\+M\+I\+T\+ED TO, T\+HE I\+M\+P\+L\+I\+ED W\+A\+R\+R\+A\+N\+T\+I\+ES OF M\+E\+R\+C\+H\+A\+N\+T\+A\+B\+I\+L\+I\+TY A\+ND F\+I\+T\+N\+E\+SS F\+OR A P\+A\+R\+T\+I\+C\+U\+L\+AR P\+U\+R\+P\+O\+SE A\+RE D\+I\+S\+C\+L\+A\+I\+M\+ED. IN NO E\+V\+E\+NT S\+H\+A\+LL T\+HE C\+O\+P\+Y\+R\+I\+G\+HT H\+O\+L\+D\+ER OR C\+O\+N\+T\+R\+I\+B\+U\+T\+O\+RS BE L\+I\+A\+B\+LE F\+OR A\+NY D\+I\+R\+E\+CT, I\+N\+D\+I\+R\+E\+CT, I\+N\+C\+I\+D\+E\+N\+T\+AL, S\+P\+E\+C\+I\+AL, E\+X\+E\+M\+P\+L\+A\+RY, OR C\+O\+N\+S\+E\+Q\+U\+E\+N\+T\+I\+AL D\+A\+M\+A\+G\+ES (I\+N\+C\+L\+U\+D\+I\+NG, B\+UT N\+OT L\+I\+M\+I\+T\+ED TO, P\+R\+O\+C\+U\+R\+E\+M\+E\+NT OF S\+U\+B\+S\+T\+I\+T\+U\+TE G\+O\+O\+DS OR S\+E\+R\+V\+I\+C\+ES; L\+O\+SS OF U\+SE, D\+A\+TA, OR P\+R\+O\+F\+I\+TS; OR B\+U\+S\+I\+N\+E\+SS I\+N\+T\+E\+R\+R\+U\+P\+T\+I\+ON) H\+O\+W\+E\+V\+ER C\+A\+U\+S\+ED A\+ND ON A\+NY T\+H\+E\+O\+RY OF L\+I\+A\+B\+I\+L\+I\+TY, W\+H\+E\+T\+H\+ER IN C\+O\+N\+T\+R\+A\+CT, S\+T\+R\+I\+CT L\+I\+A\+B\+I\+L\+I\+TY, OR T\+O\+RT (I\+N\+C\+L\+U\+D\+I\+NG N\+E\+G\+L\+I\+G\+E\+N\+CE OR O\+T\+H\+E\+R\+W\+I\+SE) A\+R\+I\+S\+I\+NG IN A\+NY W\+AY O\+UT OF T\+HE U\+SE OF T\+H\+IS S\+O\+F\+T\+W\+A\+RE, E\+V\+EN IF A\+D\+V\+I\+S\+ED OF T\+HE P\+O\+S\+S\+I\+B\+I\+L\+I\+TY OF S\+U\+CH D\+A\+M\+A\+GE.
+
+\begin{DoxyDate}{Date}
+Nov 28, 2019 
+\end{DoxyDate}
+\begin{DoxyAuthor}{Author}
+Suyash Yeotikar (test-\/driver) 
+\end{DoxyAuthor}

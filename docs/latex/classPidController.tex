@@ -1,0 +1,380 @@
+\hypertarget{classPidController}{}\section{Pid\+Controller Class Reference}
+\label{classPidController}\index{Pid\+Controller@{Pid\+Controller}}
+
+
+Controller for position controller of Turtlebot3.  
+
+
+
+
+{\ttfamily \#include $<$pid\+Controller.\+hpp$>$}
+
+
+
+Inheritance diagram for Pid\+Controller\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=181pt]{classPidController__inherit__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \hyperlink{classPidController_a9fac1b4d96ee42bb5dcfe3233b62a43c}{set\+Controller\+Node} (ros\+::\+Node\+Handle n)
+\begin{DoxyCompactList}\small\item\em Setter method for the Ros Node. \end{DoxyCompactList}\item 
+void \hyperlink{classPidController_ab8266cd116e389dd9727b1004d30e550}{set\+Velocity\+Pub} ()
+\begin{DoxyCompactList}\small\item\em Getter method for the velocity publisher. \end{DoxyCompactList}\item 
+void \hyperlink{classPidController_a5b06cf528f6d76a3302895bb286bf635}{set\+Pose\+Sub} ()
+\begin{DoxyCompactList}\small\item\em Setter method for the pose subscriber. \end{DoxyCompactList}\item 
+tf\+::\+Pose \hyperlink{classPidController_af710fd85dbca2e5652fa72fe11ea686a}{get\+Pose} ()
+\begin{DoxyCompactList}\small\item\em Getter method for the pose. \end{DoxyCompactList}\item 
+double \hyperlink{classPidController_a4d2314f673a601146db48d638cec2fee}{get\+Linear\+Vel} ()
+\begin{DoxyCompactList}\small\item\em Getter method for the linear velocity. \end{DoxyCompactList}\item 
+double \hyperlink{classPidController_adbe1918df5a0a568f814f9cdbe2f4bd0}{get\+Angular\+Vel} ()
+\begin{DoxyCompactList}\small\item\em Getter method for the angular velocity. \end{DoxyCompactList}\item 
+std\+::vector$<$ double $>$ \hyperlink{classPidController_a0a384d931823901be789c032090e6953}{get\+KP} ()
+\begin{DoxyCompactList}\small\item\em Getter method for the Propotional gain. \end{DoxyCompactList}\item 
+void \hyperlink{classPidController_a7919dfdd721488b7062d031c295f94d9}{set\+KP} (double k\+P\+\_\+linear, double k\+P\+\_\+angular)
+\begin{DoxyCompactList}\small\item\em Setter method for the propotional gain. \end{DoxyCompactList}\item 
+std\+::vector$<$ double $>$ \hyperlink{classPidController_ad43a8028641d06477d7082cf29a05aa3}{get\+KD} ()
+\begin{DoxyCompactList}\small\item\em Getter method for the derivative gain. \end{DoxyCompactList}\item 
+void \hyperlink{classPidController_af2089d082303543f70b08a2a11e0c928}{set\+KD} (double k\+D\+\_\+linear, double k\+D\+\_\+angular)
+\begin{DoxyCompactList}\small\item\em Setter method for the derivative gain. \end{DoxyCompactList}\item 
+std\+::vector$<$ double $>$ \hyperlink{classPidController_a0d33ac884b7de8b3218f6c80239d7d7c}{get\+KI} ()
+\begin{DoxyCompactList}\small\item\em Getter method for the integral gain. \end{DoxyCompactList}\item 
+void \hyperlink{classPidController_ad77c4309d1bac07395a906be6985d801}{set\+KI} (double k\+I\+\_\+linear, double k\+I\+\_\+angular)
+\begin{DoxyCompactList}\small\item\em Setter method for the integral gain. \end{DoxyCompactList}\item 
+void \hyperlink{classPidController_a3be39f89aeb0c489ac55a93b2cf3afd9}{dist\+Call\+Back} (const geometry\+\_\+msgs\+::\+Pose\+Stamped\+::\+Const\+Ptr \&dist\+Msg)
+\begin{DoxyCompactList}\small\item\em Callback function to get the pose data from the Turtlebot. \end{DoxyCompactList}\item 
+double \hyperlink{classPidController_a6ebafee7b98417079b7a07433566ead1}{euclidean\+Dist} (tf\+::\+Pose current\+Pos, tf\+::\+Pose desired\+Pos)
+\begin{DoxyCompactList}\small\item\em Euclidean distance calculator. \end{DoxyCompactList}\item 
+void \hyperlink{classPidController_a08d0ca81d46313df3a5b3f0a8be29d87}{calc\+Vel} (tf\+::\+Pose current\+Pos, tf\+::\+Pose desired\+Pos)
+\begin{DoxyCompactList}\small\item\em Method to calculate the linear and angular velocity for the robot. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+double \hyperlink{classPidController_ae0bb8e89d63e54aca087b3b942be917b}{first\+\_\+x}\hypertarget{classPidController_ae0bb8e89d63e54aca087b3b942be917b}{}\label{classPidController_ae0bb8e89d63e54aca087b3b942be917b}
+
+\begin{DoxyCompactList}\small\item\em First x coordinate of goal. \end{DoxyCompactList}\item 
+double \hyperlink{classPidController_adbb772cd8b0b32160a0e799cdf61ce4e}{first\+\_\+y}\hypertarget{classPidController_adbb772cd8b0b32160a0e799cdf61ce4e}{}\label{classPidController_adbb772cd8b0b32160a0e799cdf61ce4e}
+
+\begin{DoxyCompactList}\small\item\em First y coordinate of goal. \end{DoxyCompactList}\item 
+double \hyperlink{classPidController_a7ff9fe60ecf9154015ca2500215c9e7d}{first\+Pose\+Flag}\hypertarget{classPidController_a7ff9fe60ecf9154015ca2500215c9e7d}{}\label{classPidController_a7ff9fe60ecf9154015ca2500215c9e7d}
+
+\begin{DoxyCompactList}\small\item\em Flag to record the firs pose\+Sub. \end{DoxyCompactList}\item 
+double \hyperlink{classPidController_a4a8fc9d57c993311e2ba819bce378f2a}{angular\+Vel}\hypertarget{classPidController_a4a8fc9d57c993311e2ba819bce378f2a}{}\label{classPidController_a4a8fc9d57c993311e2ba819bce378f2a}
+
+\begin{DoxyCompactList}\small\item\em Angular velocity of the robot. \end{DoxyCompactList}\item 
+double \hyperlink{classPidController_a1639cca8b32331b2ba351a130aa56443}{sum\+Angular\+Error} = 0\hypertarget{classPidController_a1639cca8b32331b2ba351a130aa56443}{}\label{classPidController_a1639cca8b32331b2ba351a130aa56443}
+
+\begin{DoxyCompactList}\small\item\em Sum of all angular errors. \end{DoxyCompactList}\item 
+double \hyperlink{classPidController_a98449c013b60820c2807104f03b87515}{last\+Angular\+Error} = 0\hypertarget{classPidController_a98449c013b60820c2807104f03b87515}{}\label{classPidController_a98449c013b60820c2807104f03b87515}
+
+\begin{DoxyCompactList}\small\item\em Angular error recently calculated. \end{DoxyCompactList}\item 
+ros\+::\+Publisher \hyperlink{classPidController_aface6715ed205a30d2772d9cbc339a1c}{velocity\+Pub}\hypertarget{classPidController_aface6715ed205a30d2772d9cbc339a1c}{}\label{classPidController_aface6715ed205a30d2772d9cbc339a1c}
+
+\begin{DoxyCompactList}\small\item\em R\+OS publisher object for velocity publishing. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Controller for position controller of Turtlebot3. 
+
+\subsection{Member Function Documentation}
+\index{Pid\+Controller@{Pid\+Controller}!calc\+Vel@{calc\+Vel}}
+\index{calc\+Vel@{calc\+Vel}!Pid\+Controller@{Pid\+Controller}}
+\subsubsection[{\texorpdfstring{calc\+Vel(tf\+::\+Pose current\+Pos, tf\+::\+Pose desired\+Pos)}{calcVel(tf::Pose currentPos, tf::Pose desiredPos)}}]{\setlength{\rightskip}{0pt plus 5cm}void Pid\+Controller\+::calc\+Vel (
+\begin{DoxyParamCaption}
+\item[{tf\+::\+Pose}]{current\+Pos, }
+\item[{tf\+::\+Pose}]{desired\+Pos}
+\end{DoxyParamCaption}
+)}\hypertarget{classPidController_a08d0ca81d46313df3a5b3f0a8be29d87}{}\label{classPidController_a08d0ca81d46313df3a5b3f0a8be29d87}
+
+
+Method to calculate the linear and angular velocity for the robot. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em Current} & pose and desired pose \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Calculated linear and angular velocity 
+\end{DoxyReturn}
+\index{Pid\+Controller@{Pid\+Controller}!dist\+Call\+Back@{dist\+Call\+Back}}
+\index{dist\+Call\+Back@{dist\+Call\+Back}!Pid\+Controller@{Pid\+Controller}}
+\subsubsection[{\texorpdfstring{dist\+Call\+Back(const geometry\+\_\+msgs\+::\+Pose\+Stamped\+::\+Const\+Ptr \&dist\+Msg)}{distCallBack(const geometry_msgs::PoseStamped::ConstPtr &distMsg)}}]{\setlength{\rightskip}{0pt plus 5cm}void Pid\+Controller\+::dist\+Call\+Back (
+\begin{DoxyParamCaption}
+\item[{const geometry\+\_\+msgs\+::\+Pose\+Stamped\+::\+Const\+Ptr \&}]{dist\+Msg}
+\end{DoxyParamCaption}
+)}\hypertarget{classPidController_a3be39f89aeb0c489ac55a93b2cf3afd9}{}\label{classPidController_a3be39f89aeb0c489ac55a93b2cf3afd9}
+
+
+Callback function to get the pose data from the Turtlebot. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em Turtlebot} & Pose \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+none 
+\end{DoxyReturn}
+\index{Pid\+Controller@{Pid\+Controller}!euclidean\+Dist@{euclidean\+Dist}}
+\index{euclidean\+Dist@{euclidean\+Dist}!Pid\+Controller@{Pid\+Controller}}
+\subsubsection[{\texorpdfstring{euclidean\+Dist(tf\+::\+Pose current\+Pos, tf\+::\+Pose desired\+Pos)}{euclideanDist(tf::Pose currentPos, tf::Pose desiredPos)}}]{\setlength{\rightskip}{0pt plus 5cm}double Pid\+Controller\+::euclidean\+Dist (
+\begin{DoxyParamCaption}
+\item[{tf\+::\+Pose}]{current\+Pos, }
+\item[{tf\+::\+Pose}]{desired\+Pos}
+\end{DoxyParamCaption}
+)}\hypertarget{classPidController_a6ebafee7b98417079b7a07433566ead1}{}\label{classPidController_a6ebafee7b98417079b7a07433566ead1}
+
+
+Euclidean distance calculator. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em Current} & pose and desired pose \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Calculated distance 
+\end{DoxyReturn}
+\index{Pid\+Controller@{Pid\+Controller}!get\+Angular\+Vel@{get\+Angular\+Vel}}
+\index{get\+Angular\+Vel@{get\+Angular\+Vel}!Pid\+Controller@{Pid\+Controller}}
+\subsubsection[{\texorpdfstring{get\+Angular\+Vel()}{getAngularVel()}}]{\setlength{\rightskip}{0pt plus 5cm}double Pid\+Controller\+::get\+Angular\+Vel (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\hypertarget{classPidController_adbe1918df5a0a568f814f9cdbe2f4bd0}{}\label{classPidController_adbe1918df5a0a568f814f9cdbe2f4bd0}
+
+
+Getter method for the angular velocity. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em none} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current angular velocity of the turtlebot 
+\end{DoxyReturn}
+\index{Pid\+Controller@{Pid\+Controller}!get\+KD@{get\+KD}}
+\index{get\+KD@{get\+KD}!Pid\+Controller@{Pid\+Controller}}
+\subsubsection[{\texorpdfstring{get\+K\+D()}{getKD()}}]{\setlength{\rightskip}{0pt plus 5cm}std\+::vector$<$ double $>$ Pid\+Controller\+::get\+KD (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\hypertarget{classPidController_ad43a8028641d06477d7082cf29a05aa3}{}\label{classPidController_ad43a8028641d06477d7082cf29a05aa3}
+
+
+Getter method for the derivative gain. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em none} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current derivative gain of the controller 
+\end{DoxyReturn}
+\index{Pid\+Controller@{Pid\+Controller}!get\+KI@{get\+KI}}
+\index{get\+KI@{get\+KI}!Pid\+Controller@{Pid\+Controller}}
+\subsubsection[{\texorpdfstring{get\+K\+I()}{getKI()}}]{\setlength{\rightskip}{0pt plus 5cm}std\+::vector$<$ double $>$ Pid\+Controller\+::get\+KI (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\hypertarget{classPidController_a0d33ac884b7de8b3218f6c80239d7d7c}{}\label{classPidController_a0d33ac884b7de8b3218f6c80239d7d7c}
+
+
+Getter method for the integral gain. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em none} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current integral gain of the controller 
+\end{DoxyReturn}
+\index{Pid\+Controller@{Pid\+Controller}!get\+KP@{get\+KP}}
+\index{get\+KP@{get\+KP}!Pid\+Controller@{Pid\+Controller}}
+\subsubsection[{\texorpdfstring{get\+K\+P()}{getKP()}}]{\setlength{\rightskip}{0pt plus 5cm}std\+::vector$<$ double $>$ Pid\+Controller\+::get\+KP (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\hypertarget{classPidController_a0a384d931823901be789c032090e6953}{}\label{classPidController_a0a384d931823901be789c032090e6953}
+
+
+Getter method for the Propotional gain. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em none} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current propotional gain of the controller 
+\end{DoxyReturn}
+\index{Pid\+Controller@{Pid\+Controller}!get\+Linear\+Vel@{get\+Linear\+Vel}}
+\index{get\+Linear\+Vel@{get\+Linear\+Vel}!Pid\+Controller@{Pid\+Controller}}
+\subsubsection[{\texorpdfstring{get\+Linear\+Vel()}{getLinearVel()}}]{\setlength{\rightskip}{0pt plus 5cm}double Pid\+Controller\+::get\+Linear\+Vel (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\hypertarget{classPidController_a4d2314f673a601146db48d638cec2fee}{}\label{classPidController_a4d2314f673a601146db48d638cec2fee}
+
+
+Getter method for the linear velocity. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em none} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current linear velocity of the turtlebot 
+\end{DoxyReturn}
+\index{Pid\+Controller@{Pid\+Controller}!get\+Pose@{get\+Pose}}
+\index{get\+Pose@{get\+Pose}!Pid\+Controller@{Pid\+Controller}}
+\subsubsection[{\texorpdfstring{get\+Pose()}{getPose()}}]{\setlength{\rightskip}{0pt plus 5cm}tf\+::\+Pose Pid\+Controller\+::get\+Pose (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\hypertarget{classPidController_af710fd85dbca2e5652fa72fe11ea686a}{}\label{classPidController_af710fd85dbca2e5652fa72fe11ea686a}
+
+
+Getter method for the pose. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em none} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current pose of the turtlebot 
+\end{DoxyReturn}
+\index{Pid\+Controller@{Pid\+Controller}!set\+Controller\+Node@{set\+Controller\+Node}}
+\index{set\+Controller\+Node@{set\+Controller\+Node}!Pid\+Controller@{Pid\+Controller}}
+\subsubsection[{\texorpdfstring{set\+Controller\+Node(ros\+::\+Node\+Handle n)}{setControllerNode(ros::NodeHandle n)}}]{\setlength{\rightskip}{0pt plus 5cm}void Pid\+Controller\+::set\+Controller\+Node (
+\begin{DoxyParamCaption}
+\item[{ros\+::\+Node\+Handle}]{n}
+\end{DoxyParamCaption}
+)}\hypertarget{classPidController_a9fac1b4d96ee42bb5dcfe3233b62a43c}{}\label{classPidController_a9fac1b4d96ee42bb5dcfe3233b62a43c}
+
+
+Setter method for the Ros Node. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em New} & Node to be set \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+none 
+\end{DoxyReturn}
+\index{Pid\+Controller@{Pid\+Controller}!set\+KD@{set\+KD}}
+\index{set\+KD@{set\+KD}!Pid\+Controller@{Pid\+Controller}}
+\subsubsection[{\texorpdfstring{set\+K\+D(double k\+D\+\_\+linear, double k\+D\+\_\+angular)}{setKD(double kD_linear, double kD_angular)}}]{\setlength{\rightskip}{0pt plus 5cm}void Pid\+Controller\+::set\+KD (
+\begin{DoxyParamCaption}
+\item[{double}]{k\+D\+\_\+linear, }
+\item[{double}]{k\+D\+\_\+angular}
+\end{DoxyParamCaption}
+)}\hypertarget{classPidController_af2089d082303543f70b08a2a11e0c928}{}\label{classPidController_af2089d082303543f70b08a2a11e0c928}
+
+
+Setter method for the derivative gain. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em New} & derivative gain to be set \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+none 
+\end{DoxyReturn}
+\index{Pid\+Controller@{Pid\+Controller}!set\+KI@{set\+KI}}
+\index{set\+KI@{set\+KI}!Pid\+Controller@{Pid\+Controller}}
+\subsubsection[{\texorpdfstring{set\+K\+I(double k\+I\+\_\+linear, double k\+I\+\_\+angular)}{setKI(double kI_linear, double kI_angular)}}]{\setlength{\rightskip}{0pt plus 5cm}void Pid\+Controller\+::set\+KI (
+\begin{DoxyParamCaption}
+\item[{double}]{k\+I\+\_\+linear, }
+\item[{double}]{k\+I\+\_\+angular}
+\end{DoxyParamCaption}
+)}\hypertarget{classPidController_ad77c4309d1bac07395a906be6985d801}{}\label{classPidController_ad77c4309d1bac07395a906be6985d801}
+
+
+Setter method for the integral gain. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em New} & integral gain to be set \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+none 
+\end{DoxyReturn}
+\index{Pid\+Controller@{Pid\+Controller}!set\+KP@{set\+KP}}
+\index{set\+KP@{set\+KP}!Pid\+Controller@{Pid\+Controller}}
+\subsubsection[{\texorpdfstring{set\+K\+P(double k\+P\+\_\+linear, double k\+P\+\_\+angular)}{setKP(double kP_linear, double kP_angular)}}]{\setlength{\rightskip}{0pt plus 5cm}void Pid\+Controller\+::set\+KP (
+\begin{DoxyParamCaption}
+\item[{double}]{k\+P\+\_\+linear, }
+\item[{double}]{k\+P\+\_\+angular}
+\end{DoxyParamCaption}
+)}\hypertarget{classPidController_a7919dfdd721488b7062d031c295f94d9}{}\label{classPidController_a7919dfdd721488b7062d031c295f94d9}
+
+
+Setter method for the propotional gain. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em New} & propotional gain to be set \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+none 
+\end{DoxyReturn}
+\index{Pid\+Controller@{Pid\+Controller}!set\+Pose\+Sub@{set\+Pose\+Sub}}
+\index{set\+Pose\+Sub@{set\+Pose\+Sub}!Pid\+Controller@{Pid\+Controller}}
+\subsubsection[{\texorpdfstring{set\+Pose\+Sub()}{setPoseSub()}}]{\setlength{\rightskip}{0pt plus 5cm}void Pid\+Controller\+::set\+Pose\+Sub (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\hypertarget{classPidController_a5b06cf528f6d76a3302895bb286bf635}{}\label{classPidController_a5b06cf528f6d76a3302895bb286bf635}
+
+
+Setter method for the pose subscriber. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em New} & pose subscriber to be set \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+none 
+\end{DoxyReturn}
+\index{Pid\+Controller@{Pid\+Controller}!set\+Velocity\+Pub@{set\+Velocity\+Pub}}
+\index{set\+Velocity\+Pub@{set\+Velocity\+Pub}!Pid\+Controller@{Pid\+Controller}}
+\subsubsection[{\texorpdfstring{set\+Velocity\+Pub()}{setVelocityPub()}}]{\setlength{\rightskip}{0pt plus 5cm}void Pid\+Controller\+::set\+Velocity\+Pub (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\hypertarget{classPidController_ab8266cd116e389dd9727b1004d30e550}{}\label{classPidController_ab8266cd116e389dd9727b1004d30e550}
+
+
+Getter method for the velocity publisher. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em none} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The current velocity publisher 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+include/warehouse\+\_\+robot/\hyperlink{pidController_8hpp}{pid\+Controller.\+hpp}\item 
+src/\hyperlink{pidController_8cpp}{pid\+Controller.\+cpp}\end{DoxyCompactItemize}

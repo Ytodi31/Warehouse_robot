@@ -45,106 +45,117 @@
  *
  * @date 11-28-2019
  */
+#include <sensor_msgs/Image.h>
+#include <cv_bridge/cv_bridge.h>
+#include <aruco/aruco.h>
+#include <aruco/markerdetector.h>
+#include <aruco/arucofidmarkers.h>
+#include <aruco/cvdrawingutils.h>
+#include <aruco/exports.h>
+#include <iostream>
+#include <opencv2/opencv.hpp>
+#include <opencv2/core/core.hpp>
+#include "ros/ros.h"
+#include <pidController.hpp>
+#include <turtlebotPerception.hpp>
 
-#include "turtlebotPerception.hpp"
-
-/**
- * @brief Getter method for the Ros Node
- * @param  none
- * @return The current node handle for the perception
- */
-ros::NodeHandle TurtlebotPerception::getPerceptionNode() {
-  return TurtlebotPerception::perceptionNode;
-}
-/**
- * @brief Setter method for the Ros Node
- * @param  New Node to be set
- * @return none
- */
 void TurtlebotPerception::setPerceptionNode(ros::NodeHandle n) {
   TurtlebotPerception::perceptionNode = n;
 }
-/**
- * @brief Getter method for the distance publisher
- * @param  none
- * @return The current distance publisher
- */
-ros::Publisher TurtlebotPerception::getDistPub() {
-  return TurtlebotPerception::distPub;
-}
-/**
- * @brief Setter method for the distance publisher
- * @param  New distance publisher to be set
- * @return none
- */
-void TurtlebotPerception::setDistPub(ros::Publisher pub) {
-  TurtlebotPerception::distPub = pub;
-}
-/**
- * @brief Getter method for the distance subscriber
- * @param  none
- * @return The current distance subscriber
- */
-ros::Subscriber TurtlebotPerception::getDistSub() {
-  return TurtlebotPerception::distSub;
-}
-/**
- * @brief Setter method for the distance subscriber
- * @param  New distance subscriber to be set
- * @return none
- */
-void TurtlebotPerception::setDistSub(ros::Subscriber sub) {
-  TurtlebotPerception::distSub = sub;
-}
-/**
- * @brief Getter method for the collision parameter
- * @param  none
- * @return The boolean value for collision
- */
-bool TurtlebotPerception::getCollide() {
-  return TurtlebotPerception::collide;
-}
-/**
- * @brief Setter method for the collision parameter
- * @param boolean value for collision
- * @return none
- */
-void TurtlebotPerception::setCollide(bool collision) {
-  TurtlebotPerception::collide = collision;
-}
-/**
- * @brief Callback function to get the Laser scan data from the Turtlebot
- * @param Planar laser range-finder data
- * @return none
- */
-void TurtlebotPerception::sensorData(
-    const sensor_msgs::LaserScan::ConstPtr &msg) {
-  ROS_INFO("Perception Callball range data size: [%s]", msg->ranges.size());
-}
-/**
- * @brief Mock of the function to detect collision
- * @param none
- * @return true if obstacle detected
- */
-bool TurtlebotPerception::detectCollision() {
-  return true;  // MOCK VALUE FOR TESTING!
-}
-/**
- * @brief Function to detect the Aruco Marker
- * @param Frame containing the image to be processed and the markerId
- *  to be compared with
- * @return True if the marker detected matches the package required
- */
-bool TurtlebotPerception::detectArucoMarker(cv::Mat imageFrame,
-                                            double markerId) {
-  return true;  // Mock
-}
-/**
- * @brief Function to detect the depth of the package for grasping
- * @param Frame containing the image to be processed
- * @return The calculated depth of the package
- */
-double TurtlebotPerception::packageDepth(cv::Mat packageImage) {
-  return 10.0;  // Mock
+
+void TurtlebotPerception::setSubscribers() {
+  imageSub = perceptionNode.subscribe("/om_with_tb3/camera/rgb/image_raw", 100,
+                                      &TurtlebotPerception::sensorImageData,
+                                      this);
 }
 
+void TurtlebotPerception::sensorImageData(
+    const sensor_msgs::Image::ConstPtr msg) {
+  cv_bridge::CvImageConstPtr cv_ptr;
+  cv_ptr = cv_bridge::toCvCopy(msg);
+  img = cv_ptr->image;
+}
+
+bool TurtlebotPerception::detectArucoMarker(cv::Mat imageFrame,
+                                            double markerId) {
+  aruco::MarkerDetector detector;
+  std::vector < aruco::Marker > markers;
+  cv::Mat camParams = cv::Mat::zeros(3, 3, CV_32F);
+  cv::Mat distortion = cv::Mat::zeros(1, 5, CV_32F);
+  camParams.at<float>(0, 0) = 530.4669406576809;
+  camParams.at<float>(0, 1) = 0.0;
+  camParams.at<float>(0, 2) = 320.5;
+  camParams.at<float>(1, 0) = 0.0;
+  camParams.at<float>(1, 1) = 530.4669406576809;
+  camParams.at<float>(1, 2) = 240.5;
+  camParams.at<float>(2, 2) = 1;
+  aruco::CameraParameters params;
+  detector.setMinMaxSize(0.01, 1);
+
+  detector.detect(imageFrame, markers, camParams, distortion, 0.073, false);
+  for (auto mark : markers) {
+    if (mark.id == 985) {
+      markerDetected = true;
+      marker_x = mark.getCenter().x;
+      marker_y = mark.getCenter().y;
+      marker_area = mark.getArea();
+      translation = mark.Tvec.clone();
+      rotMat = mark.Rvec.clone();
+      ROS_ERROR_STREAM("marker x" << mark.getCenter().x);
+      ROS_ERROR_STREAM("marker y" << mark.getCenter().y);
+      ROS_ERROR_STREAM("translation" << translation);
+      ROS_ERROR_STREAM("rotation" << rotMat);
+    }
+  }
+  return markerDetected;
+}
+
+void TurtlebotPerception::setKP(double kpin) {
+  kp = kpin;
+  ROS_ERROR_STREAM("KP:" << kp);
+}
+
+void TurtlebotPerception::setKI(double kiin) {
+  ki = kiin;
+}
+
+void TurtlebotPerception::setKD(double kdin) {
+  kd = kdin;
+}
+
+geometry_msgs::Twist TurtlebotPerception::calcVel() {
+  geometry_msgs::Twist vel;
+  if (markerDetected) {
+    double error = 0;
+    double error_diff = 0;
+    error = img.cols / 2 - marker_x;
+    ROS_ERROR_STREAM("Perception ERROR: " << error);
+    if (abs(error) > 10) {
+      error_diff = error - lastAngularError;
+      angularVel = kp * error + ki * sumAngularError + kd * error_diff;
+      lastAngularError = error;
+      vel.linear.x = 0;
+      vel.linear.y = 0;
+      vel.linear.z = 0;
+      vel.angular.x = 0;
+      vel.angular.y = 0;
+      vel.angular.z = angularVel;
+    } else {
+      vel.linear.x = 0;
+      vel.linear.y = 0;
+      vel.linear.z = 0;
+      vel.angular.x = 0;
+      vel.angular.y = 0;
+      vel.angular.z = 0;
+    }
+  } else {
+    vel.linear.x = 0;
+    vel.linear.y = 0;
+    vel.linear.z = 0;
+    vel.angular.x = 0;
+    vel.angular.y = 0;
+    vel.angular.z = 0.08;
+  }
+  ROS_ERROR_STREAM("Angular velocity" << vel.angular.z);
+  return vel;
+}

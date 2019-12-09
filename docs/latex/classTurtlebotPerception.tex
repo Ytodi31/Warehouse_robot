@@ -1,0 +1,252 @@
+\hypertarget{classTurtlebotPerception}{}\section{Turtlebot\+Perception Class Reference}
+\label{classTurtlebotPerception}\index{Turtlebot\+Perception@{Turtlebot\+Perception}}
+
+
+To detect markers and provide pose to robot.  
+
+
+
+
+{\ttfamily \#include $<$turtlebot\+Perception.\+hpp$>$}
+
+
+
+Inheritance diagram for Turtlebot\+Perception\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=181pt]{classTurtlebotPerception__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for Turtlebot\+Perception\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=181pt]{classTurtlebotPerception__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \hyperlink{classTurtlebotPerception_aad31358d5ee035f5f948943508e58a43}{set\+KD} (double kD)
+\begin{DoxyCompactList}\small\item\em Setter method for the derivative gain. \end{DoxyCompactList}\item 
+void \hyperlink{classTurtlebotPerception_a25b85524dc8671c4560dcafd44ded89c}{set\+KP} (double kP)
+\begin{DoxyCompactList}\small\item\em Setter method for the propotional gain. \end{DoxyCompactList}\item 
+void \hyperlink{classTurtlebotPerception_a026f0e2a818a2f8a5959fc7825af2a11}{set\+KI} (double kI)
+\begin{DoxyCompactList}\small\item\em Setter method for the integral gain. \end{DoxyCompactList}\item 
+geometry\+\_\+msgs\+::\+Twist \hyperlink{classTurtlebotPerception_af8626b9948ab26c7637914a8a3b269a3}{calc\+Vel} ()
+\begin{DoxyCompactList}\small\item\em Angular velocity function. \end{DoxyCompactList}\item 
+void \hyperlink{classTurtlebotPerception_a0e516c98e39e292f03039f6abf156306}{set\+Perception\+Node} (ros\+::\+Node\+Handle n)
+\begin{DoxyCompactList}\small\item\em Setter method for the Ros Node. \end{DoxyCompactList}\item 
+void \hyperlink{classTurtlebotPerception_a6488f8f1f4f33efcbdceda9d975b9122}{set\+Subscribers} ()
+\begin{DoxyCompactList}\small\item\em Setter method for the Ros Subscribers. \end{DoxyCompactList}\item 
+void \hyperlink{classTurtlebotPerception_a9c6a0052da899680aef285d9ac746782}{sensor\+Image\+Data} (const sensor\+\_\+msgs\+::\+Image\+::\+Const\+Ptr msg)
+\begin{DoxyCompactList}\small\item\em Callback function to get the images from the Turtlebot kinect. \end{DoxyCompactList}\item 
+bool \hyperlink{classTurtlebotPerception_a6d28b2ca7782df6f0c7719752f8ea2b8}{detect\+Aruco\+Marker} (cv\+::\+Mat image\+Frame, double marker\+Id)
+\begin{DoxyCompactList}\small\item\em Function to detect the Aruco Marker. \end{DoxyCompactList}\item 
+double \hyperlink{classTurtlebotPerception_a2b856b1b813c96c6991089615032c8ac}{get\+Marker\+Area} ()
+\begin{DoxyCompactList}\small\item\em Function to calculate the marker area. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+cv\+::\+Mat \hyperlink{classTurtlebotPerception_ab2990c8e86ccebc227d88d409ab6331b}{translation}\hypertarget{classTurtlebotPerception_ab2990c8e86ccebc227d88d409ab6331b}{}\label{classTurtlebotPerception_ab2990c8e86ccebc227d88d409ab6331b}
+
+\begin{DoxyCompactList}\small\item\em Image translation matrix. \end{DoxyCompactList}\item 
+cv\+::\+Mat \hyperlink{classTurtlebotPerception_ad925de083f0e760e59f8c2e320bd6f38}{rot\+Mat}\hypertarget{classTurtlebotPerception_ad925de083f0e760e59f8c2e320bd6f38}{}\label{classTurtlebotPerception_ad925de083f0e760e59f8c2e320bd6f38}
+
+\begin{DoxyCompactList}\small\item\em Image rotation matrix. \end{DoxyCompactList}\item 
+cv\+::\+Mat \hyperlink{classTurtlebotPerception_ac97f85cc82d1f51a3ed3270d6c0d8325}{img}\hypertarget{classTurtlebotPerception_ac97f85cc82d1f51a3ed3270d6c0d8325}{}\label{classTurtlebotPerception_ac97f85cc82d1f51a3ed3270d6c0d8325}
+
+\begin{DoxyCompactList}\small\item\em Image variable. \end{DoxyCompactList}\item 
+double \hyperlink{classTurtlebotPerception_a175e02584b29cab5d6d6a3551ae51fb2}{marker\+\_\+area} = 0\hypertarget{classTurtlebotPerception_a175e02584b29cab5d6d6a3551ae51fb2}{}\label{classTurtlebotPerception_a175e02584b29cab5d6d6a3551ae51fb2}
+
+\begin{DoxyCompactList}\small\item\em Marker Area. \end{DoxyCompactList}\item 
+bool \hyperlink{classTurtlebotPerception_abf558ba5d1fb9c224029a9f3e8618a2c}{marker\+Detected} = false\hypertarget{classTurtlebotPerception_abf558ba5d1fb9c224029a9f3e8618a2c}{}\label{classTurtlebotPerception_abf558ba5d1fb9c224029a9f3e8618a2c}
+
+\begin{DoxyCompactList}\small\item\em Flag set when the Aruco marker is detected. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+To detect markers and provide pose to robot. 
+
+\subsection{Member Function Documentation}
+\index{Turtlebot\+Perception@{Turtlebot\+Perception}!calc\+Vel@{calc\+Vel}}
+\index{calc\+Vel@{calc\+Vel}!Turtlebot\+Perception@{Turtlebot\+Perception}}
+\subsubsection[{\texorpdfstring{calc\+Vel()}{calcVel()}}]{\setlength{\rightskip}{0pt plus 5cm}geometry\+\_\+msgs\+::\+Twist Turtlebot\+Perception\+::calc\+Vel (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\hypertarget{classTurtlebotPerception_af8626b9948ab26c7637914a8a3b269a3}{}\label{classTurtlebotPerception_af8626b9948ab26c7637914a8a3b269a3}
+
+
+Angular velocity function. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em none} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Gives the angular velocity that is required to track the marker 
+\end{DoxyReturn}
+\index{Turtlebot\+Perception@{Turtlebot\+Perception}!detect\+Aruco\+Marker@{detect\+Aruco\+Marker}}
+\index{detect\+Aruco\+Marker@{detect\+Aruco\+Marker}!Turtlebot\+Perception@{Turtlebot\+Perception}}
+\subsubsection[{\texorpdfstring{detect\+Aruco\+Marker(cv\+::\+Mat image\+Frame, double marker\+Id)}{detectArucoMarker(cv::Mat imageFrame, double markerId)}}]{\setlength{\rightskip}{0pt plus 5cm}bool Turtlebot\+Perception\+::detect\+Aruco\+Marker (
+\begin{DoxyParamCaption}
+\item[{cv\+::\+Mat}]{image\+Frame, }
+\item[{double}]{marker\+Id}
+\end{DoxyParamCaption}
+)}\hypertarget{classTurtlebotPerception_a6d28b2ca7782df6f0c7719752f8ea2b8}{}\label{classTurtlebotPerception_a6d28b2ca7782df6f0c7719752f8ea2b8}
+
+
+Function to detect the Aruco Marker. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em Frame} & containing the image to be processed and the marker\+Id to be compared with \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+True if the marker detected matches the package required 
+\end{DoxyReturn}
+\index{Turtlebot\+Perception@{Turtlebot\+Perception}!get\+Marker\+Area@{get\+Marker\+Area}}
+\index{get\+Marker\+Area@{get\+Marker\+Area}!Turtlebot\+Perception@{Turtlebot\+Perception}}
+\subsubsection[{\texorpdfstring{get\+Marker\+Area()}{getMarkerArea()}}]{\setlength{\rightskip}{0pt plus 5cm}double Turtlebot\+Perception\+::get\+Marker\+Area (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\hypertarget{classTurtlebotPerception_a2b856b1b813c96c6991089615032c8ac}{}\label{classTurtlebotPerception_a2b856b1b813c96c6991089615032c8ac}
+
+
+Function to calculate the marker area. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em none} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Area of the marker detected 
+\end{DoxyReturn}
+\index{Turtlebot\+Perception@{Turtlebot\+Perception}!sensor\+Image\+Data@{sensor\+Image\+Data}}
+\index{sensor\+Image\+Data@{sensor\+Image\+Data}!Turtlebot\+Perception@{Turtlebot\+Perception}}
+\subsubsection[{\texorpdfstring{sensor\+Image\+Data(const sensor\+\_\+msgs\+::\+Image\+::\+Const\+Ptr msg)}{sensorImageData(const sensor_msgs::Image::ConstPtr msg)}}]{\setlength{\rightskip}{0pt plus 5cm}void Turtlebot\+Perception\+::sensor\+Image\+Data (
+\begin{DoxyParamCaption}
+\item[{const sensor\+\_\+msgs\+::\+Image\+::\+Const\+Ptr}]{msg}
+\end{DoxyParamCaption}
+)}\hypertarget{classTurtlebotPerception_a9c6a0052da899680aef285d9ac746782}{}\label{classTurtlebotPerception_a9c6a0052da899680aef285d9ac746782}
+
+
+Callback function to get the images from the Turtlebot kinect. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em R\+GB} & image ddata \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+none 
+\end{DoxyReturn}
+\index{Turtlebot\+Perception@{Turtlebot\+Perception}!set\+KD@{set\+KD}}
+\index{set\+KD@{set\+KD}!Turtlebot\+Perception@{Turtlebot\+Perception}}
+\subsubsection[{\texorpdfstring{set\+K\+D(double k\+D)}{setKD(double kD)}}]{\setlength{\rightskip}{0pt plus 5cm}void Turtlebot\+Perception\+::set\+KD (
+\begin{DoxyParamCaption}
+\item[{double}]{kD}
+\end{DoxyParamCaption}
+)}\hypertarget{classTurtlebotPerception_aad31358d5ee035f5f948943508e58a43}{}\label{classTurtlebotPerception_aad31358d5ee035f5f948943508e58a43}
+
+
+Setter method for the derivative gain. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em Derivative} & gain \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+none 
+\end{DoxyReturn}
+\index{Turtlebot\+Perception@{Turtlebot\+Perception}!set\+KI@{set\+KI}}
+\index{set\+KI@{set\+KI}!Turtlebot\+Perception@{Turtlebot\+Perception}}
+\subsubsection[{\texorpdfstring{set\+K\+I(double k\+I)}{setKI(double kI)}}]{\setlength{\rightskip}{0pt plus 5cm}void Turtlebot\+Perception\+::set\+KI (
+\begin{DoxyParamCaption}
+\item[{double}]{kI}
+\end{DoxyParamCaption}
+)}\hypertarget{classTurtlebotPerception_a026f0e2a818a2f8a5959fc7825af2a11}{}\label{classTurtlebotPerception_a026f0e2a818a2f8a5959fc7825af2a11}
+
+
+Setter method for the integral gain. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em Integral} & gain \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+none 
+\end{DoxyReturn}
+\index{Turtlebot\+Perception@{Turtlebot\+Perception}!set\+KP@{set\+KP}}
+\index{set\+KP@{set\+KP}!Turtlebot\+Perception@{Turtlebot\+Perception}}
+\subsubsection[{\texorpdfstring{set\+K\+P(double k\+P)}{setKP(double kP)}}]{\setlength{\rightskip}{0pt plus 5cm}void Turtlebot\+Perception\+::set\+KP (
+\begin{DoxyParamCaption}
+\item[{double}]{kP}
+\end{DoxyParamCaption}
+)}\hypertarget{classTurtlebotPerception_a25b85524dc8671c4560dcafd44ded89c}{}\label{classTurtlebotPerception_a25b85524dc8671c4560dcafd44ded89c}
+
+
+Setter method for the propotional gain. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em Propotional} & gain \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+none 
+\end{DoxyReturn}
+\index{Turtlebot\+Perception@{Turtlebot\+Perception}!set\+Perception\+Node@{set\+Perception\+Node}}
+\index{set\+Perception\+Node@{set\+Perception\+Node}!Turtlebot\+Perception@{Turtlebot\+Perception}}
+\subsubsection[{\texorpdfstring{set\+Perception\+Node(ros\+::\+Node\+Handle n)}{setPerceptionNode(ros::NodeHandle n)}}]{\setlength{\rightskip}{0pt plus 5cm}void Turtlebot\+Perception\+::set\+Perception\+Node (
+\begin{DoxyParamCaption}
+\item[{ros\+::\+Node\+Handle}]{n}
+\end{DoxyParamCaption}
+)}\hypertarget{classTurtlebotPerception_a0e516c98e39e292f03039f6abf156306}{}\label{classTurtlebotPerception_a0e516c98e39e292f03039f6abf156306}
+
+
+Setter method for the Ros Node. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em New} & Node to be set \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+none 
+\end{DoxyReturn}
+\index{Turtlebot\+Perception@{Turtlebot\+Perception}!set\+Subscribers@{set\+Subscribers}}
+\index{set\+Subscribers@{set\+Subscribers}!Turtlebot\+Perception@{Turtlebot\+Perception}}
+\subsubsection[{\texorpdfstring{set\+Subscribers()}{setSubscribers()}}]{\setlength{\rightskip}{0pt plus 5cm}void Turtlebot\+Perception\+::set\+Subscribers (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\hypertarget{classTurtlebotPerception_a6488f8f1f4f33efcbdceda9d975b9122}{}\label{classTurtlebotPerception_a6488f8f1f4f33efcbdceda9d975b9122}
+
+
+Setter method for the Ros Subscribers. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em none} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+none 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+include/warehouse\+\_\+robot/\hyperlink{turtlebotPerception_8hpp}{turtlebot\+Perception.\+hpp}\item 
+src/\hyperlink{turtlebotPerception_8cpp}{turtlebot\+Perception.\+cpp}\end{DoxyCompactItemize}

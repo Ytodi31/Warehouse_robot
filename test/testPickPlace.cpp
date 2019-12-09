@@ -45,67 +45,59 @@
  *
  * @date 11-30-2019
  */
- #include "ros/ros.h"
- #include "gtest/gtest.h"
-
- #include "PickPlace.hpp"
+  #include <open_manipulator_msgs/GetKinematicsPose.h>
+  #include "ros/ros.h"
+  #include "gtest/gtest.h"
+  #include "PickPlace.hpp"
 
  /**
-  * @brief Test to check the member function checkGripperState of class
+  * @brief Test to check the member function setPose of class
   * PickPlace
   */
-TEST(TestPickPlace, testGripperState) {
-  PickPlace manipulator;
-  manipulator.robotState = 1;
-  bool gripperState = manipulator.checkGripperState();
-  // Checks if the gripper is closed when the robot is moving
-  EXPECT_EQ(gripperState, true);
+TEST(TestPickPlace, testSetPose) {
+  geometry_msgs::Pose testPose;
+  ros::NodeHandle t;
+  testPose.position.x = 0.198448840528;
+  testPose.position.y = 6.60363761286e-05;
+  testPose.position.z = 0.301622770805;
+  testPose.orientation.x = -5.11700663643e-07;
+  testPose.orientation.y =  0.00431527188029;
+  testPose.orientation.z = 0.000118577904216;
+  testPose.orientation.w = 0.99999068214;
+  PickPlace testArm;
+  bool testSrvResp = testArm.setPose(testPose);
+  EXPECT_EQ(typeid(testSrvResp), typeid(bool));
 }
 
 /**
- * @brief Test to check the member function setPick of class
+ * @brief Test to check the member function setGripper of class
  * PickPlace
  */
-TEST(TestPickPlace, testSetPick) {
-  PickPlace manipulator;
-  geometry_msgs::Pose pickPose;
-  pickPose.position.x = 1.0;
-  pickPose.position.y = 2.0;
-  pickPose.position.z = 3.0;
-  pickPose.orientation.x = 4.0;
-  pickPose.orientation.y = 5.0;
-  pickPose.orientation.z = 6.0;
-  pickPose.orientation.w = 7.0;
-  manipulator.setPick();
-  ASSERT_EQ(pickPose.position.x, manipulator.pickPose.position.x);
-  ASSERT_EQ(pickPose.position.y, manipulator.pickPose.position.y);
-  ASSERT_EQ(pickPose.position.z, manipulator.pickPose.position.z);
-  ASSERT_EQ(pickPose.orientation.x, manipulator.pickPose.orientation.x);
-  ASSERT_EQ(pickPose.orientation.y, manipulator.pickPose.orientation.y);
-  ASSERT_EQ(pickPose.orientation.z, manipulator.pickPose.orientation.z);
-  ASSERT_EQ(pickPose.orientation.w, manipulator.pickPose.orientation.w);
+TEST(TestPickPlace, testSetGripper) {
+  PickPlace testArm;
+  std::vector<double>open{0.01};
+  bool testGripperState = testArm.setGripper(open);
+  EXPECT_EQ(typeid(testGripperState), typeid(bool));
 }
 
 /**
- * @brief Test to check the member function setPlace of class
+ * @brief Test to check the member function executePick of class
  * PickPlace
  */
-TEST(TestPickPlace, testSetPlace) {
+  TEST(TestPickPlace, testExecutePick) {
   PickPlace manipulator;
-  geometry_msgs::Pose placePose;
-  placePose.position.x = 8;
-  placePose.position.y = 9;
-  placePose.position.z = 10;
-  placePose.orientation.x = 11;
-  placePose.orientation.y = 12;
-  placePose.orientation.z = 13;
-  placePose.orientation.w = 14;
-  manipulator.setPick();
-  ASSERT_EQ(placePose.position.x, manipulator.placePose.position.x);
-  ASSERT_EQ(placePose.position.y, manipulator.placePose.position.y);
-  ASSERT_EQ(placePose.position.z, manipulator.placePose.position.z);
-  ASSERT_EQ(placePose.orientation.x, manipulator.placePose.orientation.x);
-  ASSERT_EQ(placePose.orientation.y, manipulator.placePose.orientation.y);
-  ASSERT_EQ(placePose.orientation.z, manipulator.placePose.orientation.z);
-  ASSERT_EQ(placePose.orientation.w, manipulator.placePose.orientation.w);
-}
+  ros::NodeHandle t;
+  bool testPick = manipulator.executePick(t);
+  EXPECT_EQ(typeid(testPick), typeid(bool));
+  }
+
+ /**
+  * @brief Test to check the member function executePlace of class
+  * PickPlace
+  */
+  TEST(TestPickPlace, testExecutePlace) {
+    PickPlace manipulator;
+    ros::NodeHandle t;
+    bool testPlace = manipulator.executePlace(t);
+    EXPECT_EQ(typeid(testPlace), typeid(bool));
+  }

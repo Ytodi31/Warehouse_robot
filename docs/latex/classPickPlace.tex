@@ -1,0 +1,140 @@
+\hypertarget{classPickPlace}{}\section{Pick\+Place Class Reference}
+\label{classPickPlace}\index{Pick\+Place@{Pick\+Place}}
+
+
+\hyperlink{classPickPlace}{Pick\+Place} class controls the manipulator on the Turtlebot.  
+
+
+
+
+{\ttfamily \#include $<$Pick\+Place.\+hpp$>$}
+
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classPickPlace_add78282d6d4fa5db0f7606669d555633}{Pick\+Place} ()\hypertarget{classPickPlace_add78282d6d4fa5db0f7606669d555633}{}\label{classPickPlace_add78282d6d4fa5db0f7606669d555633}
+
+\begin{DoxyCompactList}\small\item\em Class constructor. \end{DoxyCompactList}\item 
+\hyperlink{classPickPlace_a621f6042ec47e137fd307e3763ede691}{$\sim$\+Pick\+Place} ()\hypertarget{classPickPlace_a621f6042ec47e137fd307e3763ede691}{}\label{classPickPlace_a621f6042ec47e137fd307e3763ede691}
+
+\begin{DoxyCompactList}\small\item\em Class Destructor. \end{DoxyCompactList}\item 
+bool \hyperlink{classPickPlace_a51c838f80b9c4e081d67799bbfba334c}{execute\+Pick} (ros\+::\+Node\+Handle)
+\begin{DoxyCompactList}\small\item\em Function that executes the pick up operation of manipulator. \end{DoxyCompactList}\item 
+bool \hyperlink{classPickPlace_a796ffb05d862d37d753dca1ea1db6165}{execute\+Place} (ros\+::\+Node\+Handle)
+\begin{DoxyCompactList}\small\item\em Function that executes the place operation of manipulator. \end{DoxyCompactList}\item 
+bool \hyperlink{classPickPlace_a8a205b4bf0394626ebc68bd4c37a5182}{set\+Pose} (geometry\+\_\+msgs\+::\+Pose)
+\begin{DoxyCompactList}\small\item\em Function that sets the kinematic pose for pick up and calls service. \end{DoxyCompactList}\item 
+bool \hyperlink{classPickPlace_afbfbcb7763486a40937abf9be2505c61}{set\+Gripper} (std\+::vector$<$ double $>$)
+\begin{DoxyCompactList}\small\item\em Function that controls the gripper. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+ros\+::\+Service\+Client \hyperlink{classPickPlace_a62ec3dceec9d5fa49bb4892dfcbe19a3}{set\+Arm\+Pose}\hypertarget{classPickPlace_a62ec3dceec9d5fa49bb4892dfcbe19a3}{}\label{classPickPlace_a62ec3dceec9d5fa49bb4892dfcbe19a3}
+
+\begin{DoxyCompactList}\small\item\em Service to set the kinematics pose of manipulator, service name -\/ /arm/moveit/set\+\_\+kinematics\+\_\+pose. \end{DoxyCompactList}\item 
+ros\+::\+Service\+Client \hyperlink{classPickPlace_a8ce1ca75a49fc54a7e6f3a22c779d7f7}{set\+Gripper\+State}\hypertarget{classPickPlace_a8ce1ca75a49fc54a7e6f3a22c779d7f7}{}\label{classPickPlace_a8ce1ca75a49fc54a7e6f3a22c779d7f7}
+
+\begin{DoxyCompactList}\small\item\em Service to set the gripper state service name -\//om\+\_\+with\+\_\+tb3/gripper. \end{DoxyCompactList}\item 
+geometry\+\_\+msgs\+::\+Pose \hyperlink{classPickPlace_aa8e8f492fae90f1eab4b549f458aeac5}{pick\+Pose}\hypertarget{classPickPlace_aa8e8f492fae90f1eab4b549f458aeac5}{}\label{classPickPlace_aa8e8f492fae90f1eab4b549f458aeac5}
+
+\begin{DoxyCompactList}\small\item\em Pose variable, holding the kinematic pose to pick object. \end{DoxyCompactList}\item 
+geometry\+\_\+msgs\+::\+Pose \hyperlink{classPickPlace_a64a3f58ff3e97bdb94da81e4c55813ae}{place\+Pose}\hypertarget{classPickPlace_a64a3f58ff3e97bdb94da81e4c55813ae}{}\label{classPickPlace_a64a3f58ff3e97bdb94da81e4c55813ae}
+
+\begin{DoxyCompactList}\small\item\em Pose variable, holding the kinematic pose to place object. \end{DoxyCompactList}\item 
+geometry\+\_\+msgs\+::\+Pose \hyperlink{classPickPlace_aeb92091bd67ab116d4793fa63c146ac5}{home\+Pose}\hypertarget{classPickPlace_aeb92091bd67ab116d4793fa63c146ac5}{}\label{classPickPlace_aeb92091bd67ab116d4793fa63c146ac5}
+
+\begin{DoxyCompactList}\small\item\em Pose variable, holding the kinematic pose of the home location of the manipulator. \end{DoxyCompactList}\item 
+bool \hyperlink{classPickPlace_abc9e3365f2fdfe759495189bef77a3b3}{robot\+State}\hypertarget{classPickPlace_abc9e3365f2fdfe759495189bef77a3b3}{}\label{classPickPlace_abc9e3365f2fdfe759495189bef77a3b3}
+
+\begin{DoxyCompactList}\small\item\em robot state, 0 if robot is stationary, 1 if it is moving \end{DoxyCompactList}\item 
+ros\+::\+Node\+Handle \hyperlink{classPickPlace_aa689e7c697a4574dc816016ef0aee94c}{pnp\+Node}\hypertarget{classPickPlace_aa689e7c697a4574dc816016ef0aee94c}{}\label{classPickPlace_aa689e7c697a4574dc816016ef0aee94c}
+
+\begin{DoxyCompactList}\small\item\em Local node handle. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+\hyperlink{classPickPlace}{Pick\+Place} class controls the manipulator on the Turtlebot. 
+
+\subsection{Member Function Documentation}
+\index{Pick\+Place@{Pick\+Place}!execute\+Pick@{execute\+Pick}}
+\index{execute\+Pick@{execute\+Pick}!Pick\+Place@{Pick\+Place}}
+\subsubsection[{\texorpdfstring{execute\+Pick(ros\+::\+Node\+Handle)}{executePick(ros::NodeHandle)}}]{\setlength{\rightskip}{0pt plus 5cm}bool Pick\+Place\+::execute\+Pick (
+\begin{DoxyParamCaption}
+\item[{ros\+::\+Node\+Handle}]{m}
+\end{DoxyParamCaption}
+)}\hypertarget{classPickPlace_a51c838f80b9c4e081d67799bbfba334c}{}\label{classPickPlace_a51c838f80b9c4e081d67799bbfba334c}
+
+
+Function that executes the pick up operation of manipulator. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em ros} & node handle \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true if succesful 
+\end{DoxyReturn}
+\index{Pick\+Place@{Pick\+Place}!execute\+Place@{execute\+Place}}
+\index{execute\+Place@{execute\+Place}!Pick\+Place@{Pick\+Place}}
+\subsubsection[{\texorpdfstring{execute\+Place(ros\+::\+Node\+Handle)}{executePlace(ros::NodeHandle)}}]{\setlength{\rightskip}{0pt plus 5cm}bool Pick\+Place\+::execute\+Place (
+\begin{DoxyParamCaption}
+\item[{ros\+::\+Node\+Handle}]{m}
+\end{DoxyParamCaption}
+)}\hypertarget{classPickPlace_a796ffb05d862d37d753dca1ea1db6165}{}\label{classPickPlace_a796ffb05d862d37d753dca1ea1db6165}
+
+
+Function that executes the place operation of manipulator. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em ros} & node handle \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true if succesful 
+\end{DoxyReturn}
+\index{Pick\+Place@{Pick\+Place}!set\+Gripper@{set\+Gripper}}
+\index{set\+Gripper@{set\+Gripper}!Pick\+Place@{Pick\+Place}}
+\subsubsection[{\texorpdfstring{set\+Gripper(std\+::vector$<$ double $>$)}{setGripper(std::vector< double >)}}]{\setlength{\rightskip}{0pt plus 5cm}bool Pick\+Place\+::set\+Gripper (
+\begin{DoxyParamCaption}
+\item[{std\+::vector$<$ double $>$}]{state}
+\end{DoxyParamCaption}
+)}\hypertarget{classPickPlace_afbfbcb7763486a40937abf9be2505c61}{}\label{classPickPlace_afbfbcb7763486a40937abf9be2505c61}
+
+
+Function that controls the gripper. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em vector} & of type double, holding value of joint position of gripper \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true if successful 
+\end{DoxyReturn}
+\index{Pick\+Place@{Pick\+Place}!set\+Pose@{set\+Pose}}
+\index{set\+Pose@{set\+Pose}!Pick\+Place@{Pick\+Place}}
+\subsubsection[{\texorpdfstring{set\+Pose(geometry\+\_\+msgs\+::\+Pose)}{setPose(geometry_msgs::Pose)}}]{\setlength{\rightskip}{0pt plus 5cm}bool Pick\+Place\+::set\+Pose (
+\begin{DoxyParamCaption}
+\item[{geometry\+\_\+msgs\+::\+Pose}]{arm\+Pose}
+\end{DoxyParamCaption}
+)}\hypertarget{classPickPlace_a8a205b4bf0394626ebc68bd4c37a5182}{}\label{classPickPlace_a8a205b4bf0394626ebc68bd4c37a5182}
+
+
+Function that sets the kinematic pose for pick up and calls service. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em geometry\+\_\+msg} & of type pose, holding the kinematic pose of the end effector \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true if successful 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+include/warehouse\+\_\+robot/\hyperlink{PickPlace_8hpp}{Pick\+Place.\+hpp}\item 
+src/\hyperlink{PickPlace_8cpp}{Pick\+Place.\+cpp}\end{DoxyCompactItemize}
