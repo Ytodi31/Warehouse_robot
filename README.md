@@ -95,9 +95,9 @@ Terminal when doing roslaunch. A sample is shown below :
 ## Demo
 
 <p align="center">
-  <img width="250" height="250" src="https://github.com/Ytodi31/warehouse_robot/blob/iteration3/data/images/image1.png">
+  <img width="250" height="250" src="https://github.com/Ytodi31/warehouse_robot/blob/master/data/images/image1.png">
 
-  <img width="250" height="250" src="https://github.com/Ytodi31/warehouse_robot/blob/iteration3/data/images/image2.png">
+  <img width="250" height="250" src="https://github.com/Ytodi31/warehouse_robot/blob/master/data/images/image2.png">
 </p>
 Left image shows the robot in the Gazebo and Rviz environment.
 Right image shows the robot using Gmapping to get robot localisation in Rviz environment.
